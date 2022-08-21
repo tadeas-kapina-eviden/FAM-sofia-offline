@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.model.Inventory
+import sk.msvvas.sofia.fam.offline.data.model.InventoryModel
 import java.time.LocalDate
 
 @Composable
 fun InventoryListView(
-    inventories: List<Inventory>
+    inventories: List<InventoryModel>
 ) {
     Column(
         modifier = Modifier
@@ -37,7 +37,7 @@ fun InventoryListView(
 @Composable
 fun InventoryListViewPreview() {
     val inventories = listOf(
-        Inventory(
+        InventoryModel(
             id = "350",
             note = "UCJ",
             createdAt = LocalDate.now(),
@@ -45,7 +45,7 @@ fun InventoryListViewPreview() {
             countProcessed = 40,
             countAll = 44
         ),
-        Inventory(
+        InventoryModel(
             id = "1520",
             note = "FRI CIT 105930 - skúšobná",
             createdAt = LocalDate.of(2018, 9, 30),
@@ -53,7 +53,7 @@ fun InventoryListViewPreview() {
             countProcessed = 0,
             countAll = 0
         ),
-        Inventory(
+        InventoryModel(
             id = "992",
             note = "NM 103110 KF",
             createdAt = LocalDate.of(2019, 12, 31),

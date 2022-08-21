@@ -13,13 +13,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.model.Inventory
+import sk.msvvas.sofia.fam.offline.data.model.InventoryModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun InventoryListItem(
-    inventory: Inventory
+    inventory: InventoryModel
 ) {
     Box(
         modifier = Modifier
@@ -66,7 +66,7 @@ fun InventoryListItem(
 @Composable
 fun InventoryListItemPreview() {
     InventoryListItem(
-        Inventory(
+        InventoryModel(
             id = "350",
             note = "UCJ",
             createdAt = LocalDate.now(),

@@ -2,7 +2,7 @@ package sk.msvvas.sofia.fam.offline.data.model
 
 import java.time.LocalDate
 
-data class Inventory(
+data class InventoryModel(
     val id : String,
     val createdAt : LocalDate,
     val createdBy : String,
