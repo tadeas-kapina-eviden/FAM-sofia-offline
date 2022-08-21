@@ -12,15 +12,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.data.model.Inventory
 import java.time.LocalDate
 
 @Composable
 fun InventoryListItem(
-    id: String,
-    note: String,
-    createdAt: LocalDate,
-    createdBy: String,
-    counts: String
+    inventory: Inventory
 ) {
     Column(
         modifier = Modifier
@@ -29,20 +26,20 @@ fun InventoryListItem(
             .fillMaxWidth()
     ) {
         Text(
-            text = id,
+            text = inventory.id,
             style = TextStyle(fontWeight = FontWeight.Bold)
         )
         Text(
-            text = note
+            text = inventory.note
         )
         Text(
-            text = "Dátum:\t$createdAt"
+            text = "Dátum:\t" + inventory.createdAt
         )
         Text(
-            text = "Založené:\t$createdBy"
+            text = "Založené:\t" + inventory.createdBy
         )
         Text(
-            text = "Spracované/Celkom\t$counts"
+            text = "Spracované/Celkom\t" + inventory.countProcessed + "/" + inventory.countAll
         )
     }
 }
@@ -51,10 +48,13 @@ fun InventoryListItem(
 @Composable
 fun InventoryListItemPreview() {
     InventoryListItem(
-        id = "350",
-        note = "UCJ",
-        createdAt = LocalDate.now(),
-        createdBy = "110SEVCOVA",
-        counts = "44/44"
+        Inventory(
+            id = "350",
+            note = "UCJ",
+            createdAt = LocalDate.now(),
+            createdBy = "110SEVCOVA",
+            countProcessed = 44,
+            countAll = 44
+        )
     )
 }
