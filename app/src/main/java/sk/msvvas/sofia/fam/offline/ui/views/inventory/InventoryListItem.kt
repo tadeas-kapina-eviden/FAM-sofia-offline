@@ -1,6 +1,7 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,33 +15,50 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.model.Inventory
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun InventoryListItem(
     inventory: Inventory
 ) {
-    Column(
+    Box(
         modifier = Modifier
-            .padding(15.dp)
-            .border(width = 1.dp, color = MaterialTheme.colors.primary)
             .fillMaxWidth()
+            .border(width = 1.dp, color = MaterialTheme.colors.primary)
     ) {
-        Text(
-            text = inventory.id,
-            style = TextStyle(fontWeight = FontWeight.Bold)
-        )
-        Text(
-            text = inventory.note
-        )
-        Text(
-            text = "Dátum:\t" + inventory.createdAt
-        )
-        Text(
-            text = "Založené:\t" + inventory.createdBy
-        )
-        Text(
-            text = "Spracované/Celkom\t" + inventory.countProcessed + "/" + inventory.countAll
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        ) {
+            Text(
+                text = inventory.id,
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                modifier = Modifier
+                    .padding(bottom = 5.dp)
+            )
+            Text(
+                text = inventory.note,
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+            )
+            Text(
+                text = "Dátum:\t" + inventory.createdAt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                modifier = Modifier
+                    .padding(bottom = 5.dp)
+
+            )
+            Text(
+                text = "Založené:\t" + inventory.createdBy,
+                modifier = Modifier
+                    .padding(bottom = 5.dp)
+            )
+            Text(
+                text = "Spracované/Celkom: \t" + inventory.countProcessed + "/" + inventory.countAll,
+                modifier = Modifier
+                    .padding(bottom = 5.dp)
+            )
+        }
     }
 }
 
