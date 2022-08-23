@@ -14,6 +14,9 @@ interface InventoryDao {
     @Insert(onConflict = IGNORE)
     suspend fun save(inventoryEntity: InventoryEntity)
 
+    @Insert
+    suspend fun saveAll(inventoryEntities: List<InventoryEntity>)
+
     @Query("SELECT * FROM inventories")
     fun getAll(): LiveData<List<InventoryEntity>>
 

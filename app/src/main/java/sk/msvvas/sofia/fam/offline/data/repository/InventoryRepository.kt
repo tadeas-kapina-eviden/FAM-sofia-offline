@@ -19,6 +19,11 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         }
     }
 
+    fun saveAll(inventories: List<InventoryEntity>) {
+        coroutineScope.launch(Dispatchers.IO) {
+            inventoryDao.saveAll(inventories)
+        }
+    }
 
     fun findById(id: String) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -30,5 +35,4 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         coroutineScope.async(Dispatchers.IO) {
             return@async inventoryDao.findById(id)[0]
         }
-
 }
