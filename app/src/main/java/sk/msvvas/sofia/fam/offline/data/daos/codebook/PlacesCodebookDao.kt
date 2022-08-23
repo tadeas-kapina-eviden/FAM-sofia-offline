@@ -11,10 +11,10 @@ import sk.msvvas.sofia.fam.offline.data.entities.codebook.PlacesCodebookEntity
 interface PlacesCodebookDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun save(user: PlacesCodebookEntity)
+    suspend fun save(place: PlacesCodebookEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun saveAll(users: List<PlacesCodebookEntity>)
+    suspend fun saveAll(places: List<PlacesCodebookEntity>)
 
     @Query("SELECT * FROM places_codebook")
     fun getAll(): LiveData<List<PlacesCodebookEntity>>
