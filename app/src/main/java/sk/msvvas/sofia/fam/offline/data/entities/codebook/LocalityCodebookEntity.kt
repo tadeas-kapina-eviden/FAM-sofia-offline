@@ -11,8 +11,5 @@ data class LocalityCodebookEntity(
     val id: String,
 
     @ColumnInfo(name = "description")
-    val description: String,
-
-    @ColumnInfo(name = "flagged")
-    val flagged : Boolean
+    val description: String
 )
