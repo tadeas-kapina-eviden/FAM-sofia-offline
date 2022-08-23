@@ -5,19 +5,25 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import sk.msvvas.sofia.fam.offline.data.daos.InventoryDao
+import sk.msvvas.sofia.fam.offline.data.daos.codebook.RoomCodebookDao
 import sk.msvvas.sofia.fam.offline.data.daos.codebook.UserCodebookDao
 import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.data.entities.codebook.RoomCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.UserCodebookEntity
 
 /*TODO add other daos */
-@Database(entities = [(InventoryEntity::class), UserCodebookEntity::class], version = 1)
+@Database(
+    entities = [InventoryEntity::class, UserCodebookEntity::class, RoomCodebookEntity::class],
+    version = 1
+)
 abstract class FamOfflineDatabase : RoomDatabase() {
 
-    abstract fun inventoryDao() : InventoryDao
-    abstract fun userCodebookDao() : UserCodebookDao
+    abstract fun inventoryDao(): InventoryDao
+    abstract fun userCodebookDao(): UserCodebookDao
+    abstract fun roomCodebookDao(): RoomCodebookDao
 
-    companion object{
-        private var INSTANCE : FamOfflineDatabase? = null
+    companion object {
+        private var INSTANCE: FamOfflineDatabase? = null
 
         fun getInstance(context: Context): FamOfflineDatabase {
             synchronized(this) {
