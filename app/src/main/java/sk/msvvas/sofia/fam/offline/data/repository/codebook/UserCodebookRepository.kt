@@ -28,7 +28,7 @@ class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
     }
 
     fun findById(id: String) {
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.Main) {
             searchResult.value = asyncFind(id).await()
         }
     }

@@ -29,7 +29,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     }
 
     fun findById(id: String) {
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.Main) {
             searchResult.value = asyncFindById(id).await()
         }
     }
@@ -40,7 +40,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         }
 
     fun findByInventoryId(inventoryId: String) {
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.Main) {
             searchByInventoryIdResult.value = asyncFindByInventoryId(inventoryId).await()
         }
     }

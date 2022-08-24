@@ -42,7 +42,7 @@ data class PropertyEntity(
     var textMainNumber: String,
 
     @ColumnInfo(name = "record_status")
-    var recordStatus: String = "X",
+    var recordStatus: Char = 'X',
 
     @ColumnInfo(name = "werks")
     var werks: String = "",
