@@ -2,10 +2,17 @@ package sk.msvvas.sofia.fam.offline.data.entities.codebook
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-/*TODO add foreign key on LocalityCodebook*/
-@Entity(tableName = "rooms_codebook")
+@Entity(
+    tableName = "rooms_codebook",
+    foreignKeys = [ForeignKey(
+        entity = LocalityCodebookEntity::class,
+        parentColumns = ["id"],
+        childColumns = ["locality_id"]
+    )]
+)
 data class RoomCodebookEntity(
 
     @PrimaryKey
@@ -13,7 +20,7 @@ data class RoomCodebookEntity(
     val id: String,
 
     @ColumnInfo(name = "locality_id")
-    val localityId: String,
+    var localityId: String,
 
     @ColumnInfo(name = "description")
     val description: String
