@@ -22,14 +22,13 @@ fun InventoryDetailView(
 ) {
 
     val properties by inventoryDetailViewModel.properties.observeAsState(emptyList())
+    val isFiltersShow by inventoryDetailViewModel.isFiltersShown.observeAsState(false)
 
 
     var filter by remember {
         mutableStateOf("")
     }
-    var isFiltersShow by remember {
-        mutableStateOf(false)
-    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,7 +48,7 @@ fun InventoryDetailView(
                 maxLines = 1
             )
             Button(
-                onClick = { isFiltersShow = !isFiltersShow },
+                onClick = { inventoryDetailViewModel.onFiltersShowClick() },
                 modifier = Modifier
                     .weight(1f)
             ) {

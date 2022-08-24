@@ -69,15 +69,15 @@ class LoginViewModel(
         }
     }
 
-    fun requestLoginNameFocus(){
+    fun requestLoginNameFocus() {
         _loginNameFocusRequester.value!!.requestFocus()
     }
 
-    fun requestPasswordFocus(){
+    fun requestPasswordFocus() {
         _passwordFocusRequester.value!!.requestFocus()
     }
 
-    fun requestClientFocus(){
+    fun requestClientFocus() {
         _clientFocusRequester.value!!.requestFocus()
     }
 }
