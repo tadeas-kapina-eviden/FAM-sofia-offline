@@ -13,13 +13,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.model.InventoryModel
+import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun InventoryListItem(
-    inventory: InventoryModel
+    inventory: InventoryEntity
 ) {
     Box(
         modifier = Modifier
@@ -43,7 +43,7 @@ fun InventoryListItem(
                     .padding(bottom = 15.dp)
             )
             Text(
-                text = "Dátum:\t" + inventory.createdAt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                text = "Dátum:\t" + inventory.createdAt,
                 modifier = Modifier
                     .padding(bottom = 5.dp)
 
@@ -66,10 +66,10 @@ fun InventoryListItem(
 @Composable
 fun InventoryListItemPreview() {
     InventoryListItem(
-        InventoryModel(
+        InventoryEntity(
             id = "350",
             note = "UCJ",
-            createdAt = LocalDate.now(),
+            createdAt = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             createdBy = "110SEVCOVA",
             countProcessed = 44,
             countAll = 44

@@ -10,12 +10,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.model.InventoryModel
+import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListViewModel
 import java.time.LocalDate
 
 @Composable
 fun InventoryListView(
-    inventories: List<InventoryModel>
+    inventoryListViewModel: InventoryListViewModel
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,7 +29,7 @@ fun InventoryListView(
                 .padding(15.dp)
                 .fillMaxWidth()
         )
-        inventories.forEach {
+        inventoryListViewModel.inventories.value!!.forEach {
             InventoryListItem(inventory = it)
         }
     }
@@ -63,5 +65,6 @@ fun InventoryListViewPreview() {
         )
     )
 
-    InventoryListView(inventories = inventories)
+    //TODO add preview
+    //InventoryListView(inventories = inventories)
 }
