@@ -2,83 +2,98 @@ package sk.msvvas.sofia.fam.offline.ui.views.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.ui.components.DropdownBox
 
 @Composable
-fun LoginView() {
-    var loginName by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var selectedLanguage by remember {
-        mutableStateOf("SK - Slovenčina")
-    }
-
-    var klient by remember { mutableStateOf("") }
+fun LoginView(
+    loginViewModel: LoginViewModel
+) {
+    val loginName: String by loginViewModel.loginName.observeAsState("")
+    val password: String by loginViewModel.password.observeAsState("")
+    val client: String by loginViewModel.client.observeAsState("")
 
     Column(
         modifier = Modifier
-            .fillMaxWidth(0.5f),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         TextField(
             value = loginName,
-            onValueChange = { newText: String -> loginName = newText },
+            onValueChange = { loginViewModel.onLoginNameChanged(it) },
             colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.background),
             placeholder = { Text(text = "Užívateľ") },
-            modifier = Modifier.border(
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.primary
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(bottom = 5.dp)
+                .border(
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.primary
+                    )
                 )
-            )
         )
         TextField(
             value = password,
-            onValueChange = { newPass: String -> password = newPass },
+            onValueChange = { loginViewModel.onPasswordChange(it) },
             colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.background),
             placeholder = { Text(text = "Heslo") },
-            modifier = Modifier.border(
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.primary
-                )
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(bottom = 5.dp)
+                .border(
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.primary
+                    )
+                ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
             ),
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Text(text = "Jazyk", textAlign = TextAlign.Left)
-        DropdownBox(
-            default = selectedLanguage,
-            content = listOf("DE - Deutsch", "EN - English", "SK - Slovenčina", "CS - Čeština")
+            visualTransformation = PasswordVisualTransformation(),
+            maxLines = 1,
         )
         TextField(
-            value = klient,
-            onValueChange = { newKlient: String -> klient = newKlient },
+            value = client,
+            onValueChange = { loginViewModel.onClientChange(it) },
             colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.background),
             placeholder = { Text(text = "Klient") },
-            modifier = Modifier.border(
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.primary
-                )
-            ),
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(bottom = 5.dp)
+                .border(
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.primary
+                    )
+                ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            )
         )
         Button(
-            onClick = { login() },
+            onClick = { loginViewModel.onLoginButtonClick() },
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.8f)
         ) {
-            Text(text = "Prihlásenie")
+            Text(
+                text = "Prihlásenie",
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.h6.fontSize
+                )
+            )
         }
     }
 }
@@ -87,10 +102,9 @@ fun LoginView() {
 @Composable
 @Preview(showBackground = true)
 fun LoginViewPreview() {
-    LoginView()
+    LoginView(
+        loginViewModel = LoginViewModel(
+            changeView = {}
+        )
+    )
 }
-
-fun login() {
-
-}
-
