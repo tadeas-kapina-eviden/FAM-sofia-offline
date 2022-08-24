@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 
 

@@ -11,7 +11,7 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     val getAll: LiveData<List<InventoryEntity>> = inventoryDao.getAll()
-    val searchResult = MutableLiveData<InventoryEntity>()
+    private val searchResult = MutableLiveData<InventoryEntity>()
 
     fun save(inventory: InventoryEntity) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -25,10 +25,11 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         }
     }
 
-    fun findById(id: String) {
+    fun findById(id: String): LiveData<InventoryEntity> {
         coroutineScope.launch(Dispatchers.IO) {
             searchResult.value = asyncFind(id).await()
         }
+        return searchResult
     }
 
     private fun asyncFind(id: String): Deferred<InventoryEntity?> =

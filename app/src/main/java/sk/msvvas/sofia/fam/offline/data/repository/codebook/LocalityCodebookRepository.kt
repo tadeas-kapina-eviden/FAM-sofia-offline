@@ -11,7 +11,7 @@ class LocalityCodebookRepository(private val localityCodebookDao: LocalityCodebo
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     val getAll: LiveData<List<LocalityCodebookEntity>> = localityCodebookDao.getAll()
-    val searchResult = MutableLiveData<LocalityCodebookEntity>()
+    private val searchResult = MutableLiveData<LocalityCodebookEntity>()
 
     fun save(localityCodebook: LocalityCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -25,10 +25,11 @@ class LocalityCodebookRepository(private val localityCodebookDao: LocalityCodebo
         }
     }
 
-    fun findById(id: String) {
+    fun findById(id: String): LiveData<LocalityCodebookEntity> {
         coroutineScope.launch(Dispatchers.IO) {
             searchResult.value = asyncFind(id).await()
         }
+        return searchResult
     }
 
     private fun asyncFind(id: String): Deferred<LocalityCodebookEntity?> =

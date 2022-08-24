@@ -6,11 +6,11 @@ import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.daos.PropertyDao
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 
-class PropertyRepository (private val propertyDao: PropertyDao){
+class PropertyRepository(private val propertyDao: PropertyDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     val getAll: LiveData<List<PropertyEntity>> = propertyDao.getAll()
-    val searchResult = MutableLiveData<PropertyEntity>()
+    private val searchResult = MutableLiveData<PropertyEntity>()
 
     fun save(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -24,10 +24,11 @@ class PropertyRepository (private val propertyDao: PropertyDao){
         }
     }
 
-    fun findById(id: String) {
+    fun findById(id: String): LiveData<PropertyEntity> {
         coroutineScope.launch(Dispatchers.IO) {
             searchResult.value = asyncFind(id).await()
         }
+        return searchResult
     }
 
     private fun asyncFind(id: String): Deferred<PropertyEntity?> =

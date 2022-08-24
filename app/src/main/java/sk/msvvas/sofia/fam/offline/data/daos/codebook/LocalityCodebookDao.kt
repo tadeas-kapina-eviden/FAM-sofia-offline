@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.LocalityCodebookEntity
-import sk.msvvas.sofia.fam.offline.data.entities.codebook.PlacesCodebookEntity
 
 @Dao
 interface LocalityCodebookDao {

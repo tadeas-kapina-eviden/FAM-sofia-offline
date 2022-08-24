@@ -1,4 +1,4 @@
-package sk.msvvas.sofia.fam.offline.ui.views.inventory
+package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

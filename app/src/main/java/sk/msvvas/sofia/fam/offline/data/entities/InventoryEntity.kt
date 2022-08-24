@@ -3,7 +3,6 @@ package sk.msvvas.sofia.fam.offline.data.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
 
 @Entity(tableName = "inventories")
 data class InventoryEntity(

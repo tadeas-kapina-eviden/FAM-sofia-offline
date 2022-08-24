@@ -1,4 +1,4 @@
-package sk.msvvas.sofia.fam.offline.ui.views.inventory
+package sk.msvvas.sofia.fam.offline.ui.views.inventory.list
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
