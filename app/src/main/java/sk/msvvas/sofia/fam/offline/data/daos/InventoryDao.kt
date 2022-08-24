@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.data.daos
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
@@ -14,7 +13,7 @@ interface InventoryDao {
     @Insert(onConflict = IGNORE)
     suspend fun save(inventoryEntity: InventoryEntity)
 
-    @Insert
+    @Insert(onConflict = IGNORE)
     suspend fun saveAll(inventoryEntities: List<InventoryEntity>)
 
     @Query("SELECT * FROM inventories")

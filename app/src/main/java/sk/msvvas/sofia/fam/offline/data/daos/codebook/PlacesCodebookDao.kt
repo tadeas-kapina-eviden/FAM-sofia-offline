@@ -2,17 +2,17 @@ package sk.msvvas.sofia.fam.offline.data.daos.codebook
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.PlacesCodebookEntity
 
 @Dao
 interface PlacesCodebookDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = IGNORE)
     suspend fun save(place: PlacesCodebookEntity)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = IGNORE)
     suspend fun saveAll(places: List<PlacesCodebookEntity>)
 
     @Query("SELECT * FROM places_codebook")
