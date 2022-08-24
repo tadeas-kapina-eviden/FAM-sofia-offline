@@ -1,6 +1,7 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.list
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,12 +20,16 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun InventoryListItem(
-    inventory: InventoryEntity
+    inventory: InventoryEntity,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .border(width = 1.dp, color = MaterialTheme.colors.primary)
+            .clickable {
+                onClick()
+            }
     ) {
         Column(
             modifier = Modifier
@@ -73,6 +78,9 @@ fun InventoryListItemPreview() {
             createdBy = "110SEVCOVA",
             countProcessed = 44,
             countAll = 44
-        )
+        ),
+        onClick = {
+
+        }
     )
 }

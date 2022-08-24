@@ -34,7 +34,12 @@ fun InventoryListView(
         )
 
         inventories.forEach {
-            InventoryListItem(inventory = it)
+            InventoryListItem(
+                inventory = it,
+                onClick = {
+                    inventoryListViewModel.onSelectInventory(it.id)
+                }
+            )
         }
     }
 }
