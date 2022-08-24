@@ -16,6 +16,9 @@ class LoginViewModel(
     private val _client = MutableLiveData("")
     val client: LiveData<String> = _client
 
+    private val _lastError = MutableLiveData("")
+    val lastError: LiveData<String> = _lastError
+
     fun onLoginNameChanged(newName: String) {
         if (newName.length <= 12) {
             _loginName.value = newName
@@ -37,8 +40,18 @@ class LoginViewModel(
         }
     }
 
-    //TODO complete input check
+    //TODO complete login
     fun onLoginButtonClick() {
-        changeView()
+        if (_loginName.value!!.isEmpty()) {
+            _lastError.value = "Zadajte meno užívateľa!"
+        } else if (_password.value!!.isEmpty()) {
+            _lastError.value = "Zadajte heslo!"
+        } else if (_client.value!!.isEmpty()) {
+            _lastError.value = "Zadajte číslo klienta!"
+        } else if (_client.value!!.length < 3) {
+            _lastError.value = "Číslo klienta musí mať 3 znaky!"
+        } else {
+            changeView()
+        }
     }
 }

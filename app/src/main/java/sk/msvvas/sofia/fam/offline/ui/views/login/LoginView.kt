@@ -23,6 +23,7 @@ fun LoginView(
     val loginName: String by loginViewModel.loginName.observeAsState("")
     val password: String by loginViewModel.password.observeAsState("")
     val client: String by loginViewModel.client.observeAsState("")
+    val lastError: String by loginViewModel.lastError.observeAsState("")
 
     Column(
         modifier = Modifier
@@ -30,6 +31,22 @@ fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        if(lastError.isNotEmpty()){
+            TextField(
+                value = lastError,
+                onValueChange = {  },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .padding(bottom = 5.dp)
+                    .border(
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.secondary
+                        )
+                    )
+            )
+        }
         TextField(
             value = loginName,
             onValueChange = { loginViewModel.onLoginNameChanged(it) },
