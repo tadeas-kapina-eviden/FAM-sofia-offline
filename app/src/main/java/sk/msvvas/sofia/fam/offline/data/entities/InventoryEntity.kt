@@ -15,7 +15,7 @@ data class InventoryEntity(
     var createdAt: String,
 
     @ColumnInfo(name = "created_by")
-    var created_by: String,
+    var createdBy: String,
 
     @ColumnInfo(name = "note")
     var note: String,
