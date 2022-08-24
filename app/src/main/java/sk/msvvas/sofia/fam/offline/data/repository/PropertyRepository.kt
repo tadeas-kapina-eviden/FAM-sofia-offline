@@ -10,6 +10,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     val allData = MutableLiveData<List<PropertyEntity>>()
     val searchResult = MutableLiveData<PropertyEntity>()
+    val searchByInventoryIdResult = MutableLiveData<List<PropertyEntity>>()
 
     init {
         getAll()
@@ -29,13 +30,24 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
 
     fun findById(id: String) {
         coroutineScope.launch(Dispatchers.IO) {
-            searchResult.value = asyncFind(id).await()
+            searchResult.value = asyncFindById(id).await()
         }
     }
 
-    private fun asyncFind(id: String): Deferred<PropertyEntity?> =
+    private fun asyncFindById(id: String): Deferred<PropertyEntity?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async propertyDao.findById(id)[0]
+        }
+
+    fun findByInventoryId(inventoryId: String) {
+        coroutineScope.launch(Dispatchers.IO) {
+            searchByInventoryIdResult.value = asyncFindByInventoryId(inventoryId).await()
+        }
+    }
+
+    private fun asyncFindByInventoryId(id: String): Deferred<List<PropertyEntity>> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async propertyDao.findByInventoryId(id)
         }
 
     fun getAll() {
