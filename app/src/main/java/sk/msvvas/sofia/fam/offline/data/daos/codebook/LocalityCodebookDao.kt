@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.data.daos.codebook
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,7 +16,7 @@ interface LocalityCodebookDao {
     suspend fun saveAll(localities: List<LocalityCodebookEntity>)
 
     @Query("SELECT * FROM localities_codebook")
-    fun getAll(): LiveData<List<LocalityCodebookEntity>>
+    fun getAll(): List<LocalityCodebookEntity>
 
     @Query("SELECT * FROM localities_codebook WHERE id = :id")
     suspend fun findById(id: String): List<LocalityCodebookEntity>

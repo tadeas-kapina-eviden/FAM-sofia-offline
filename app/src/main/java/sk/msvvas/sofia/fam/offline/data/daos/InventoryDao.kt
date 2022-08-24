@@ -18,7 +18,7 @@ interface InventoryDao {
     suspend fun saveAll(inventoryEntities: List<InventoryEntity>)
 
     @Query("SELECT * FROM inventories")
-    fun getAll(): LiveData<List<InventoryEntity>>
+    fun getAll(): List<InventoryEntity>
 
     @Query("SELECT * FROM inventories WHERE id = :id")
     suspend fun findById(id: String): List<InventoryEntity>

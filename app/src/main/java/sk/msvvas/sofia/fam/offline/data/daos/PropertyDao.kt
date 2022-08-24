@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.data.daos
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -18,7 +17,7 @@ interface PropertyDao {
     suspend fun saveAll(propertyEntities: List<PropertyEntity>)
 
     @Query("SELECT * FROM properties")
-    fun getAll(): LiveData<List<PropertyEntity>>
+    fun getAll(): List<PropertyEntity>
 
     @Query("SELECT * FROM properties WHERE id = :id")
     suspend fun findById(id: String): List<PropertyEntity>

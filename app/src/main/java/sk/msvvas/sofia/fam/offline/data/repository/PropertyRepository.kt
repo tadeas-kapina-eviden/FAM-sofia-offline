@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.data.repository
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.daos.PropertyDao
@@ -9,8 +8,8 @@ import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 class PropertyRepository(private val propertyDao: PropertyDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    val getAll: LiveData<List<PropertyEntity>> = propertyDao.getAll()
-    private val searchResult = MutableLiveData<PropertyEntity>()
+    val allData = MutableLiveData<List<PropertyEntity>>()
+    val searchResult = MutableLiveData<PropertyEntity>()
 
     fun save(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -24,15 +23,25 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         }
     }
 
-    fun findById(id: String): LiveData<PropertyEntity> {
+    fun findById(id: String) {
         coroutineScope.launch(Dispatchers.IO) {
             searchResult.value = asyncFind(id).await()
         }
-        return searchResult
     }
 
     private fun asyncFind(id: String): Deferred<PropertyEntity?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async propertyDao.findById(id)[0]
+        }
+
+    fun getAll() {
+        coroutineScope.launch(Dispatchers.Main) {
+            allData.value = asyncGetAll().await()
+        }
+    }
+
+    private fun asyncGetAll(): Deferred<List<PropertyEntity>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async propertyDao.getAll()
         }
 }

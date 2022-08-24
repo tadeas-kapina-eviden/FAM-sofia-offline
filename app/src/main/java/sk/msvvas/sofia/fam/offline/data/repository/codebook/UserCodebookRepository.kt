@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.data.repository.codebook
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.daos.codebook.UserCodebookDao
@@ -9,9 +8,8 @@ import sk.msvvas.sofia.fam.offline.data.entities.codebook.UserCodebookEntity
 class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
-    val getAll: LiveData<List<UserCodebookEntity>> = userCodebookDao.getAll()
-    private val searchResult = MutableLiveData<UserCodebookEntity>()
+    val allData = MutableLiveData<List<UserCodebookEntity>>()
+    val searchResult = MutableLiveData<UserCodebookEntity>()
 
     fun save(userCodebook: UserCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -25,15 +23,25 @@ class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
         }
     }
 
-    fun findById(id: String): LiveData<UserCodebookEntity> {
+    fun findById(id: String) {
         coroutineScope.launch(Dispatchers.IO) {
             searchResult.value = asyncFind(id).await()
         }
-        return searchResult
     }
 
     private fun asyncFind(id: String): Deferred<UserCodebookEntity?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async userCodebookDao.findById(id)[0]
+        }
+
+    fun getAll() {
+        coroutineScope.launch(Dispatchers.Main) {
+            allData.value = asyncGetAll().await()
+        }
+    }
+
+    private fun asyncGetAll(): Deferred<List<UserCodebookEntity>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async userCodebookDao.getAll()
         }
 }
