@@ -5,14 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import sk.msvvas.sofia.fam.offline.data.daos.InventoryDao
+import sk.msvvas.sofia.fam.offline.data.daos.PropertyDao
 import sk.msvvas.sofia.fam.offline.data.daos.codebook.*
 import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.*
 
 /*TODO add other daos */
 @Database(
     entities = [
         InventoryEntity::class,
+        PropertyEntity::class,
         UserCodebookEntity::class,
         RoomCodebookEntity::class,
         PlacesCodebookEntity::class,
@@ -24,6 +27,7 @@ import sk.msvvas.sofia.fam.offline.data.entities.codebook.*
 abstract class FamOfflineDatabase : RoomDatabase() {
 
     abstract fun inventoryDao(): InventoryDao
+    abstract fun propertyDao(): PropertyDao
     abstract fun userCodebookDao(): UserCodebookDao
     abstract fun roomCodebookDao(): RoomCodebookDao
     abstract fun placesCodebookDao(): PlacesCodebookDao
