@@ -10,6 +10,10 @@ class PlacesCodebookRepository(private val placesCodebookDao: PlacesCodebookDao)
     val allData = MutableLiveData<List<PlacesCodebookEntity>>()
     val searchResult = MutableLiveData<PlacesCodebookEntity>()
 
+    init {
+        getAll()
+    }
+
     fun save(placesCodebook: PlacesCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             placesCodebookDao.save(placesCodebook)

@@ -11,6 +11,10 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     val allData = MutableLiveData<List<PropertyEntity>>()
     val searchResult = MutableLiveData<PropertyEntity>()
 
+    init {
+        getAll()
+    }
+
     fun save(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.save(property)

@@ -11,6 +11,10 @@ class RoomCodebookRepository(private val roomCodebookDao: RoomCodebookDao) {
     val allData = MutableLiveData<List<RoomCodebookEntity>>()
     val searchResult = MutableLiveData<RoomCodebookEntity>()
 
+    init {
+        getAll()
+    }
+
     fun save(roomCodebook: RoomCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             roomCodebookDao.save(roomCodebook)

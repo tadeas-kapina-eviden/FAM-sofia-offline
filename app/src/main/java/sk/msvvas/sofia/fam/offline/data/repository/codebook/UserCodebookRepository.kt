@@ -11,6 +11,10 @@ class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
     val allData = MutableLiveData<List<UserCodebookEntity>>()
     val searchResult = MutableLiveData<UserCodebookEntity>()
 
+    init {
+        getAll()
+    }
+
     fun save(userCodebook: UserCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             userCodebookDao.save(userCodebook)

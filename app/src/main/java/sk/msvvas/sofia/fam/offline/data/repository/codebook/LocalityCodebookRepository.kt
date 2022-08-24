@@ -11,6 +11,10 @@ class LocalityCodebookRepository(private val localityCodebookDao: LocalityCodebo
     val allData = MutableLiveData<List<LocalityCodebookEntity>>()
     val searchResult = MutableLiveData<LocalityCodebookEntity>()
 
+    init {
+        getAll()
+    }
+
     fun save(localityCodebook: LocalityCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             localityCodebookDao.save(localityCodebook)
