@@ -18,16 +18,16 @@ import androidx.room.PrimaryKey
 data class PropertyEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long,
+    val id: Long = 0L,
 
     @ColumnInfo(name = "inventory_id")
     var inventoryId: String,
 
     @ColumnInfo(name = "invent_number")
-    var inventNumber: String,
+    var inventNumber: String = "",
 
     @ColumnInfo(name = "serial_number")
-    var serialNumber: String,
+    var serialNumber: String = "",
 
     @ColumnInfo(name = "client")
     var client: String,
@@ -42,25 +42,25 @@ data class PropertyEntity(
     var textMainNumber: String,
 
     @ColumnInfo(name = "record_status")
-    var recordStatus: String,
+    var recordStatus: String = "X",
 
     @ColumnInfo(name = "werks")
-    var werks: String,
+    var werks: String = "",
 
     @ColumnInfo(name = "werks_new")
-    var werksNew: String,
+    var werksNew: String = "",
 
     @ColumnInfo(name = "locality")
-    var locality: String,
+    var locality: String = "",
 
     @ColumnInfo(name = "locality_new")
-    var localityNew: String,
+    var localityNew: String = "",
 
     @ColumnInfo(name = "room")
-    var room: String,
+    var room: String = "",
 
     @ColumnInfo(name = "room_new")
-    var roomNew: String,
+    var roomNew: String = "",
 
     @ColumnInfo(name = "personal_number")
     var personalNumber: String,
@@ -69,29 +69,29 @@ data class PropertyEntity(
     var personalNumberNew: String,
 
     @ColumnInfo(name = "center")
-    var center: String,
+    var center: String = "",
 
     @ColumnInfo(name = "center_new")
-    var centerNew: String,
+    var centerNew: String = "",
 
     @ColumnInfo(name = "workplace")
-    var workplace: String,
+    var workplace: String = "",
 
     @ColumnInfo(name = "workplace_new")
-    var workplaceNew: String,
+    var workplaceNew: String = "",
 
     @ColumnInfo(name = "quantity")
-    var quantity: Double,
+    var quantity: Double = 0.0,
 
     @ColumnInfo(name = "quantity_new")
-    var quantityNew: Double,
+    var quantityNew: Double = 0.0,
 
     @ColumnInfo(name = "fixed_note")
-    var fixedNote: String,
+    var fixedNote: String = "",
 
     @ColumnInfo(name = "variable_note")
-    var variableNote: String,
+    var variableNote: String = "",
 
     @ColumnInfo(name = "is_manual")
-    var isManual: String,
+    var isManual: Boolean = false,
 )
