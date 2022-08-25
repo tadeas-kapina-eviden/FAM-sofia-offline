@@ -10,25 +10,23 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InventoryDetailFiltersComponent() {
-    var location by remember {
-        mutableStateOf("")
-    }
-
-    var room by remember {
-        mutableStateOf("")
-    }
-
-    var user by remember {
-        mutableStateOf("")
-    }
+fun InventoryDetailFiltersComponent(
+    inventoryDetailViewModel: InventoryDetailViewModel
+) {
+    val localityFilter by inventoryDetailViewModel.localityFilter.observeAsState("")
+    val roomFilter by inventoryDetailViewModel.roomFilter.observeAsState("")
+    val userFilter by inventoryDetailViewModel.userFilter.observeAsState("")
+    val scanWithoutDetail by inventoryDetailViewModel.scanWithoutDetail.observeAsState(false)
 
     Column(
         modifier = Modifier
@@ -48,9 +46,9 @@ fun InventoryDetailFiltersComponent() {
                 textAlign = TextAlign.End
             )
             TextField(
-                value = location,
+                value = localityFilter,
                 onValueChange = {
-                    location = it
+                    inventoryDetailViewModel.onLocalityFilterChange(it)
                 },
                 modifier = Modifier
                     .weight(3f),
@@ -70,9 +68,9 @@ fun InventoryDetailFiltersComponent() {
                 textAlign = TextAlign.End
             )
             TextField(
-                value = room,
+                value = roomFilter,
                 onValueChange = {
-                    room = it
+                    inventoryDetailViewModel.onRoomFilterChange(it)
                 },
                 modifier = Modifier
                     .weight(3f)
@@ -91,9 +89,9 @@ fun InventoryDetailFiltersComponent() {
                 textAlign = TextAlign.End
             )
             TextField(
-                value = user,
+                value = userFilter,
                 onValueChange = {
-                    user = it
+                    inventoryDetailViewModel.onUserFilterChange(it)
                 },
                 modifier = Modifier
                     .weight(3f)
@@ -116,13 +114,17 @@ fun InventoryDetailFiltersComponent() {
                     .weight(3f)
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { inventoryDetailViewModel.onScanWithoutDetailButtonClick() },
                 ) {
                     Icon(
                         Icons.Default.ArrowDropDown,
                         contentDescription = "dropdown icon",
                         modifier = Modifier
                             .weight(1f)
+                            /*TODO change icon*/
+                            .rotate(
+                                if (scanWithoutDetail) 180f else 0f
+                            )
                     )
                 }
             }
@@ -133,7 +135,7 @@ fun InventoryDetailFiltersComponent() {
                 .padding(5.dp)
         ) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { inventoryDetailViewModel.runFilters() },
             ) {
                 Text(text = "Spustiť filtre")
             }
@@ -144,5 +146,5 @@ fun InventoryDetailFiltersComponent() {
 @Preview(showBackground = true)
 @Composable
 fun InventoryDetailFiltersComponentPreview() {
-    InventoryDetailFiltersComponent()
+    //InventoryDetailFiltersComponent()
 }
