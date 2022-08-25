@@ -77,6 +77,7 @@ fun LoginView(
                 onDone = {
                     loginViewModel.requestPasswordFocus()
                 }),
+            singleLine = true
         )
         TextField(
             value = password,
@@ -102,7 +103,7 @@ fun LoginView(
                     loginViewModel.requestClientFocus()
                 }),
             visualTransformation = PasswordVisualTransformation(),
-            maxLines = 1,
+            singleLine = true,
         )
         TextField(
             value = client,
@@ -126,7 +127,8 @@ fun LoginView(
             keyboardActions = KeyboardActions(
                 onDone = {
                     loginViewModel.onLoginButtonClick()
-                })
+                }),
+            singleLine = true
         )
         Button(
             onClick = { loginViewModel.onLoginButtonClick() },
