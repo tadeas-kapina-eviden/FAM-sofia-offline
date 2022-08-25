@@ -14,11 +14,17 @@ class InventoryDetailViewModel(
         propertyRepository.searchByInventoryIdResult
     val properties: LiveData<List<PropertyEntity>> = _properties
 
+    private val _filteredProperties = MutableLiveData(listOf<PropertyEntity>())
+    val filteredProperties: LiveData<List<PropertyEntity>> = _filteredProperties
+
     private val _isFiltersShown = MutableLiveData(false)
     val isFiltersShown: LiveData<Boolean> = _isFiltersShown
 
     private val _inventoryId = MutableLiveData("")
     val inventoryId: LiveData<String> = _inventoryId
+
+    private val _statusFilter = MutableLiveData('S')
+    val statusFilter: LiveData<Char> = _statusFilter
 
     private val _codeFilter = MutableLiveData("")
     val codeFilter: LiveData<String> = _codeFilter
@@ -69,7 +75,33 @@ class InventoryDetailViewModel(
     }
 
     fun runFilters() {
-        /*TODO*/
+        filterOutValues()
+    }
+
+
+    /*TODO write more effective code*/
+    fun filterOutValues() {
+        _filteredProperties.value = _properties.value?.filter {
+            if (_statusFilter.value != null)
+                it.recordStatus == _statusFilter.value
+            else
+                true
+        }?.filter {
+            if (_localityFilter.value != null && _localityFilter.value!!.isNotEmpty())
+                it.locality == _localityFilter.value
+            else
+                true
+        }?.filter {
+            if (_roomFilter.value != null && _roomFilter.value!!.isNotEmpty())
+                it.room == _roomFilter.value
+            else
+                true
+        }?.filter {
+            if (_userFilter.value != null && _userFilter.value!!.isNotEmpty())
+                it.personalNumber == _userFilter.value
+            else
+                true
+        }
     }
 
 }

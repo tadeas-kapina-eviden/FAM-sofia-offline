@@ -27,7 +27,7 @@ fun InventoryDetailView(
     inventoryDetailViewModel: InventoryDetailViewModel
 ) {
 
-    val properties by inventoryDetailViewModel.properties.observeAsState(emptyList())
+    val properties by inventoryDetailViewModel.filteredProperties.observeAsState(emptyList())
     val isFiltersShow by inventoryDetailViewModel.isFiltersShown.observeAsState(false)
     val inventoryId by inventoryDetailViewModel.inventoryId.observeAsState("")
     val codeFilter by inventoryDetailViewModel.codeFilter.observeAsState("")
@@ -87,6 +87,7 @@ fun InventoryDetailView(
         }
         PropertyListView(properties = propertyEntityListToPropertyPreviewList(properties))
     }
+    inventoryDetailViewModel.filterOutValues()
 }
 
 @Preview(showBackground = true)
