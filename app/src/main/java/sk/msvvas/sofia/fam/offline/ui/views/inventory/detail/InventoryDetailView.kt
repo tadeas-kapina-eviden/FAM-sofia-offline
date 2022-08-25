@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -36,6 +38,10 @@ fun InventoryDetailView(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp)
+            .verticalScroll(
+                enabled = true,
+                state = ScrollState(0)
+            )
     ) {
         Row(
             modifier = Modifier

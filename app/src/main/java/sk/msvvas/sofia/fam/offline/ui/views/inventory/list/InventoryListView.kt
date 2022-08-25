@@ -1,8 +1,10 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.list
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,14 +40,22 @@ fun InventoryListView(
                     .padding(15.dp)
                     .fillMaxWidth()
             )
-
-            inventories.forEach {
-                InventoryListItem(
-                    inventory = it,
-                    onClick = {
-                        inventoryListViewModel.onSelectInventory(it.id)
-                    }
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(
+                        enabled = true,
+                        state = ScrollState(0)
+                    )
+            ) {
+                inventories.forEach {
+                    InventoryListItem(
+                        inventory = it,
+                        onClick = {
+                            inventoryListViewModel.onSelectInventory(it.id)
+                        }
+                    )
+                }
             }
         }
         if (isDownloadConfirmShown) {
