@@ -78,30 +78,17 @@ class InventoryDetailViewModel(
         filterOutValues()
     }
 
-
-    /*TODO write more effective code*/
     fun filterOutValues() {
-        _filteredProperties.value = _properties.value?.filter {
-            if (_statusFilter.value != null)
-                it.recordStatus == _statusFilter.value
-            else
-                true
-        }?.filter {
-            if (_localityFilter.value != null && _localityFilter.value!!.isNotEmpty())
-                it.locality == _localityFilter.value
-            else
-                true
-        }?.filter {
-            if (_roomFilter.value != null && _roomFilter.value!!.isNotEmpty())
-                it.room == _roomFilter.value
-            else
-                true
-        }?.filter {
-            if (_userFilter.value != null && _userFilter.value!!.isNotEmpty())
-                it.personalNumber == _userFilter.value
-            else
-                true
+        if (_properties.value == null || _properties.value!!.isEmpty()) {
+            _filteredProperties.value = emptyList()
+        }
+        else {
+            _filteredProperties.value = _properties.value!!.filter {
+                (_statusFilter.value == null || it.recordStatus == _statusFilter.value)
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
+                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
+            }
         }
     }
-
 }

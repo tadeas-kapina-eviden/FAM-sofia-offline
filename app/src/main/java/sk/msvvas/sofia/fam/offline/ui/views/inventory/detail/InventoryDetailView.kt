@@ -104,7 +104,6 @@ fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntit
             status = it.recordStatus,
             subNumber = it.subnumber,
             propertyNumber = it.propertyNumber
-
         )
     }
 }
