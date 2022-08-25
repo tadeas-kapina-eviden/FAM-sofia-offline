@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
 import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 
-/*TODO add functionality*/
 @Dao
 interface InventoryDao {
 

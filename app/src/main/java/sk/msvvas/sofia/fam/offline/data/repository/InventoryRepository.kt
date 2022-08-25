@@ -5,7 +5,6 @@ import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.daos.InventoryDao
 import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 
-/* TODO add functionality*/
 class InventoryRepository(private val inventoryDao: InventoryDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

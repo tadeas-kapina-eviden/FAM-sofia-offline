@@ -104,37 +104,3 @@ fun InventoryListView(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun InventoryListViewPreview() {
-    val inventories = listOf(
-        InventoryModel(
-            id = "350",
-            note = "UCJ",
-            createdAt = LocalDate.now(),
-            createdBy = "110SEVECOVA",
-            countProcessed = 40,
-            countAll = 44
-        ),
-        InventoryModel(
-            id = "1520",
-            note = "FRI CIT 105930 - skúšobná",
-            createdAt = LocalDate.of(2018, 9, 30),
-            createdBy = "110MICIANOV1",
-            countProcessed = 0,
-            countAll = 0
-        ),
-        InventoryModel(
-            id = "992",
-            note = "NM 103110 KF",
-            createdAt = LocalDate.of(2019, 12, 31),
-            createdBy = "110KUBALOVA",
-            countProcessed = 120,
-            countAll = 150
-        )
-    )
-
-    //TODO add preview
-    //InventoryListView(inventories = inventories)
-}

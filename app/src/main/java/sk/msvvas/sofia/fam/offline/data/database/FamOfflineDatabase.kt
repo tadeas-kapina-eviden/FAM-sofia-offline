@@ -11,7 +11,6 @@ import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.*
 
-/*TODO add other daos */
 @Database(
     entities = [
         InventoryEntity::class,

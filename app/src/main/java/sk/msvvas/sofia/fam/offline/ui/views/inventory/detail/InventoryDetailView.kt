@@ -96,13 +96,6 @@ fun InventoryDetailView(
     inventoryDetailViewModel.filterOutValues()
 }
 
-@Preview(showBackground = true)
-@Composable
-fun InventoryDetailViewPreview() {
-//TODO add preview
-//InventoryDetailView()
-}
-
 fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
     return propertyEntities.map {
         PropertyPreviewModel(
