@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
-import sk.msvvas.sofia.fam.offline.ui.views.property.PropertyListView
+import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 
 @Composable
 fun InventoryDetailView(
@@ -99,7 +99,9 @@ fun InventoryDetailView(
                         .padding(horizontal = 15.dp, vertical = 1.dp)
                 )
             }
-            PropertyListView(properties = propertyEntityListToPropertyPreviewList(properties))
+            PropertyListView(
+                properties = propertyEntityListToPropertyPreviewList(properties),
+                changeView = { inventoryDetailViewModel.changeToDetailOfProperty(it) })
         }
 
         if (errorHeader.isNotEmpty()) {
@@ -142,7 +144,7 @@ fun InventoryDetailView(
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
                 )
-                Row() {
+                Row {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { inventoryDetailViewModel.closeErrorAlert() }
@@ -193,7 +195,7 @@ fun InventoryDetailView(
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
                 )
-                Row() {
+                Row {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { inventoryDetailViewModel.confirmLocalityChange() }
@@ -210,6 +212,7 @@ fun InventoryDetailView(
 fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
     return propertyEntities.map {
         PropertyPreviewModel(
+            id = it.id,
             textMainNumber = it.textMainNumber,
             status = it.recordStatus,
             subNumber = it.subnumber,

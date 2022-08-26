@@ -1,4 +1,4 @@
-package sk.msvvas.sofia.fam.offline.ui.views.property
+package sk.msvvas.sofia.fam.offline.ui.views.property.list
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +17,13 @@ import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListItem
 
 
 @Composable
 fun PropertyListView(
-    properties: List<PropertyPreviewModel>
+    properties: List<PropertyPreviewModel>,
+    changeView: (Long) -> Unit
 ) {
     val underLineColor = MaterialTheme.colors.primary
     Column(
@@ -59,7 +61,7 @@ fun PropertyListView(
             )
         }
         properties.forEach {
-            PropertyListItem(property = it)
+            PropertyListItem(property = it, onClick = { changeView(it) })
         }
     }
 }
@@ -70,35 +72,41 @@ fun PropertyListViewPreview() {
     PropertyListView(
         properties = listOf(
             PropertyPreviewModel(
+                id = 5L,
                 textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
                 propertyNumber = "22005779",
                 subNumber = "22005779",
                 status = 'S'
             ),
             PropertyPreviewModel(
+                id = 1L,
                 textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
                 propertyNumber = "22005779",
                 subNumber = "22005779",
                 status = 'S'
             ),
             PropertyPreviewModel(
+                id = 3L,
                 textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
                 propertyNumber = "22005779",
                 subNumber = "22005779",
                 status = 'S'
             ),
             PropertyPreviewModel(
+                id = 2L,
                 textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
                 propertyNumber = "22005779",
                 subNumber = "22005779",
                 status = 'S'
             ),
             PropertyPreviewModel(
+                id = 6L,
                 textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
                 propertyNumber = "22005779",
                 subNumber = "22005779",
                 status = 'S'
             )
-        )
+        ),
+        changeView = {}
     )
 }

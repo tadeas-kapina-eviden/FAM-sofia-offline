@@ -12,8 +12,10 @@ import sk.msvvas.sofia.fam.offline.data.repository.codebook.RoomCodebookReposito
 class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val localityCodebookRepository: LocalityCodebookRepository,
-    private val roomCodebookRepository: RoomCodebookRepository
+    private val roomCodebookRepository: RoomCodebookRepository,
+    val changeToDetailOfProperty: (Long) -> Unit
 ) : ViewModel() {
+
     private val _properties: LiveData<List<PropertyEntity>> =
         propertyRepository.searchByInventoryIdResult
     val properties: LiveData<List<PropertyEntity>> = _properties
@@ -100,7 +102,7 @@ class InventoryDetailViewModel(
                 if (_scanWithoutDetail.value!!) {
                     //TODO change the status of property
                 } else {
-                    //TODO show detail of property
+                    changeToDetailOfProperty(selectedList[0].id)
                 }
             }
         } else if (_codeFilter.value!!.length == 22) {

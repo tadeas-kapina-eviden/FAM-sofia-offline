@@ -1,5 +1,6 @@
-package sk.msvvas.sofia.fam.offline.ui.views.property
+package sk.msvvas.sofia.fam.offline.ui.views.property.list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +23,8 @@ import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
 
 @Composable
 fun PropertyListItem(
-    property: PropertyPreviewModel
+    property: PropertyPreviewModel,
+    onClick: (Long) -> Unit
 ) {
     val color = MaterialTheme.colors.primary
     Row(
@@ -41,6 +43,9 @@ fun PropertyListItem(
                         end = Offset(x = size.width, y = y)
                     )
                 }
+            }
+            .clickable {
+                onClick(property.id)
             }
     ) {
         Column(
@@ -71,10 +76,14 @@ fun PropertyListItem(
 fun PropertyListItemPreview() {
     PropertyListItem(
         property = PropertyPreviewModel(
+            id = 10,
             textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
             propertyNumber = "22005779",
             subNumber = "45",
             status = 'S'
-        )
+        ),
+        onClick = {
+
+        }
     )
 }
