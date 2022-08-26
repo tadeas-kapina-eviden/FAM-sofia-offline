@@ -5,10 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
+import sk.msvvas.sofia.fam.offline.data.repository.codebook.LocalityCodebookRepository
+import sk.msvvas.sofia.fam.offline.data.repository.codebook.RoomCodebookRepository
 
 
 class InventoryDetailViewModel(
-    private val propertyRepository: PropertyRepository
+    private val propertyRepository: PropertyRepository,
+    private val localityCodebookRepository: LocalityCodebookRepository,
+    private val roomCodebookRepository: RoomCodebookRepository
 ) : ViewModel() {
     private val _properties: LiveData<List<PropertyEntity>> =
         propertyRepository.searchByInventoryIdResult
@@ -41,6 +45,18 @@ class InventoryDetailViewModel(
     private val _scanWithoutDetail = MutableLiveData(false)
     val scanWithoutDetail: LiveData<Boolean> = _scanWithoutDetail
 
+    private val _errorHeader = MutableLiveData("")
+    val errorHeader: LiveData<String> = _errorHeader
+
+    private val _errorText = MutableLiveData("")
+    val errorText: LiveData<String> = _errorText
+
+    private val _codeFilterLocality = MutableLiveData("")
+    var codeFilterLocality: LiveData<String> = _codeFilterLocality
+
+    private val _codeFilterRoom = MutableLiveData("")
+    var codeFilterRoom: LiveData<String> = _codeFilterRoom
+
     fun findInventoryProperties(inventoryId: String) {
         _inventoryId.value = inventoryId
         propertyRepository.findByInventoryId(inventoryId = inventoryId)
@@ -71,7 +87,46 @@ class InventoryDetailViewModel(
     }
 
     fun runCodeFilter() {
-        /*TODO*/
+        if (_codeFilter.value!!.length == 20) {
+            val propertyNumber: String = _codeFilter.value!!.subSequence(4, 16).toString()
+            val subnumber: String = _codeFilter.value!!.subSequence(16, 20).toString()
+
+            val selectedList = _properties.value!!.filter {
+                it.propertyNumber == propertyNumber && it.subnumber == subnumber
+            }
+            if (selectedList.isEmpty()) {
+                //TODO show detail of new property
+            } else {
+                if (_scanWithoutDetail.value!!) {
+                    //TODO change the status of property
+                } else {
+                    //TODO show detail of property
+                }
+            }
+        } else if (_codeFilter.value!!.length == 22) {
+            val localityId: String = _codeFilter.value!!.subSequence(4, 14).toString().trim()
+            val roomId: String = _codeFilter.value!!.subSequence(14, 22).toString().trim()
+
+            _codeFilterLocality.value = localityId
+            _codeFilterRoom.value = roomId
+        } else {
+            _errorHeader.value = "Nesprávny kód..."
+            _errorText.value =
+                "Zadaný kód je nesprávny, skúste znova, alebo kontaktujte administrátora!"
+        }
+        _codeFilter.value = ""
+    }
+
+    fun confirmLocalityChange() {
+        if (localityCodebookRepository.allData.value!!.any { it.id == _codeFilterLocality.value } && roomCodebookRepository.allData.value!!.any { it.id == codeFilterRoom.value }) {
+            _localityFilter.value = _codeFilterLocality.value
+            _roomFilter.value = codeFilterRoom.value
+        } else {
+            _errorHeader.value = "Chyba"
+            _errorText.value = "Naskenovaná nesprávna lokalita! Nenachádza sa v zozname."
+        }
+        _codeFilterLocality.value = ""
+        _codeFilterRoom.value = ""
     }
 
     fun runFilters() {
@@ -81,8 +136,7 @@ class InventoryDetailViewModel(
     fun filterOutValues() {
         if (_properties.value == null || _properties.value!!.isEmpty()) {
             _filteredProperties.value = emptyList()
-        }
-        else {
+        } else {
             _filteredProperties.value = _properties.value!!.filter {
                 (_statusFilter.value == null || it.recordStatus == _statusFilter.value)
                         && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
@@ -90,5 +144,10 @@ class InventoryDetailViewModel(
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
             }
         }
+    }
+
+    fun closeErrorAlert() {
+        _errorHeader.value = ""
+        _errorText.value = ""
     }
 }
