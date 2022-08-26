@@ -9,41 +9,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
 
 @Composable
 fun PropertyListItem(
     property: PropertyPreviewModel,
     onClick: (Long) -> Unit
 ) {
-    val color = MaterialTheme.colors.primary
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .drawWithContent {
-                drawContent()
-                clipRect {
-                    val strokeWidth = Stroke.DefaultMiter
-                    val y = size.height
-                    drawLine(
-                        brush = SolidColor(color),
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Square,
-                        start = Offset.Zero.copy(y = y),
-                        end = Offset(x = size.width, y = y)
-                    )
-                }
-            }
+            .drawWithBottomLine(
+                width = 1f,
+                color = MaterialTheme.colors.primary
+            )
             .clickable {
                 onClick(property.id)
             }
