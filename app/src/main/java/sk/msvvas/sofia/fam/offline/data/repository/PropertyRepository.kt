@@ -28,13 +28,13 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         }
     }
 
-    fun findById(id: String) {
+    fun findById(id: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResult.value = asyncFindById(id).await()
         }
     }
 
-    private fun asyncFindById(id: String): Deferred<PropertyEntity?> =
+    private fun asyncFindById(id: Long): Deferred<PropertyEntity?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async propertyDao.findById(id)[0]
         }

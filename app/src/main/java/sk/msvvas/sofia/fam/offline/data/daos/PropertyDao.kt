@@ -20,7 +20,7 @@ interface PropertyDao {
     fun getAll(): List<PropertyEntity>
 
     @Query("SELECT * FROM properties WHERE id = :id")
-    suspend fun findById(id: String): List<PropertyEntity>
+    suspend fun findById(id: Long): List<PropertyEntity>
 
     @Query("SELECT * FROM properties WHERE inventory_id = :inventoryId")
     suspend fun findByInventoryId(inventoryId: String): List<PropertyEntity>
