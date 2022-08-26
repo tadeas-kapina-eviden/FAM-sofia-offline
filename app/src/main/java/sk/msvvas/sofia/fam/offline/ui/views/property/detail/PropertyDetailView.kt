@@ -121,7 +121,5 @@ fun PropertyDetailView(
                 onValueChange = {}
             )
         }
-
-
     }
 }

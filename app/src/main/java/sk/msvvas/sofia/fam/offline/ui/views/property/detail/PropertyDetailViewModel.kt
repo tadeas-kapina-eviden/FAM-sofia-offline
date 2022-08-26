@@ -17,6 +17,4 @@ class PropertyDetailViewModel(
 
     private val _property = propertyRepository.searchResult
     val property: LiveData<PropertyEntity> = _property
-
-
 }

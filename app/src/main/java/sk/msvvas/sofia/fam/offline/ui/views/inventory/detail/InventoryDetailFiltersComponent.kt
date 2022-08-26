@@ -16,7 +16,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -141,10 +140,4 @@ fun InventoryDetailFiltersComponent(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun InventoryDetailFiltersComponentPreview() {
-    //InventoryDetailFiltersComponent()
 }
