@@ -91,7 +91,7 @@ fun InventoryDetailFiltersComponent(
 }
 
 @Composable
-fun InputRow(
+private fun InputRow(
     label: String,
     value: String,
     onValueChange: (String) -> Unit

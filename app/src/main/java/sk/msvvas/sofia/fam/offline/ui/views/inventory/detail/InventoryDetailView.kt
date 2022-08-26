@@ -126,7 +126,7 @@ fun InventoryDetailView(
 }
 
 @Composable
-fun BoxScope.ErrorModalWindow(
+private fun BoxScope.ErrorModalWindow(
     errorHeader: String,
     errorText: String,
     close: () -> Unit
@@ -182,7 +182,7 @@ fun BoxScope.ErrorModalWindow(
 }
 
 @Composable
-fun BoxScope.LocalityChangeModalWindow(
+private fun BoxScope.LocalityChangeModalWindow(
     codeFilterLocality: String,
     codeFilterRoom: String,
     confirm: () -> Unit
