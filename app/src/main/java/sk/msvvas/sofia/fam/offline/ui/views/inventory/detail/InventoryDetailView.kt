@@ -64,7 +64,7 @@ fun InventoryDetailView(
                         imeAction = ImeAction.Done,
                         autoCorrect = false,
                         capitalization = KeyboardCapitalization.Characters,
-                        keyboardType = KeyboardType.Ascii
+                        keyboardType = KeyboardType.Number
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
@@ -105,108 +105,136 @@ fun InventoryDetailView(
         }
 
         if (errorHeader.isNotEmpty()) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize(),
-                color = Color(0xBB222222),
-                content = {}
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.Center)
-                    .background(color = MaterialTheme.colors.surface)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colors.primary
-                    ),
+            ErrorModalWindow(
+                errorHeader = errorHeader,
+                errorText = errorText
             ) {
-                TextField(
-                    value = errorHeader,
-                    readOnly = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    ),
-                    textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                )
-                TextField(
-                    value = errorText,
-                    readOnly = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    ),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                )
-                Row {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { inventoryDetailViewModel.closeErrorAlert() }
-                    ) {
-                        Text(text = "Zavrieť")
-                    }
-                }
+                inventoryDetailViewModel.closeErrorAlert()
             }
         }
 
         if (codeFilterRoom.isNotEmpty() || codeFilterLocality.isNotEmpty()) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize(),
-                color = Color(0xBB222222),
-                content = {}
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.Center)
-                    .background(color = MaterialTheme.colors.surface)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colors.primary
-                    ),
+            LocalityChangeModalWindow(
+                codeFilterLocality = codeFilterLocality,
+                codeFilterRoom = codeFilterRoom
             ) {
-                TextField(
-                    value = "Vstupujete do miestnosti...",
-                    readOnly = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    ),
-                    textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                )
-                TextField(
-                    value = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
-                    readOnly = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    ),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                )
-                Row {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { inventoryDetailViewModel.confirmLocalityChange() }
-                    ) {
-                        Text(text = "Ok")
-                    }
-                }
+                inventoryDetailViewModel.confirmLocalityChange()
             }
         }
     }
     inventoryDetailViewModel.filterOutValues()
+}
+
+@Composable
+fun BoxScope.ErrorModalWindow(
+    errorHeader: String,
+    errorText: String,
+    close: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = Color(0xBB222222),
+        content = {}
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .align(Alignment.Center)
+            .background(color = MaterialTheme.colors.surface)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colors.primary
+            ),
+    ) {
+        TextField(
+            value = errorHeader,
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface
+            ),
+            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+        )
+        TextField(
+            value = errorText,
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface
+            ),
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+        )
+        Row {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { close() }
+            ) {
+                Text(text = "Zavrieť")
+            }
+        }
+    }
+}
+
+@Composable
+fun BoxScope.LocalityChangeModalWindow(
+    codeFilterLocality: String,
+    codeFilterRoom: String,
+    confirm: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = Color(0xBB222222),
+        content = {}
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .align(Alignment.Center)
+            .background(color = MaterialTheme.colors.surface)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colors.primary
+            ),
+    ) {
+        TextField(
+            value = "Vstupujete do miestnosti...",
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface
+            ),
+            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+        )
+        TextField(
+            value = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface
+            ),
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+        )
+        Row {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { confirm() }
+            ) {
+                Text(text = "Ok")
+            }
+        }
+    }
 }
 
 fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
