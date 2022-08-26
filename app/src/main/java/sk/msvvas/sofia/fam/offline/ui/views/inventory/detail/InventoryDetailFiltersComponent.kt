@@ -32,70 +32,18 @@ fun InventoryDetailFiltersComponent(
             .fillMaxWidth()
             .padding(15.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp)
-        ) {
-            Text(
-                text = "Lokalita:",
-                modifier = Modifier
-                    .weight(2f)
-                    .padding(15.dp),
-                textAlign = TextAlign.End
-            )
-            TextField(
-                value = localityFilter,
-                onValueChange = {
-                    inventoryDetailViewModel.onLocalityFilterChange(it)
-                },
-                modifier = Modifier
-                    .weight(3f),
-
-                )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp)
-        ) {
-            Text(
-                text = "Miestnosť:",
-                modifier = Modifier
-                    .weight(2f)
-                    .padding(15.dp),
-                textAlign = TextAlign.End
-            )
-            TextField(
-                value = roomFilter,
-                onValueChange = {
-                    inventoryDetailViewModel.onRoomFilterChange(it)
-                },
-                modifier = Modifier
-                    .weight(3f)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp)
-        ) {
-            Text(
-                text = "Osoba:",
-                modifier = Modifier
-                    .weight(2f)
-                    .padding(15.dp),
-                textAlign = TextAlign.End
-            )
-            TextField(
-                value = userFilter,
-                onValueChange = {
-                    inventoryDetailViewModel.onUserFilterChange(it)
-                },
-                modifier = Modifier
-                    .weight(3f)
-            )
-        }
+        InputRow(
+            label = "Lokalita:",
+            value = localityFilter,
+            onValueChange = { inventoryDetailViewModel.onLocalityFilterChange(it) })
+        InputRow(
+            label = "Miestnosť:",
+            value = roomFilter,
+            onValueChange = { inventoryDetailViewModel.onRoomFilterChange(it) })
+        InputRow(
+            label = "Osoba:",
+            value = userFilter,
+            onValueChange = { inventoryDetailViewModel.onUserFilterChange(it) })
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,5 +87,34 @@ fun InventoryDetailFiltersComponent(
                 Text(text = "Spustiť filtre")
             }
         }
+    }
+}
+
+@Composable
+fun InputRow(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp)
+    ) {
+        Text(
+            text = label,
+            modifier = Modifier
+                .weight(2f)
+                .padding(15.dp),
+            textAlign = TextAlign.End
+        )
+        TextField(
+            value = value,
+            onValueChange = {
+                onValueChange(it)
+            },
+            modifier = Modifier
+                .weight(3f)
+        )
     }
 }
