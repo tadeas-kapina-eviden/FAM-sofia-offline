@@ -21,7 +21,7 @@ data class PropertyEntity(
     val id: Long = 0L,
 
     @ColumnInfo(name = "inventory_id")
-    var inventoryId: String,
+    var inventoryId: String = "",
 
     @ColumnInfo(name = "invent_number")
     var inventNumber: String = "",
@@ -30,25 +30,22 @@ data class PropertyEntity(
     var serialNumber: String = "",
 
     @ColumnInfo(name = "client")
-    var client: String,
+    var client: String = "",
 
     @ColumnInfo(name = "property_number")
-    var propertyNumber: String,
+    var propertyNumber: String = "",
 
     @ColumnInfo(name = "subnumber")
-    var subnumber: String,
+    var subnumber: String = "",
 
     @ColumnInfo(name = "text_main_number")
-    var textMainNumber: String,
+    var textMainNumber: String = "",
 
     @ColumnInfo(name = "record_status")
     var recordStatus: Char = 'X',
 
     @ColumnInfo(name = "werks")
     var werks: String = "",
-
-    @ColumnInfo(name = "werks_new")
-    var werksNew: String = "",
 
     @ColumnInfo(name = "locality")
     var locality: String = "",
@@ -63,10 +60,10 @@ data class PropertyEntity(
     var roomNew: String = "",
 
     @ColumnInfo(name = "personal_number")
-    var personalNumber: String,
+    var personalNumber: String = "",
 
     @ColumnInfo(name = "personal_number_new")
-    var personalNumberNew: String,
+    var personalNumberNew: String = "",
 
     @ColumnInfo(name = "center")
     var center: String = "",
