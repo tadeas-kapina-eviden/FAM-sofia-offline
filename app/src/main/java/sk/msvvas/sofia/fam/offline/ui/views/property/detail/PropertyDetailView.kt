@@ -1,17 +1,16 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
@@ -37,89 +36,109 @@ fun PropertyDetailView(
             onValueChange = {},
             readOnly = true,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.background
+            )
         )
         TextField(
             value = property.textMainNumber,
             onValueChange = {},
             readOnly = true,
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.End)
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.background
+            ),
+            textStyle = LocalTextStyle.current
+                .copy(textAlign = TextAlign.End)
         )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .drawWithBottomLine(
-                    width = 1f,
-                    color = MaterialTheme.colors.primary
-                )
-        ) {
-            Text(
-                text = "Sériové číslo",
-                modifier = Modifier.weight(2f)
-            )
-            TextField(
-                value = property.serialNumber,
-                readOnly = true,
-                onValueChange = {}
-            )
-        }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .drawWithBottomLine(
-                    width = 1f,
-                    color = MaterialTheme.colors.primary
-                )
-        ) {
-            Text(
-                text = "Invent číslo",
-                modifier = Modifier.weight(2f)
-            )
-            TextField(
-                value = property.inventNumber,
-                readOnly = true,
-                onValueChange = {}
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .drawWithBottomLine(
-                    width = 1f,
-                    color = MaterialTheme.colors.primary
-                )
-        ) {
-            Text(
-                text = "Závod",
-                modifier = Modifier.weight(2f)
-            )
-            TextField(
-                value = property.werks,
-                readOnly = true,
-                onValueChange = {}
-            )
-        }
+        InputRow(
+            label = "Sériové číslo",
+            value = property.serialNumber,
+            onClick = {}
+        )
+        InputRow(
+            label = "Invent. číslo",
+            value = property.inventNumber,
+            onClick = {}
+        )
+        InputRow(
+            label = "Závod",
+            value = property.werks,
+            onClick = {}
+        )
+        InputRow(
+            label = "Lokalita",
+            value = property.localityNew,
+            onClick = {/*TODO*/ }
+        )
+        InputRow(
+            label = "Miestnosť",
+            value = property.roomNew,
+            onClick = {/*TODO*/ }
+        )
+        InputRow(
+            label = "z. Os.",
+            value = property.personalNumberNew,
+            onClick = {/*TODO*/ }
+        )
+        InputRow(
+            label = "Stredisko",
+            value = property.center,
+            onClick = {}
+        )
+        InputRow(
+            label = "Pracovisko",
+            value = property.workplaceNew,
+            onClick = {/*TODO*/ }
+        )
+        InputRow(
+            label = "Poznámka",
+            value = property.fixedNote,
+            onClick = {/*TODO*/ }
+        )
+        InputRow(
+            label = "Vlastná pozn.",
+            value = property.variableNote,
+            onClick = {/*TODO*/ }
+        )
+    }
+}
 
-        Row(
+@Composable
+private fun InputRow(
+    label: String,
+    value: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .drawWithBottomLine(
+                width = 1f,
+                color = MaterialTheme.colors.primary
+            )
+    ) {
+        Text(
+            text = label,
+            modifier = Modifier.weight(2f)
+        )
+        TextField(
+            value = value,
+            readOnly = true,
+            onValueChange = {},
             modifier = Modifier
-                .fillMaxWidth()
-                .drawWithBottomLine(
-                    width = 1f,
-                    color = MaterialTheme.colors.primary
-                )
-        ) {
-            Text(
-                text = "Lokalita",
-                modifier = Modifier.weight(2f)
-            )
-            TextField(
-                value = property.werks,
-                readOnly = true,
-                onValueChange = {}
-            )
-        }
+                .weight(5f)
+                .clickable {
+                    onClick()
+                },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.background
+            ),
+            textStyle = LocalTextStyle.current
+                .copy(textAlign = TextAlign.End)
+        )
     }
 }
