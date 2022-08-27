@@ -47,30 +47,39 @@ fun CodebookSelectionView(
                 .fillMaxWidth()
                 .padding(horizontal = 5.dp, vertical = 5.dp)
         )
-        codebookData.forEach {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp, horizontal = 15.dp)
-                    .clickable {
-                        onSelect(idGetter(codebookData))
-                    }
-                    .verticalScroll(
-                        enabled = true,
-                        state = ScrollState(0)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(
+                    enabled = true,
+                    state = ScrollState(0)
+                )
+        ) {
+            codebookData.forEach {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp, horizontal = 15.dp)
+                        .clickable {
+                            onSelect(idGetter(codebookData))
+                        }
+                        .verticalScroll(
+                            enabled = true,
+                            state = ScrollState(0)
+                        )
+                ) {
+                    Text(
+                        text = idGetter(it),
+                        modifier = Modifier
+                            .weight(2f)
                     )
-            ) {
-                Text(
-                    text = idGetter(it),
-                    modifier = Modifier
-                        .weight(2f)
-                )
-                Text(
-                    text = descriptionGetter(it),
-                    modifier = Modifier
-                        .weight(5f),
-                    textAlign = TextAlign.End
-                )
+                    Text(
+                        text = descriptionGetter(it),
+                        modifier = Modifier
+                            .weight(5f),
+                        textAlign = TextAlign.End
+                    )
+                }
             }
         }
     }

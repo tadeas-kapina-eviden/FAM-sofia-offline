@@ -5,14 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
-import sk.msvvas.sofia.fam.offline.data.repository.codebook.LocalityCodebookRepository
-import sk.msvvas.sofia.fam.offline.data.repository.codebook.RoomCodebookRepository
+import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
 
 
 class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
-    private val localityCodebookRepository: LocalityCodebookRepository,
-    private val roomCodebookRepository: RoomCodebookRepository,
+    private val allCodebooksRepository: AllCodebooksRepository,
     val changeToDetailOfProperty: (Long) -> Unit
 ) : ViewModel() {
 
@@ -120,7 +118,7 @@ class InventoryDetailViewModel(
     }
 
     fun confirmLocalityChange() {
-        if (localityCodebookRepository.allData.value!!.any { it.id == _codeFilterLocality.value } && roomCodebookRepository.allData.value!!.any { it.id == codeFilterRoom.value }) {
+        if (allCodebooksRepository.allLocalities.value!!.any { it.id == _codeFilterLocality.value } && allCodebooksRepository.allRooms.value!!.any { it.id == codeFilterRoom.value }) {
             _localityFilter.value = _codeFilterLocality.value
             _roomFilter.value = codeFilterRoom.value
         } else {
