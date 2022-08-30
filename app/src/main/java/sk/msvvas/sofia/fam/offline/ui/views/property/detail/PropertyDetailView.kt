@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
 
 
-//TODO add other fields
 @Composable
 fun PropertyDetailView(
     propertyDetailViewModel: PropertyDetailViewModel
@@ -27,7 +27,16 @@ fun PropertyDetailView(
         false
     )
 
-    Box() {
+    val codebookSelectionViewData by propertyDetailViewModel.codebookSelectionViewData.observeAsState(
+        listOf()
+    )
+
+    val codebookSelectionViewIdGetter by propertyDetailViewModel.codebookSelectionViewIdGetter.observeAsState { "" }
+
+    val codebookSelectionViewDescriptionGetter by propertyDetailViewModel.codebookSelectionViewDescriptionGetter.observeAsState { "" }
+    val selectCodebook by propertyDetailViewModel.selectCodebook.observeAsState { "" }
+
+    Box {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,17 +83,17 @@ fun PropertyDetailView(
             InputRow(
                 label = "Lokalita",
                 value = property.localityNew,
-                onClick = {/*TODO*/ }
+                onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
             )
             InputRow(
                 label = "Miestnosť",
                 value = property.roomNew,
-                onClick = {/*TODO*/ }
+                onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
             )
             InputRow(
                 label = "z. Os.",
                 value = property.personalNumberNew,
-                onClick = {/*TODO*/ }
+                onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
             )
             InputRow(
                 label = "Stredisko",
@@ -94,12 +103,12 @@ fun PropertyDetailView(
             InputRow(
                 label = "Pracovisko",
                 value = property.workplaceNew,
-                onClick = {/*TODO*/ }
+                onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
             )
             InputRow(
                 label = "Poznámka",
                 value = property.fixedNote,
-                onClick = {/*TODO*/ }
+                onClick = { propertyDetailViewModel.showNoteCodebookSelectionView() }
             )
             InputRow(
                 label = "Vlastná pozn.",
@@ -108,7 +117,13 @@ fun PropertyDetailView(
             )
         }
         if (isCodebookSelectionViewShown) {
-
+            CodebookSelectionView(
+                codebookData = codebookSelectionViewData,
+                idGetter = codebookSelectionViewIdGetter,
+                descriptionGetter = codebookSelectionViewDescriptionGetter,
+                onSelect = selectCodebook,
+                onClose = { propertyDetailViewModel.closeCodebookSelectionView() }
+            )
         }
     }
 }
@@ -133,11 +148,11 @@ private fun InputRow(
         )
         TextField(
             value = value,
-            readOnly = true,
+            enabled = false,
             onValueChange = {},
             modifier = Modifier
                 .weight(5f)
-                .clickable {
+                .clickable(enabled = true) {
                     onClick()
                 },
             colors = TextFieldDefaults.textFieldColors(
