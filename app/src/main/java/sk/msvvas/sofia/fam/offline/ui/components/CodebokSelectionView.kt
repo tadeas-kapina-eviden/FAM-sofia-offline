@@ -1,15 +1,17 @@
 package sk.msvvas.sofia.fam.offline.ui.components
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -22,12 +24,27 @@ fun CodebookSelectionView(
     codebookData: List<Any>,
     idGetter: (Any) -> String,
     descriptionGetter: (Any) -> String,
-    onSelect: (String) -> Unit,
+    onSelect: (String) -> Any,
     onClose: () -> Unit
 ) {
+    var filterValue by remember {
+        mutableStateOf("")
+    }
+
+    var filteredCodebookData by remember {
+        mutableStateOf(codebookData.filter {
+            filterValue.isEmpty() || idGetter(it).contains(filterValue) || descriptionGetter(it).contains(
+                filterValue
+            )
+        })
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                color = MaterialTheme.colors.background,
+            )
     ) {
         Row(
             modifier = Modifier
@@ -41,8 +58,15 @@ fun CodebookSelectionView(
             )
         }
         TextField(
-            value = "",
-            onValueChange = {},
+            value = filterValue,
+            onValueChange = {
+                filterValue = it
+                filteredCodebookData = codebookData.filter {
+                    filterValue.isEmpty() || idGetter(it).contains(filterValue) || descriptionGetter(
+                        it
+                    ).contains(filterValue)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 5.dp, vertical = 5.dp)
@@ -55,18 +79,15 @@ fun CodebookSelectionView(
                     state = ScrollState(0)
                 )
         ) {
-            codebookData.forEach {
+            filteredCodebookData.forEach {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 5.dp, horizontal = 15.dp)
-                        .clickable {
-                            onSelect(idGetter(codebookData))
+                        .clickable(enabled = true) {
+
+                            onSelect(idGetter(it))
                         }
-                        .verticalScroll(
-                            enabled = true,
-                            state = ScrollState(0)
-                        )
                 ) {
                     Text(
                         text = idGetter(it),

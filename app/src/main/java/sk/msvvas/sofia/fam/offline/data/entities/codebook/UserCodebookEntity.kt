@@ -11,5 +11,5 @@ data class UserCodebookEntity(
     val id: String,
 
     @ColumnInfo(name = "full_name")
-    val full_name: String
+    val fullName: String
 )
