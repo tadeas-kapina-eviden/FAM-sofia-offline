@@ -4,9 +4,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 
 class LoginViewModel(
-    private val changeView: () -> Unit
+    private val navController: NavController
 ) : ViewModel() {
     private val _loginName = MutableLiveData("")
     val loginName: LiveData<String> = _loginName
@@ -65,7 +68,7 @@ class LoginViewModel(
             _lastError.value = "Číslo klienta musí mať 3 znaky!"
             requestClientFocus()
         } else {
-            changeView()
+            navController.navigate(Routes.INVENTORY_LIST.value)
         }
     }
 

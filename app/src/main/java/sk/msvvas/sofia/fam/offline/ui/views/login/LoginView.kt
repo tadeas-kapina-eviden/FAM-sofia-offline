@@ -141,13 +141,3 @@ private fun InputField(
         singleLine = true
     )
 }
-
-@Composable
-@Preview(showBackground = true)
-fun LoginViewPreview() {
-    LoginView(
-        loginViewModel = LoginViewModel(
-            changeView = {}
-        )
-    )
-}
