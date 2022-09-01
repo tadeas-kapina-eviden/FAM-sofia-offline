@@ -16,6 +16,8 @@ import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.login.LoginView
 import sk.msvvas.sofia.fam.offline.ui.views.login.LoginViewModel
+import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailView
+import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailViewModel
 
 @Composable
 fun Navigation(
@@ -47,7 +49,7 @@ fun Navigation(
             )
         }
         composable(
-            route = Routes.INVENTORY_DETAIL.value + "/{id}",
+            route = Routes.INVENTORY_DETAIL.defineRoute("id"),
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.StringType
@@ -62,6 +64,24 @@ fun Navigation(
                     allCodebooksRepository = allCodebookRepository,
                     navController = navController,
                     inventoryIdParameter = it.arguments?.getString("id")!!
+                )
+            )
+        }
+        composable(
+            route = Routes.PROPERTY_DETAIL.defineRoute("id"),
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.LongType
+                    defaultValue = 0L
+                    nullable = false
+                }
+            )
+        ) {
+            PropertyDetailView(
+                propertyDetailViewModel = PropertyDetailViewModel(
+                  propertyRepository = propertyRepository,
+                    allCodebooksRepository = allCodebookRepository,
+                    id = it.arguments?.getLong("id")!!
                 )
             )
         }

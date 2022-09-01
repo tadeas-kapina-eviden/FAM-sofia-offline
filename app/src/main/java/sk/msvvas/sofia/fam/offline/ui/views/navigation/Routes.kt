@@ -14,4 +14,13 @@ enum class Routes(val value: String) {
         }
         return route.toString()
     }
+
+    fun defineRoute(vararg params: String): String {
+        val route = StringBuilder(this.value)
+        params.forEach {
+            route.append("/{$it}")
+        }
+        return route.toString()
+    }
+
 }
