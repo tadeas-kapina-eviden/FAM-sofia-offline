@@ -49,7 +49,7 @@ fun Navigation(
         composable(
             route = Routes.INVENTORY_DETAIL.value + "/{id}",
             arguments = listOf(
-                navArgument("name") {
+                navArgument("id") {
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = false
@@ -61,7 +61,7 @@ fun Navigation(
                     propertyRepository = propertyRepository,
                     allCodebooksRepository = allCodebookRepository,
                     navController = navController,
-                    inventoryIdParameter = it.arguments?.getString("name")!!
+                    inventoryIdParameter = it.arguments?.getString("id")!!
                 )
             )
         }
