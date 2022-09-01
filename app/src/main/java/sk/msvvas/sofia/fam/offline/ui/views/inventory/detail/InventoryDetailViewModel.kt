@@ -3,20 +3,22 @@ package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
+import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 
 
 class InventoryDetailViewModel(
-    private val propertyRepository: PropertyRepository,
+    propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
-    val changeToDetailOfProperty: (Long) -> Unit
+    val navController: NavController,
+    inventoryIdParameter: String
 ) : ViewModel() {
 
     private val _properties: LiveData<List<PropertyEntity>> =
         propertyRepository.searchByInventoryIdResult
-    val properties: LiveData<List<PropertyEntity>> = _properties
 
     private val _filteredProperties = MutableLiveData(listOf<PropertyEntity>())
     val filteredProperties: LiveData<List<PropertyEntity>> = _filteredProperties
@@ -57,9 +59,9 @@ class InventoryDetailViewModel(
     private val _codeFilterRoom = MutableLiveData("")
     var codeFilterRoom: LiveData<String> = _codeFilterRoom
 
-    fun findInventoryProperties(inventoryId: String) {
-        _inventoryId.value = inventoryId
-        propertyRepository.findByInventoryId(inventoryId = inventoryId)
+    init {
+        _inventoryId.value = inventoryIdParameter
+        propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
     }
 
     fun onFiltersShowClick() {
@@ -100,7 +102,8 @@ class InventoryDetailViewModel(
                 if (_scanWithoutDetail.value!!) {
                     //TODO change the status of property
                 } else {
-                    changeToDetailOfProperty(selectedList[0].id)
+                    navController.navigate(Routes.PROPERTY_DETAIL.withArgs(selectedList[0].id.toString()))
+                    //changeToDetailOfProperty(selectedList[0].id)
                 }
             }
         } else if (_codeFilter.value!!.length == 22) {

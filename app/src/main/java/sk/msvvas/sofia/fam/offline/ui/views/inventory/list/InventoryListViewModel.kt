@@ -3,12 +3,14 @@ package sk.msvvas.sofia.fam.offline.ui.views.inventory.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.repository.InventoryRepository
+import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 
 class InventoryListViewModel(
     inventoryRepository: InventoryRepository,
-    private val viewChange: (String) -> Unit
+    private val navController: NavController
 ) : ViewModel() {
     private val _inventories: LiveData<List<InventoryEntity>> = inventoryRepository.allData
     val inventories: LiveData<List<InventoryEntity>> = _inventories
@@ -24,11 +26,11 @@ class InventoryListViewModel(
         _isDownloadConfirmShown.value = true
     }
 
-    fun onSelectInventoryConfirm(){
-        viewChange(_selectedInventoryId.value!!)
+    fun onSelectInventoryConfirm() {
+        navController.navigate(Routes.INVENTORY_DETAIL.withArgs(_selectedInventoryId.value!!))
     }
 
-    fun onSelectInventoryDecline(){
+    fun onSelectInventoryDecline() {
         _isDownloadConfirmShown.value = false
     }
 }

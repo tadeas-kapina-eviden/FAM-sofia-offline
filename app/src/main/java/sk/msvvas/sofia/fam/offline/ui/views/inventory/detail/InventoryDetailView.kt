@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 
 @Composable
@@ -101,7 +102,7 @@ fun InventoryDetailView(
             }
             PropertyListView(
                 properties = propertyEntityListToPropertyPreviewList(properties),
-                changeView = { inventoryDetailViewModel.changeToDetailOfProperty(it) })
+                changeView = { inventoryDetailViewModel.navController.navigate(Routes.PROPERTY_DETAIL.withArgs(it.toString())) })
         }
 
         if (errorHeader.isNotEmpty()) {
