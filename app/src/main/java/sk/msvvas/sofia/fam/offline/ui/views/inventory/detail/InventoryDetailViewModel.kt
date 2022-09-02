@@ -121,13 +121,8 @@ class InventoryDetailViewModel(
     }
 
     fun confirmLocalityChange() {
-        if (allCodebooksRepository.allLocalities.value!!.any { it.id == _codeFilterLocality.value } && allCodebooksRepository.allRooms.value!!.any { it.id == codeFilterRoom.value }) {
-            _localityFilter.value = _codeFilterLocality.value
-            _roomFilter.value = codeFilterRoom.value
-        } else {
-            _errorHeader.value = "Chyba"
-            _errorText.value = "Naskenovaná nesprávna lokalita! Nenachádza sa v zozname."
-        }
+        _localityFilter.value = _codeFilterLocality.value
+        _roomFilter.value = codeFilterRoom.value
         _codeFilterLocality.value = ""
         _codeFilterRoom.value = ""
     }
