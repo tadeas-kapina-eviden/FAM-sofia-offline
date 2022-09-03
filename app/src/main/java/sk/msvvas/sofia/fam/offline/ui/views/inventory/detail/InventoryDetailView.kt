@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 
@@ -37,6 +38,22 @@ fun InventoryDetailView(
     val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState("")
     val codeFilterRoom by inventoryDetailViewModel.codeFilterRoom.observeAsState("")
     val statusFilter by inventoryDetailViewModel.statusFilter.observeAsState('U')
+
+    val isCodebookSelectionViewShown by inventoryDetailViewModel.isCodebookSelectionViewShown.observeAsState(
+        false
+    )
+    val codebookSelectionViewData by inventoryDetailViewModel.codebookSelectionViewData.observeAsState(
+        listOf()
+    )
+
+    val codebookSelectionViewLastValue by inventoryDetailViewModel.codebookSelectionViewLastValue.observeAsState(
+        ""
+    )
+
+    val codebookSelectionViewIdGetter by inventoryDetailViewModel.codebookSelectionViewIdGetter.observeAsState { "" }
+
+    val codebookSelectionViewDescriptionGetter by inventoryDetailViewModel.codebookSelectionViewDescriptionGetter.observeAsState { "" }
+    val selectCodebook by inventoryDetailViewModel.selectCodebook.observeAsState { "" }
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -144,6 +161,17 @@ fun InventoryDetailView(
             ) {
                 inventoryDetailViewModel.closeErrorAlert()
             }
+        }
+
+        if (isCodebookSelectionViewShown) {
+            CodebookSelectionView(
+                codebookData = codebookSelectionViewData,
+                lastFilerValue = codebookSelectionViewLastValue,
+                idGetter = codebookSelectionViewIdGetter,
+                descriptionGetter = codebookSelectionViewDescriptionGetter,
+                onSelect = selectCodebook,
+                onClose = { inventoryDetailViewModel.closeCodebookSelectionView() }
+            )
         }
 
         if (codeFilterRoom.isNotEmpty() || codeFilterLocality.isNotEmpty()) {

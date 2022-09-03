@@ -1,26 +1,21 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.R
 
 @Composable
 fun InventoryDetailFiltersComponent(
@@ -39,15 +34,15 @@ fun InventoryDetailFiltersComponent(
         InputRow(
             label = "Lokalita:",
             value = localityFilter,
-            onValueChange = { inventoryDetailViewModel.onLocalityFilterChange(it) })
+            onClick = { inventoryDetailViewModel.showLocationCodebookSelectionView() })
         InputRow(
             label = "Miestnosť:",
             value = roomFilter,
-            onValueChange = { inventoryDetailViewModel.onRoomFilterChange(it) })
+            onClick = { inventoryDetailViewModel.showRoomCodebookSelectionView() })
         InputRow(
             label = "Osoba:",
             value = userFilter,
-            onValueChange = { inventoryDetailViewModel.onUserFilterChange(it) })
+            onClick = { inventoryDetailViewModel.showUserCodebookSelectionView() })
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -60,24 +55,15 @@ fun InventoryDetailFiltersComponent(
                     .padding(15.dp),
                 textAlign = TextAlign.End
             )
-            Row(
+            Column(
                 modifier = Modifier
                     .weight(3f)
             ) {
-                Button(
-                    onClick = { inventoryDetailViewModel.onScanWithoutDetailButtonClick() },
-                ) {
-                    Icon(
-                        Icons.Default.ArrowDropDown,
-                        contentDescription = "dropdown icon",
-                        modifier = Modifier
-                            .weight(1f)
-                            /*TODO change icon*/
-                            .rotate(
-                                if (scanWithoutDetail) 180f else 0f
-                            )
-                    )
-                }
+                Checkbox(
+                    checked = scanWithoutDetail,
+                    onCheckedChange = { inventoryDetailViewModel.onScanWithoutDetailButtonClick() },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
         Row(
@@ -98,7 +84,7 @@ fun InventoryDetailFiltersComponent(
 private fun InputRow(
     label: String,
     value: String,
-    onValueChange: (String) -> Unit
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -114,11 +100,13 @@ private fun InputRow(
         )
         TextField(
             value = value,
-            onValueChange = {
-                onValueChange(it)
-            },
+            onValueChange = {},
+            enabled = false,
             modifier = Modifier
                 .weight(3f)
+                .clickable {
+                    onClick()
+                }
         )
     }
 }

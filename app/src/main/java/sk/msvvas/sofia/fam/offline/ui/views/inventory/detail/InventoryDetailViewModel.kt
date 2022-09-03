@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.entities.codebook.LocalityCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.entities.codebook.RoomCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.entities.codebook.UserCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 
 
 class InventoryDetailViewModel(
-    propertyRepository: PropertyRepository,
+    private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
     val navController: NavController,
     inventoryIdParameter: String
@@ -61,6 +64,25 @@ class InventoryDetailViewModel(
     private val _codeFilterRoom = MutableLiveData("")
     var codeFilterRoom: LiveData<String> = _codeFilterRoom
 
+    private val _isCodebookSelectionViewShown = MutableLiveData(false)
+    val isCodebookSelectionViewShown: LiveData<Boolean> = _isCodebookSelectionViewShown
+
+    private val _codebookSelectionViewData = MutableLiveData(listOf<Any>())
+    val codebookSelectionViewData: LiveData<List<Any>> = _codebookSelectionViewData
+
+    private val _codebookSelectionViewIdGetter = MutableLiveData<(Any) -> String> { "" }
+    val codebookSelectionViewIdGetter: LiveData<(Any) -> String> = _codebookSelectionViewIdGetter
+
+    private val _codebookSelectionViewDescriptionGetter = MutableLiveData<(Any) -> String> { "" }
+    val codebookSelectionViewDescriptionGetter: LiveData<(Any) -> String> =
+        _codebookSelectionViewDescriptionGetter
+
+    private val _selectCodebook = MutableLiveData<(String) -> Unit> {}
+    val selectCodebook: LiveData<(String) -> Unit> = _selectCodebook
+
+    private val _codebookSelectionViewLastValue = MutableLiveData("")
+    val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
+
     init {
         _inventoryId.value = inventoryIdParameter
         propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
@@ -72,18 +94,6 @@ class InventoryDetailViewModel(
 
     fun onCodeFilterChange(newCode: String) {
         _codeFilter.value = newCode
-    }
-
-    fun onLocalityFilterChange(newCode: String) {
-        _localityFilter.value = newCode
-    }
-
-    fun onRoomFilterChange(newCode: String) {
-        _roomFilter.value = newCode
-    }
-
-    fun onUserFilterChange(newCode: String) {
-        _userFilter.value = newCode
     }
 
     fun onScanWithoutDetailButtonClick() {
@@ -102,11 +112,15 @@ class InventoryDetailViewModel(
                 //TODO show detail of new property
             } else {
                 if (_scanWithoutDetail.value!!) {
-                    //TODO change the status of property
+                    val propertyToUpdate = selectedList.first()
+                    propertyToUpdate.localityNew = _localityFilter.value!!
+                    propertyToUpdate.roomNew = _roomFilter.value!!
+                    propertyToUpdate.personalNumberNew = _userFilter.value!!
+                    propertyRepository.update(property = propertyToUpdate)
                 } else {
                     navController.navigate(
                         Routes.PROPERTY_DETAIL.withArgs(
-                            selectedList[0].id.toString()
+                            selectedList.first().id.toString()
                         ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!!
                     )
                 }
@@ -176,5 +190,48 @@ class InventoryDetailViewModel(
     fun statusFilterStatus() {
         _statusFilter.value = 'S'
         filterOutValues()
+    }
+
+    fun closeCodebookSelectionView() {
+        _isCodebookSelectionViewShown.value = false
+    }
+
+    fun showLocationCodebookSelectionView() {
+        _isCodebookSelectionViewShown.value = true
+        _codebookSelectionViewData.value = allCodebooksRepository.allLocalities.value
+        _codebookSelectionViewIdGetter.value = { (it as LocalityCodebookEntity).id }
+        _codebookSelectionViewDescriptionGetter.value =
+            { (it as LocalityCodebookEntity).description }
+        _codebookSelectionViewLastValue.value = _localityFilter.value
+        _selectCodebook.value = {
+            closeCodebookSelectionView()
+            _localityFilter.value = it
+        }
+    }
+
+    fun showRoomCodebookSelectionView() {
+        _isCodebookSelectionViewShown.value = true
+        _codebookSelectionViewData.value = allCodebooksRepository.allRooms.value
+        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
+        _codebookSelectionViewDescriptionGetter.value =
+            { (it as RoomCodebookEntity).description }
+        _codebookSelectionViewLastValue.value = _roomFilter.value
+        _selectCodebook.value = {
+            closeCodebookSelectionView()
+            _roomFilter.value = it
+        }
+    }
+
+    fun showUserCodebookSelectionView() {
+        _isCodebookSelectionViewShown.value = true
+        _codebookSelectionViewData.value = allCodebooksRepository.allUsers.value
+        _codebookSelectionViewIdGetter.value = { (it as UserCodebookEntity).id }
+        _codebookSelectionViewDescriptionGetter.value =
+            { (it as UserCodebookEntity).fullName }
+        _codebookSelectionViewLastValue.value = _userFilter.value
+        _selectCodebook.value = {
+            closeCodebookSelectionView()
+            _userFilter.value = it
+        }
     }
 }
