@@ -1,12 +1,9 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,11 +11,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
@@ -37,6 +36,7 @@ fun InventoryDetailView(
     val errorText by inventoryDetailViewModel.errorText.observeAsState("")
     val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState("")
     val codeFilterRoom by inventoryDetailViewModel.codeFilterRoom.observeAsState("")
+    val statusFilter by inventoryDetailViewModel.statusFilter.observeAsState('U')
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -85,6 +85,32 @@ fun InventoryDetailView(
             }
             if (isFiltersShow) {
                 InventoryDetailFiltersComponent(inventoryDetailViewModel)
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = (if (statusFilter == 'U') R.drawable.unprocessed_selected else R.drawable.unprocessed_unselected)),
+                    contentDescription = "",
+                    Modifier.clickable(enabled = true) {
+                        inventoryDetailViewModel.statusFilterUnprocessed()
+                    }
+                )
+                Image(
+                    painter = painterResource(id = (if (statusFilter == 'P') R.drawable.processed_selected else R.drawable.processed_unselected)),
+                    contentDescription = "",
+                    Modifier.clickable(enabled = true) {
+                        inventoryDetailViewModel.statusFilterProcessed()
+                    }
+                )
+                Image(
+                    painter = painterResource(id = (if (statusFilter == 'S') R.drawable.status_selected else R.drawable.status_unselected)),
+                    contentDescription = "",
+                    Modifier.clickable(enabled = true) {
+                        inventoryDetailViewModel.statusFilterStatus()
+                    }
+                )
             }
             Row(
                 modifier = Modifier

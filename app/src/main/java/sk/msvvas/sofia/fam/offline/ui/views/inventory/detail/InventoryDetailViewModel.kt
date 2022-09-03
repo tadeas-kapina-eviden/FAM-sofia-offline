@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,7 +30,7 @@ class InventoryDetailViewModel(
     private val _inventoryId = MutableLiveData("")
     val inventoryId: LiveData<String> = _inventoryId
 
-    private val _statusFilter = MutableLiveData('S')
+    private val _statusFilter = MutableLiveData('U')
     val statusFilter: LiveData<Char> = _statusFilter
 
     private val _codeFilter = MutableLiveData("")
@@ -136,10 +137,11 @@ class InventoryDetailViewModel(
             _filteredProperties.value = emptyList()
         } else {
             _filteredProperties.value = _properties.value!!.filter {
-                (_statusFilter.value == null || it.recordStatus == _statusFilter.value)
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
+                (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
                         && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
+                        && ((_statusFilter.value == 'U' && (it.recordStatus == 'X' || it.recordStatus == 'C'))
+                        || (_statusFilter.value == 'P' && (it.recordStatus == 'Z' || it.recordStatus == 'S')))
             }
         }
     }
@@ -147,5 +149,20 @@ class InventoryDetailViewModel(
     fun closeErrorAlert() {
         _errorHeader.value = ""
         _errorText.value = ""
+    }
+
+    fun statusFilterUnprocessed() {
+        _statusFilter.value = 'U'
+        filterOutValues()
+    }
+
+    fun statusFilterProcessed() {
+        _statusFilter.value = 'P'
+        filterOutValues()
+    }
+
+    fun statusFilterStatus() {
+        _statusFilter.value = 'S'
+        filterOutValues()
     }
 }
