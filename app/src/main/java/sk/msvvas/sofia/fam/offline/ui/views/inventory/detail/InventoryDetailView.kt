@@ -132,11 +132,7 @@ fun InventoryDetailView(
                 PropertyListView(
                     properties = propertyEntityListToPropertyPreviewList(properties),
                     changeView = {
-                        inventoryDetailViewModel.navController.navigate(
-                            Routes.PROPERTY_DETAIL.withArgs(
-                                it.toString()
-                            )
-                        )
+                        inventoryDetailViewModel.onSelectProperty(it)
                     })
             }
         }

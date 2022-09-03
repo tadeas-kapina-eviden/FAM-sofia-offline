@@ -15,7 +15,10 @@ class PropertyDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
     val id: Long,
-    private val navController: NavController
+    private val navController: NavController,
+    localityFilter: String,
+    roomFilter: String,
+    userFilter: String
 ) : ViewModel() {
 
     init {
@@ -25,13 +28,15 @@ class PropertyDetailViewModel(
     private val _property = propertyRepository.searchResult
     val property: LiveData<PropertyEntity> = _property
 
-    private val _locality = MutableLiveData("")
+    private var varsInitialized = false
+
+    private val _locality = MutableLiveData(localityFilter)
     val locality: LiveData<String> = _locality
 
-    private val _room = MutableLiveData("")
+    private val _room = MutableLiveData(roomFilter)
     val room: LiveData<String> = _room
 
-    private val _user = MutableLiveData("")
+    private val _user = MutableLiveData(userFilter)
     val user: LiveData<String> = _user
 
     private val _place = MutableLiveData("")
@@ -151,17 +156,21 @@ class PropertyDetailViewModel(
     }
 
     fun lateInitVarsData() {
-        if (_locality.value == "" && _room.value == "" && _user.value == "" && _place.value == "") {
+        if (!varsInitialized) {
             _property.value!!.let {
                 if ("XC".contains(it.recordStatus)) {
-                    it.localityNew = it.locality
-                    it.roomNew = it.room
-                    it.personalNumberNew = it.personalNumber
+                    it.localityNew = if (_locality.value == "") it.locality else _locality.value!!
+                    it.roomNew = if (_room.value == "") it.room else _room.value!!
+                    it.personalNumberNew =
+                        if (_user.value == "") it.personalNumber else _user.value!!
                     it.workplaceNew = it.workplace
                 }
-                _locality.value = it.localityNew
-                _room.value = it.roomNew
-                _user.value = it.personalNumberNew
+                if (_locality.value == "")
+                    _locality.value = it.localityNew
+                if (_room.value == "")
+                    _room.value = it.roomNew
+                if (_user.value == "")
+                    _user.value = it.personalNumberNew
                 _place.value = it.workplaceNew
                 _fixedNote.value = it.fixedNote
                 _variableNote.value = it.variableNote

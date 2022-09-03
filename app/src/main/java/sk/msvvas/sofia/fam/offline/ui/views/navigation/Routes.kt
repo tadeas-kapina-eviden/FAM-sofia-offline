@@ -23,4 +23,13 @@ enum class Routes(val value: String) {
         return route.toString()
     }
 
+    companion object {
+        fun addOptionalArgumentsToRoute(route: String, vararg params: String): String {
+            val result = StringBuilder(route)
+            params.forEach {
+                result.append("?$it={$it}")
+            }
+            return result.toString()
+        }
+    }
 }

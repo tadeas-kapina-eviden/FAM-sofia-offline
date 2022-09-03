@@ -68,21 +68,44 @@ fun Navigation(
             )
         }
         composable(
-            route = Routes.PROPERTY_DETAIL.defineRoute("id"),
+            route = Routes.addOptionalArgumentsToRoute(
+                Routes.PROPERTY_DETAIL.defineRoute("id"),
+                "locality",
+                "room",
+                "user"
+            ),
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.LongType
                     defaultValue = 0L
+                    nullable = false
+                },
+                navArgument("locality") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                },
+                navArgument("room") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                },
+                navArgument("user") {
+                    type = NavType.StringType
+                    defaultValue = ""
                     nullable = false
                 }
             )
         ) {
             PropertyDetailView(
                 propertyDetailViewModel = PropertyDetailViewModel(
-                  propertyRepository = propertyRepository,
+                    propertyRepository = propertyRepository,
                     allCodebooksRepository = allCodebookRepository,
                     id = it.arguments?.getLong("id")!!,
-                    navController = navController
+                    navController = navController,
+                    localityFilter = it.arguments?.getString("locality")!!,
+                    roomFilter = it.arguments?.getString("room")!!,
+                    userFilter = it.arguments?.getString("user")!!
                 )
             )
         }

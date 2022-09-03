@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -105,8 +104,11 @@ class InventoryDetailViewModel(
                 if (_scanWithoutDetail.value!!) {
                     //TODO change the status of property
                 } else {
-                    navController.navigate(Routes.PROPERTY_DETAIL.withArgs(selectedList[0].id.toString()))
-                    //changeToDetailOfProperty(selectedList[0].id)
+                    navController.navigate(
+                        Routes.PROPERTY_DETAIL.withArgs(
+                            selectedList[0].id.toString()
+                        ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!!
+                    )
                 }
             }
         } else if (_codeFilter.value!!.length == 22) {
@@ -146,6 +148,14 @@ class InventoryDetailViewModel(
                         || (_statusFilter.value == 'P' && (it.recordStatus == 'Z' || it.recordStatus == 'S')))
             }
         }
+    }
+
+    fun onSelectProperty(id: Long) {
+        navController.navigate(
+            Routes.PROPERTY_DETAIL.withArgs(
+                id.toString(),
+            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!!
+        )
     }
 
     fun closeErrorAlert() {
