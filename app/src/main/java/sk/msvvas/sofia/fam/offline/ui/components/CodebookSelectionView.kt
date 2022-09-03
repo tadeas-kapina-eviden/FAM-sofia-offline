@@ -27,13 +27,14 @@ import sk.msvvas.sofia.fam.offline.data.entities.codebook.LocalityCodebookEntity
 @Composable
 fun CodebookSelectionView(
     codebookData: List<Any>,
+    lastFilerValue: String,
     idGetter: (Any) -> String,
     descriptionGetter: (Any) -> String,
     onSelect: (String) -> Any,
     onClose: () -> Unit
 ) {
     var filterValue by remember {
-        mutableStateOf("")
+        mutableStateOf(lastFilerValue)
     }
 
     var filteredCodebookData by remember {
@@ -129,7 +130,7 @@ fun CodebookSelectionView(
 }
 
 fun highlightSelectedText(selected: String, text: String): AnnotatedString {
-    if (selected.isEmpty() || !text.contains(selected))
+    if (selected.isEmpty() || !text.contains(selected) || text.split(selected).size > 2)
         return buildAnnotatedString { append(text) }
     else
         return buildAnnotatedString {
@@ -173,6 +174,7 @@ fun CodebookSelectionPreview() {
                 description = "Zdlhavy popis tretej lokality"
             ),
         ),
+        lastFilerValue = "",
         idGetter = {
             (it as LocalityCodebookEntity).id
         },
