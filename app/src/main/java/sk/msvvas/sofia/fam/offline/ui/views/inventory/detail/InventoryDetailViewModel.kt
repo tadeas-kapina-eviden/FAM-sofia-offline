@@ -18,7 +18,9 @@ class InventoryDetailViewModel(
     inventoryIdParameter: String
 ) : ViewModel() {
 
-    private val _properties: LiveData<List<PropertyEntity>> =
+    private val _properties =
+        propertyRepository.searchByInventoryIdResult
+    val properties: LiveData<List<PropertyEntity>> =
         propertyRepository.searchByInventoryIdResult
 
     private val _filteredProperties = MutableLiveData(listOf<PropertyEntity>())

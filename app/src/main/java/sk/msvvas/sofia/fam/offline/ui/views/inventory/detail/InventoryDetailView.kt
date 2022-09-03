@@ -126,9 +126,19 @@ fun InventoryDetailView(
                         .padding(horizontal = 15.dp, vertical = 1.dp)
                 )
             }
-            PropertyListView(
-                properties = propertyEntityListToPropertyPreviewList(properties),
-                changeView = { inventoryDetailViewModel.navController.navigate(Routes.PROPERTY_DETAIL.withArgs(it.toString())) })
+            if (statusFilter == 'S') {
+                InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel)
+            } else {
+                PropertyListView(
+                    properties = propertyEntityListToPropertyPreviewList(properties),
+                    changeView = {
+                        inventoryDetailViewModel.navController.navigate(
+                            Routes.PROPERTY_DETAIL.withArgs(
+                                it.toString()
+                            )
+                        )
+                    })
+            }
         }
 
         if (errorHeader.isNotEmpty()) {
