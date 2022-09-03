@@ -10,7 +10,6 @@ import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 
-//TODO
 class PropertyDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
