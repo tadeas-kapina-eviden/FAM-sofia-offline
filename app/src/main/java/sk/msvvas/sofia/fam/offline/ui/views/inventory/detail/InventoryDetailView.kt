@@ -82,7 +82,7 @@ fun InventoryDetailView(
                         imeAction = ImeAction.Done,
                         autoCorrect = false,
                         capitalization = KeyboardCapitalization.Characters,
-                        keyboardType = KeyboardType.Number
+                        keyboardType = KeyboardType.Ascii
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
