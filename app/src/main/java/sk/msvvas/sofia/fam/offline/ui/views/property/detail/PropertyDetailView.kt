@@ -1,7 +1,9 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,12 +25,23 @@ fun PropertyDetailView(
         PropertyEntity()
     )
 
+    val locality by propertyDetailViewModel.locality.observeAsState("")
+    val room by propertyDetailViewModel.room.observeAsState("")
+    val user by propertyDetailViewModel.user.observeAsState("")
+    val place by propertyDetailViewModel.place.observeAsState("")
+    val fixedNote by propertyDetailViewModel.fixedNote.observeAsState("")
+    val variableNote by propertyDetailViewModel.variableNote.observeAsState("")
+
     val isCodebookSelectionViewShown by propertyDetailViewModel.isCodebookSelectionViewShown.observeAsState(
         false
     )
 
     val codebookSelectionViewData by propertyDetailViewModel.codebookSelectionViewData.observeAsState(
         listOf()
+    )
+
+    val codebookSelectionViewLastValue by propertyDetailViewModel.codebookSelectionViewLastValue.observeAsState(
+        ""
     )
 
     val codebookSelectionViewIdGetter by propertyDetailViewModel.codebookSelectionViewIdGetter.observeAsState { "" }
@@ -39,91 +52,122 @@ fun PropertyDetailView(
     Box {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp)
-        ) {
-            TextField(
-                value = "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
-                onValueChange = {},
-                readOnly = true,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.background
-                )
-            )
-            TextField(
-                value = property.textMainNumber,
-                onValueChange = {},
-                readOnly = true,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.background
+                .fillMaxSize()
+                .verticalScroll(
+                    enabled = true,
+                    state = ScrollState(0)
                 ),
-                textStyle = LocalTextStyle.current
-                    .copy(textAlign = TextAlign.End)
-            )
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+            ) {
+                TextField(
+                    value = "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.background
+                    )
+                )
+                TextField(
+                    value = property.textMainNumber,
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.background
+                    ),
+                    textStyle = LocalTextStyle.current
+                        .copy(textAlign = TextAlign.End)
+                )
 
-            InputRow(
-                label = "Sériové číslo",
-                value = property.serialNumber,
-                onClick = {}
-            )
-            InputRow(
-                label = "Invent. číslo",
-                value = property.inventNumber,
-                onClick = {}
-            )
-            InputRow(
-                label = "Závod",
-                value = property.werks,
-                onClick = {}
-            )
-            InputRow(
-                label = "Lokalita",
-                value = property.localityNew,
-                onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
-            )
-            InputRow(
-                label = "Miestnosť",
-                value = property.roomNew,
-                onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
-            )
-            InputRow(
-                label = "z. Os.",
-                value = property.personalNumberNew,
-                onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
-            )
-            InputRow(
-                label = "Stredisko",
-                value = property.center,
-                onClick = {}
-            )
-            InputRow(
-                label = "Pracovisko",
-                value = property.workplaceNew,
-                onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
-            )
-            InputRow(
-                label = "Poznámka",
-                value = property.fixedNote,
-                onClick = { propertyDetailViewModel.showNoteCodebookSelectionView() }
-            )
-            InputRow(
-                label = "Vlastná pozn.",
-                value = property.variableNote,
-                onClick = {/*TODO*/ }
-            )
+                InputRow(
+                    label = "Sériové číslo",
+                    value = property.serialNumber,
+                    onClick = {}
+                )
+                InputRow(
+                    label = "Invent. číslo",
+                    value = property.inventNumber,
+                    onClick = {}
+                )
+                InputRow(
+                    label = "Závod",
+                    value = property.werks,
+                    onClick = {}
+                )
+                InputRow(
+                    label = "Lokalita",
+                    value = locality,
+                    onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
+                )
+                InputRow(
+                    label = "Miestnosť",
+                    value = room,
+                    onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
+                )
+                InputRow(
+                    label = "z. Os.",
+                    value = user,
+                    onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
+                )
+                InputRow(
+                    label = "Stredisko",
+                    value = property.center,
+                    onClick = {}
+                )
+                InputRow(
+                    label = "Pracovisko",
+                    value = place,
+                    onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
+                )
+                InputRow(
+                    label = "Poznámka",
+                    value = fixedNote,
+                    onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() }
+                )
+                InputRow(
+                    label = "Vlastná pozn.",
+                    value = variableNote,
+                    onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() }
+                )
+            }
+            Row(modifier = Modifier.fillMaxWidth()) {
+                if("SZ".contains(property.recordStatus)){
+                    Button(
+                        onClick = { propertyDetailViewModel.rollback() },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(text = "Vráť na originál")
+                    }
+                }
+                Button(
+                    onClick = { propertyDetailViewModel.submit() },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Potvrď")
+                }
+            }
         }
         if (isCodebookSelectionViewShown) {
             CodebookSelectionView(
                 codebookData = codebookSelectionViewData,
+                lastFilerValue = codebookSelectionViewLastValue,
                 idGetter = codebookSelectionViewIdGetter,
                 descriptionGetter = codebookSelectionViewDescriptionGetter,
                 onSelect = selectCodebook,
                 onClose = { propertyDetailViewModel.closeCodebookSelectionView() }
             )
+        }
+
+        if (propertyDetailViewModel.property.value != null) {
+            propertyDetailViewModel.lateInitVarsData()
         }
     }
 }
@@ -156,7 +200,8 @@ private fun InputRow(
                     onClick()
                 },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.background,
+                textColor = MaterialTheme.colors.primary
             ),
             textStyle = LocalTextStyle.current
                 .copy(textAlign = TextAlign.End)

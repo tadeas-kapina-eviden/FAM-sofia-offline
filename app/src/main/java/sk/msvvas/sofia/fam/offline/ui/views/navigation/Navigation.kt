@@ -81,7 +81,8 @@ fun Navigation(
                 propertyDetailViewModel = PropertyDetailViewModel(
                   propertyRepository = propertyRepository,
                     allCodebooksRepository = allCodebookRepository,
-                    id = it.arguments?.getLong("id")!!
+                    id = it.arguments?.getLong("id")!!,
+                    navController = navController
                 )
             )
         }

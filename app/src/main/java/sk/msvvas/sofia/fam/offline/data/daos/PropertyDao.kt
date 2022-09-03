@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
+import androidx.room.Update
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 
 
@@ -15,6 +16,9 @@ interface PropertyDao {
 
     @Insert(onConflict = IGNORE)
     suspend fun saveAll(propertyEntities: List<PropertyEntity>)
+
+    @Update
+    suspend fun update(propertyEntity: PropertyEntity)
 
     @Query("SELECT * FROM properties")
     fun getAll(): List<PropertyEntity>

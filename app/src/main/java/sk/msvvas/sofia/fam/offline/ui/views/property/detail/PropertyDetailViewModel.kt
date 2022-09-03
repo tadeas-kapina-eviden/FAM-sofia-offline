@@ -3,16 +3,19 @@ package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.*
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
+import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 
 //TODO
 class PropertyDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
-    val id: Long
+    val id: Long,
+    private val navController: NavController
 ) : ViewModel() {
 
     init {
@@ -21,6 +24,24 @@ class PropertyDetailViewModel(
 
     private val _property = propertyRepository.searchResult
     val property: LiveData<PropertyEntity> = _property
+
+    private val _locality = MutableLiveData("")
+    val locality: LiveData<String> = _locality
+
+    private val _room = MutableLiveData("")
+    val room: LiveData<String> = _room
+
+    private val _user = MutableLiveData("")
+    val user: LiveData<String> = _user
+
+    private val _place = MutableLiveData("")
+    val place: LiveData<String> = _place
+
+    private val _fixedNote = MutableLiveData("")
+    val fixedNote: LiveData<String> = _fixedNote
+
+    private val _variableNote = MutableLiveData("")
+    val variableNote: LiveData<String> = _variableNote
 
     private val _isCodebookSelectionViewShown = MutableLiveData(false)
     val isCodebookSelectionViewShown: LiveData<Boolean> = _isCodebookSelectionViewShown
@@ -38,6 +59,9 @@ class PropertyDetailViewModel(
     private val _selectCodebook = MutableLiveData<(String) -> Unit> {}
     val selectCodebook: LiveData<(String) -> Unit> = _selectCodebook
 
+    private val _codebookSelectionViewLastValue = MutableLiveData("")
+    val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
+
     fun closeCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = false
     }
@@ -48,9 +72,11 @@ class PropertyDetailViewModel(
         _codebookSelectionViewIdGetter.value = { (it as LocalityCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as LocalityCodebookEntity).description }
+        _codebookSelectionViewLastValue.value = _property.value?.localityNew
         _selectCodebook.value = {
             closeCodebookSelectionView()
             property.value!!.localityNew = it
+            _locality.value = it
         }
     }
 
@@ -60,8 +86,10 @@ class PropertyDetailViewModel(
         _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
+        _codebookSelectionViewLastValue.value = _property.value?.roomNew
         _selectCodebook.value = {
             closeCodebookSelectionView()
+            _room.value = it
             property.value!!.roomNew = it
         }
     }
@@ -72,8 +100,10 @@ class PropertyDetailViewModel(
         _codebookSelectionViewIdGetter.value = { (it as UserCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as UserCodebookEntity).fullName }
+        _codebookSelectionViewLastValue.value = _property.value?.personalNumberNew
         _selectCodebook.value = {
             closeCodebookSelectionView()
+            _user.value = it
             property.value!!.personalNumberNew = it
         }
     }
@@ -84,21 +114,90 @@ class PropertyDetailViewModel(
         _codebookSelectionViewIdGetter.value = { (it as PlacesCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as PlacesCodebookEntity).description }
+        _codebookSelectionViewLastValue.value = _property.value?.workplaceNew
         _selectCodebook.value = {
             closeCodebookSelectionView()
+            _place.value = it
             property.value!!.workplaceNew = it
         }
     }
 
-    fun showNoteCodebookSelectionView() {
+    fun showFixedNoteCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allNotes.value
         _codebookSelectionViewIdGetter.value = { (it as NoteCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as NoteCodebookEntity).description }
+        _codebookSelectionViewLastValue.value = _property.value?.fixedNote
         _selectCodebook.value = {
             closeCodebookSelectionView()
+            _fixedNote.value = it
             property.value!!.fixedNote = it
         }
     }
+
+    fun showVariableNoteCodebookSelectionView() {
+        _isCodebookSelectionViewShown.value = true
+        _codebookSelectionViewData.value = emptyList()
+        _codebookSelectionViewIdGetter.value = { "" }
+        _codebookSelectionViewDescriptionGetter.value =
+            { "" }
+        _codebookSelectionViewLastValue.value = _property.value?.variableNote
+        _selectCodebook.value = {
+            closeCodebookSelectionView()
+            _variableNote.value = it
+            property.value!!.variableNote = it
+        }
+    }
+
+    fun lateInitVarsData() {
+        if (_locality.value == "" && _room.value == "" && _user.value == "" && _place.value == "") {
+            _property.value!!.let {
+                if ("XC".contains(it.recordStatus)) {
+                    it.localityNew = it.locality
+                    it.roomNew = it.room
+                    it.personalNumberNew = it.personalNumber
+                    it.workplaceNew = it.workplace
+                }
+                _locality.value = it.localityNew
+                _room.value = it.roomNew
+                _user.value = it.personalNumberNew
+                _place.value = it.workplaceNew
+                _fixedNote.value = it.fixedNote
+                _variableNote.value = it.variableNote
+            }
+        }
+    }
+
+    fun submit() {
+        _property.value!!.let {
+            if (it.locality == it.localityNew
+                && it.room == it.roomNew
+                && it.personalNumber == it.personalNumberNew
+                && it.workplace == it.workplaceNew
+            ) {
+                it.recordStatus = 'S'
+            } else {
+                it.recordStatus = 'Z'
+            }
+
+            propertyRepository.update(property = it)
+            navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
+        }
+    }
+
+    fun rollback() {
+        _property.value!!.let {
+            it.localityNew = ""
+            it.roomNew = ""
+            it.personalNumberNew = ""
+            it.workplaceNew = ""
+            it.recordStatus = 'C'
+            it.variableNote = ""
+            it.fixedNote = ""
+            propertyRepository.update(property = it)
+            navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
+        }
+    }
+
 }

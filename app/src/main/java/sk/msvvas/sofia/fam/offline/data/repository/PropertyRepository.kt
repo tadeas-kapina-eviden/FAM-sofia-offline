@@ -28,6 +28,12 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         }
     }
 
+    fun update(property: PropertyEntity){
+        coroutineScope.launch(Dispatchers.IO){
+            propertyDao.update(property)
+        }
+    }
+
     fun findById(id: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResult.value = asyncFindById(id).await()

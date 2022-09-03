@@ -47,7 +47,15 @@ fun PropertyListItem(
             )
         }
         Text(
-            text = "Spracované",
+            text = when (property.status) {
+                'X' -> "Nespracovaný"
+                'Z' -> "Zmenený"
+                'C' -> "Chýbajúci"
+                'S' -> "Spracovaný"
+                else -> {
+                    ""
+                }
+            },
             modifier = Modifier
                 .weight(1f)
                 .padding(5.dp)
