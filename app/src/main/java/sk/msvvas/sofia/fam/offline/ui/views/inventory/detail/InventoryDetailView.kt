@@ -21,7 +21,6 @@ import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
-import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 
 @Composable
@@ -58,102 +57,113 @@ fun InventoryDetailView(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp)
-                .verticalScroll(
-                    enabled = true,
-                    state = ScrollState(0)
-                )
+            modifier = Modifier.fillMaxSize()
         ) {
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(vertical = 5.dp)
+                    .verticalScroll(
+                        enabled = true,
+                        state = ScrollState(0)
+                    )
+                    .weight(1f)
             ) {
-                TextField(
-                    value = codeFilter,
-                    onValueChange = {
-                        inventoryDetailViewModel.onCodeFilterChange(it)
-                    },
+                Row(
                     modifier = Modifier
-                        .weight(1f),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                        autoCorrect = false,
-                        capitalization = KeyboardCapitalization.Characters,
-                        keyboardType = KeyboardType.Ascii
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            inventoryDetailViewModel.runCodeFilter()
-                        }
-                    ),
-                )
-                Button(
-                    onClick = { inventoryDetailViewModel.onFiltersShowClick() },
-                    modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                 ) {
-                    Text(
-                        text = "Zobraziť filtre"
+                    TextField(
+                        value = codeFilter,
+                        onValueChange = {
+                            inventoryDetailViewModel.onCodeFilterChange(it)
+                        },
+                        modifier = Modifier
+                            .weight(1f),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            autoCorrect = false,
+                            capitalization = KeyboardCapitalization.Characters,
+                            keyboardType = KeyboardType.Ascii
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                inventoryDetailViewModel.runCodeFilter()
+                            }
+                        ),
+                    )
+                    Button(
+                        onClick = { inventoryDetailViewModel.onFiltersShowClick() },
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "Zobraziť filtre"
+                        )
+                    }
+                }
+                if (isFiltersShow) {
+                    InventoryDetailFiltersComponent(inventoryDetailViewModel)
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(id = (if (statusFilter == 'U') R.drawable.unprocessed_selected else R.drawable.unprocessed_unselected)),
+                        contentDescription = "",
+                        Modifier.clickable(enabled = true) {
+                            inventoryDetailViewModel.statusFilterUnprocessed()
+                        }
+                    )
+                    Image(
+                        painter = painterResource(id = (if (statusFilter == 'P') R.drawable.processed_selected else R.drawable.processed_unselected)),
+                        contentDescription = "",
+                        Modifier.clickable(enabled = true) {
+                            inventoryDetailViewModel.statusFilterProcessed()
+                        }
+                    )
+                    Image(
+                        painter = painterResource(id = (if (statusFilter == 'S') R.drawable.status_selected else R.drawable.status_unselected)),
+                        contentDescription = "",
+                        Modifier.clickable(enabled = true) {
+                            inventoryDetailViewModel.statusFilterStatus()
+                        }
                     )
                 }
-            }
-            if (isFiltersShow) {
-                InventoryDetailFiltersComponent(inventoryDetailViewModel)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = (if (statusFilter == 'U') R.drawable.unprocessed_selected else R.drawable.unprocessed_unselected)),
-                    contentDescription = "",
-                    Modifier.clickable(enabled = true) {
-                        inventoryDetailViewModel.statusFilterUnprocessed()
-                    }
-                )
-                Image(
-                    painter = painterResource(id = (if (statusFilter == 'P') R.drawable.processed_selected else R.drawable.processed_unselected)),
-                    contentDescription = "",
-                    Modifier.clickable(enabled = true) {
-                        inventoryDetailViewModel.statusFilterProcessed()
-                    }
-                )
-                Image(
-                    painter = painterResource(id = (if (statusFilter == 'S') R.drawable.status_selected else R.drawable.status_unselected)),
-                    contentDescription = "",
-                    Modifier.clickable(enabled = true) {
-                        inventoryDetailViewModel.statusFilterStatus()
-                    }
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colors.primary
-                    )
-            ) {
-                Text(
-                    text = "Inv. $inventoryId",
+                Row(
                     modifier = Modifier
-                        .padding(horizontal = 15.dp, vertical = 1.dp)
-                )
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.primary
+                        )
+                ) {
+                    Text(
+                        text = "Inv. $inventoryId",
+                        modifier = Modifier
+                            .padding(horizontal = 15.dp, vertical = 1.dp)
+                    )
+                }
+                if (statusFilter == 'S') {
+                    InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel)
+                } else {
+                    PropertyListView(
+                        properties = propertyEntityListToPropertyPreviewList(properties),
+                        changeView = {
+                            inventoryDetailViewModel.onSelectProperty(it)
+                        })
+                }
             }
-            if (statusFilter == 'S') {
-                InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel)
-            } else {
-                PropertyListView(
-                    properties = propertyEntityListToPropertyPreviewList(properties),
-                    changeView = {
-                        inventoryDetailViewModel.onSelectProperty(it)
-                    })
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    inventoryDetailViewModel.onSelectProperty(-1)
+            }) {
+                Text(text = "+ Nový")
             }
         }
-
         if (errorHeader.isNotEmpty()) {
             ErrorModalWindow(
                 errorHeader = errorHeader,

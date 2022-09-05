@@ -172,10 +172,17 @@ class InventoryDetailViewModel(
     }
 
     fun onSelectProperty(id: Long) {
+        val computedId: Long =
+            if (id < 0) {
+                -(_properties.value!!.filter {
+                    it.propertyNumber.trim() == "NOVY"
+                }.size + 1).toLong()
+            } else id
+
         navController.navigate(
             Routes.PROPERTY_DETAIL.withArgs(
-                id.toString(),
-            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + "?isManual=" + true.toString()
+                computedId.toString(),
+            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value + "?isManual=" + true.toString()
         )
     }
 
