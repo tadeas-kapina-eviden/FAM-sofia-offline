@@ -83,6 +83,12 @@ class PropertyDetailViewModel(
     private val _codebookSelectionViewLastValue = MutableLiveData("")
     val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
 
+    private val _errorHeader = MutableLiveData("")
+    val errorHeader: LiveData<String> = _errorHeader
+
+    private val _errorText = MutableLiveData("")
+    val errorText: LiveData<String> = _errorText
+
     fun closeCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = false
     }
@@ -212,7 +218,8 @@ class PropertyDetailViewModel(
                 propertyRepository.update(property = it)
             } else {
                 if (it.variableNote.trim().isEmpty()) {
-                    //TODO show error
+                    _errorHeader.value = "Vyplňte vlastnú poznámu"
+                    _errorText.value = "Pri neidentifikovanom majetku je nutné vyplniť Vlastnú poznámku - meno/popis majetku"
                     return
                 } else {
                     it.textMainNumber = it.variableNote
@@ -242,6 +249,11 @@ class PropertyDetailViewModel(
             }
             navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
         }
+    }
+
+    fun closeErrorAlert() {
+        _errorHeader.value = ""
+        _errorText.value = ""
     }
 
 }

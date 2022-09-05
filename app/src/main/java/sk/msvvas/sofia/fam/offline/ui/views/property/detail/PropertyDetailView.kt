@@ -1,14 +1,15 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
@@ -31,6 +32,8 @@ fun PropertyDetailView(
     val place by propertyDetailViewModel.place.observeAsState("")
     val fixedNote by propertyDetailViewModel.fixedNote.observeAsState("")
     val variableNote by propertyDetailViewModel.variableNote.observeAsState("")
+    val errorHeader by propertyDetailViewModel.errorHeader.observeAsState("")
+    val errorText by propertyDetailViewModel.errorText.observeAsState("")
 
     val isCodebookSelectionViewShown by propertyDetailViewModel.isCodebookSelectionViewShown.observeAsState(
         false
@@ -169,6 +172,15 @@ fun PropertyDetailView(
         if (propertyDetailViewModel.property.value != null) {
             propertyDetailViewModel.lateInitVarsData()
         }
+
+        if (errorHeader.isNotEmpty()) {
+            ErrorModalWindow(
+                errorHeader = errorHeader,
+                errorText = errorText
+            ) {
+                propertyDetailViewModel.closeErrorAlert()
+            }
+        }
     }
 }
 
@@ -206,5 +218,61 @@ private fun InputRow(
             textStyle = LocalTextStyle.current
                 .copy(textAlign = TextAlign.End)
         )
+    }
+}
+
+@Composable
+private fun BoxScope.ErrorModalWindow(
+    errorHeader: String,
+    errorText: String,
+    close: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = Color(0xBB222222),
+        content = {}
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .align(Alignment.Center)
+            .background(color = MaterialTheme.colors.surface)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colors.primary
+            ),
+    ) {
+        TextField(
+            value = errorHeader,
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface
+            ),
+            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+        )
+        TextField(
+            value = errorText,
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface
+            ),
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+        )
+        Row {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { close() }
+            ) {
+                Text(text = "Zavrieť")
+            }
+        }
     }
 }
