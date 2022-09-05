@@ -65,7 +65,7 @@ fun PropertyDetailView(
                     .padding(horizontal = 15.dp)
             ) {
                 TextField(
-                    value = "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
+                    value = if (propertyDetailViewModel.isNew) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier
@@ -139,7 +139,7 @@ fun PropertyDetailView(
                 )
             }
             Row(modifier = Modifier.fillMaxWidth()) {
-                if("SZ".contains(property.recordStatus)){
+                if ("SZN".contains(property.recordStatus)) {
                     Button(
                         onClick = { propertyDetailViewModel.rollback() },
                         modifier = Modifier.weight(1f)

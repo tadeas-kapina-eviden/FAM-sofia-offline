@@ -17,15 +17,32 @@ class PropertyDetailViewModel(
     private val navController: NavController,
     localityFilter: String,
     roomFilter: String,
-    userFilter: String
+    userFilter: String,
+    inventoryId: String,
+    val isManual: Boolean
 ) : ViewModel() {
+    private val _property: MutableLiveData<PropertyEntity>
+    val property: LiveData<PropertyEntity>
+    val isNew: Boolean
 
     init {
-        propertyRepository.findById(id)
+        if (id > 0) {
+            propertyRepository.findById(id)
+            _property = propertyRepository.searchResult
+            isNew = false
+        } else {
+            _property = MutableLiveData(
+                PropertyEntity(
+                    propertyNumber = "NOVY",
+                    subnumber = (-id).toString(),
+                    inventoryId = inventoryId,
+                    recordStatus = 'N'
+                )
+            )
+            isNew = true
+        }
+        property = _property
     }
-
-    private val _property = propertyRepository.searchResult
-    val property: LiveData<PropertyEntity> = _property
 
     private var varsInitialized = false
 
@@ -179,31 +196,50 @@ class PropertyDetailViewModel(
 
     fun submit() {
         _property.value!!.let {
-            if (it.locality == it.localityNew
-                && it.room == it.roomNew
-                && it.personalNumber == it.personalNumberNew
-                && it.workplace == it.workplaceNew
-            ) {
-                it.recordStatus = 'S'
+            if (!isNew) {
+                if (it.recordStatus != 'N') {
+                    if (it.locality == it.localityNew
+                        && it.room == it.roomNew
+                        && it.personalNumber == it.personalNumberNew
+                        && it.workplace == it.workplaceNew
+                    ) {
+                        it.recordStatus = 'S'
+                    } else {
+                        it.recordStatus = 'Z'
+                    }
+                }
+                it.isManual = isManual
+                propertyRepository.update(property = it)
             } else {
-                it.recordStatus = 'Z'
+                if (it.variableNote.trim().isEmpty()) {
+                    //TODO show error
+                    return
+                } else {
+                    it.textMainNumber = it.variableNote
+                    it.isManual = isManual
+                    propertyRepository.save(property = it)
+                }
             }
-
-            propertyRepository.update(property = it)
             navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
         }
     }
 
     fun rollback() {
         _property.value!!.let {
-            it.localityNew = ""
-            it.roomNew = ""
-            it.personalNumberNew = ""
-            it.workplaceNew = ""
-            it.recordStatus = 'C'
-            it.variableNote = ""
-            it.fixedNote = ""
-            propertyRepository.update(property = it)
+            if (it.recordStatus != 'N') {
+                it.localityNew = ""
+                it.roomNew = ""
+                it.personalNumberNew = ""
+                it.workplaceNew = ""
+                it.recordStatus = 'C'
+                it.variableNote = ""
+                it.fixedNote = ""
+                propertyRepository.update(property = it)
+            } else {
+                if (!isNew) {
+                    propertyRepository.delete(property = it)
+                }
+            }
             navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
         }
     }

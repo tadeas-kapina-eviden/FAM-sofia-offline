@@ -28,9 +28,15 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         }
     }
 
-    fun update(property: PropertyEntity){
-        coroutineScope.launch(Dispatchers.IO){
+    fun update(property: PropertyEntity) {
+        coroutineScope.launch(Dispatchers.IO) {
             propertyDao.update(property)
+        }
+    }
+
+    fun delete(property: PropertyEntity) {
+        coroutineScope.launch(Dispatchers.IO) {
+            propertyDao.delete(property)
         }
     }
 
@@ -42,7 +48,8 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
 
     private fun asyncFindById(id: Long): Deferred<PropertyEntity?> =
         coroutineScope.async(Dispatchers.IO) {
-            return@async propertyDao.findById(id)[0]
+            val resultList = propertyDao.findById(id)
+            return@async if (resultList.isEmpty()) null else resultList[0]
         }
 
     fun findByInventoryId(inventoryId: String) {

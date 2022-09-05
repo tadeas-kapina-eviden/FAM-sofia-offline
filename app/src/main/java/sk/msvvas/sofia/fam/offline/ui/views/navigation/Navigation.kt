@@ -72,7 +72,9 @@ fun Navigation(
                 Routes.PROPERTY_DETAIL.defineRoute("id"),
                 "locality",
                 "room",
-                "user"
+                "user",
+                "inventoryId",
+                "isManual"
             ),
             arguments = listOf(
                 navArgument("id") {
@@ -94,6 +96,16 @@ fun Navigation(
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = false
+                },
+                navArgument("inventoryId") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                },
+                navArgument("isManual") {
+                    type = NavType.BoolType
+                    defaultValue = false
+                    nullable = false
                 }
             )
         ) {
@@ -105,7 +117,9 @@ fun Navigation(
                     navController = navController,
                     localityFilter = it.arguments?.getString("locality")!!,
                     roomFilter = it.arguments?.getString("room")!!,
-                    userFilter = it.arguments?.getString("user")!!
+                    userFilter = it.arguments?.getString("user")!!,
+                    inventoryId = it.arguments?.getString("inventoryId")!!,
+                    isManual = it.arguments?.getBoolean("isManual")!!,
                 )
             )
         }

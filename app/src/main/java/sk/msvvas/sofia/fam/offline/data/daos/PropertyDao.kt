@@ -1,10 +1,7 @@
 package sk.msvvas.sofia.fam.offline.data.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
-import androidx.room.Query
-import androidx.room.Update
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 
 
@@ -20,6 +17,9 @@ interface PropertyDao {
     @Update
     suspend fun update(propertyEntity: PropertyEntity)
 
+    @Delete
+    suspend fun delete(property: PropertyEntity)
+
     @Query("SELECT * FROM properties")
     fun getAll(): List<PropertyEntity>
 
@@ -28,4 +28,5 @@ interface PropertyDao {
 
     @Query("SELECT * FROM properties WHERE inventory_id = :inventoryId")
     suspend fun findByInventoryId(inventoryId: String): List<PropertyEntity>
+
 }

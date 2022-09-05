@@ -109,7 +109,14 @@ class InventoryDetailViewModel(
                 it.propertyNumber == propertyNumber && it.subnumber == subnumber
             }
             if (selectedList.isEmpty()) {
-                //TODO show detail of new property
+                val newCount = _properties.value!!.filter {
+                    it.propertyNumber.trim() == "NOVY"
+                }.size + 1
+                navController.navigate(
+                    Routes.PROPERTY_DETAIL.withArgs(
+                        (-newCount).toString(),
+                    ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value!! + "?isManual=" + false.toString()
+                )
             } else {
                 if (_scanWithoutDetail.value!!) {
                     val propertyToUpdate = selectedList.first()
@@ -121,7 +128,7 @@ class InventoryDetailViewModel(
                     navController.navigate(
                         Routes.PROPERTY_DETAIL.withArgs(
                             selectedList.first().id.toString()
-                        ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!!
+                        ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?isManual=" + false.toString()
                     )
                 }
             }
@@ -159,7 +166,7 @@ class InventoryDetailViewModel(
                         && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
                         && ((_statusFilter.value == 'U' && (it.recordStatus == 'X' || it.recordStatus == 'C'))
-                        || (_statusFilter.value == 'P' && (it.recordStatus == 'Z' || it.recordStatus == 'S')))
+                        || (_statusFilter.value == 'P' && (it.recordStatus == 'Z' || it.recordStatus == 'S' || it.recordStatus == 'N')))
             }
         }
     }
@@ -168,7 +175,7 @@ class InventoryDetailViewModel(
         navController.navigate(
             Routes.PROPERTY_DETAIL.withArgs(
                 id.toString(),
-            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!!
+            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + "?isManual=" + true.toString()
         )
     }
 

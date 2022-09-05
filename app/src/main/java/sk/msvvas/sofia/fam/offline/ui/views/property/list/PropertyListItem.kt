@@ -52,6 +52,7 @@ fun PropertyListItem(
                 'Z' -> "Zmenený"
                 'C' -> "Chýbajúci"
                 'S' -> "Spracovaný"
+                'N' -> "Nový"
                 else -> {
                     ""
                 }
