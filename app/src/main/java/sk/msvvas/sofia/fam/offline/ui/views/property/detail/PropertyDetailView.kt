@@ -140,6 +140,30 @@ fun PropertyDetailView(
                     value = variableNote,
                     onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() }
                 )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            20.dp
+                        )
+                ) {
+                    Row(modifier = Modifier.weight(1f)) {
+                        Checkbox(
+                            checked = propertyDetailViewModel.isManual,
+                            onCheckedChange = {},
+                            enabled = false
+                        )
+                        Text("Manuálny")
+                    }
+                    Row(modifier = Modifier.weight(1f)) {
+                        Checkbox(
+                            checked = propertyDetailViewModel.isNew,
+                            onCheckedChange = {},
+                            enabled = false
+                        )
+                        Text("Nový")
+                    }
+                }
             }
             Row(modifier = Modifier.fillMaxWidth()) {
                 if ("SZN".contains(property.recordStatus)) {
