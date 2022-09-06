@@ -144,7 +144,7 @@ fun PropertyDetailView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            20.dp
+                            horizontal = 20.dp
                         )
                 ) {
                     Row(modifier = Modifier.weight(1f)) {
@@ -153,7 +153,10 @@ fun PropertyDetailView(
                             onCheckedChange = {},
                             enabled = false
                         )
-                        Text("Manuálny")
+                        Text(
+                            text = "Manuálny",
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
                     }
                     Row(modifier = Modifier.weight(1f)) {
                         Checkbox(
@@ -161,7 +164,10 @@ fun PropertyDetailView(
                             onCheckedChange = {},
                             enabled = false
                         )
-                        Text("Nový")
+                        Text(
+                            text = "Nový",
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
                     }
                 }
             }
