@@ -108,28 +108,34 @@ fun InventoryDetailView(
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(0.5f)
                 ) {
                     Image(
                         painter = painterResource(id = (if (statusFilter == 'U') R.drawable.unprocessed_selected else R.drawable.unprocessed_unselected)),
                         contentDescription = "",
-                        Modifier.clickable(enabled = true) {
-                            inventoryDetailViewModel.statusFilterUnprocessed()
-                        }
+                        Modifier
+                            .clickable(enabled = true) {
+                                inventoryDetailViewModel.statusFilterUnprocessed()
+                            }
+                            .weight(1f)
                     )
                     Image(
                         painter = painterResource(id = (if (statusFilter == 'P') R.drawable.processed_selected else R.drawable.processed_unselected)),
                         contentDescription = "",
-                        Modifier.clickable(enabled = true) {
-                            inventoryDetailViewModel.statusFilterProcessed()
-                        }
+                        Modifier
+                            .clickable(enabled = true) {
+                                inventoryDetailViewModel.statusFilterProcessed()
+                            }
+                            .weight(1f)
                     )
                     Image(
                         painter = painterResource(id = (if (statusFilter == 'S') R.drawable.status_selected else R.drawable.status_unselected)),
                         contentDescription = "",
-                        Modifier.clickable(enabled = true) {
-                            inventoryDetailViewModel.statusFilterStatus()
-                        }
+                        Modifier
+                            .clickable(enabled = true) {
+                                inventoryDetailViewModel.statusFilterStatus()
+                            }
+                            .weight(1f)
                     )
                 }
                 Row(
@@ -160,7 +166,7 @@ fun InventoryDetailView(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     inventoryDetailViewModel.onSelectProperty(-1)
-            }) {
+                }) {
                 Text(text = "+ Nový")
             }
         }

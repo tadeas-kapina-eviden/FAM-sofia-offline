@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +13,7 @@ import sk.msvvas.sofia.fam.offline.data.model.LocalityRoomCountPair
 
 @Composable
 fun InventoryDetailStatusView(
-    inventoryDetailViewModel: InventoryDetailViewModel
+    inventoryDetailViewModel: InventoryDetailViewModel,
 ) {
     val properties by inventoryDetailViewModel.properties.observeAsState(emptyList())
     val localityRoomPairs = countLocalityRoomPairs(properties)
@@ -43,7 +44,14 @@ fun InventoryDetailStatusView(
             )
         }
         localityRoomPairs.forEach {
-            StatusRow(localityRoomCountPair = it)
+            StatusRow(
+                localityRoomCountPair = it,
+                onSelect = { loc, room ->
+                    inventoryDetailViewModel.onLocalityRoomStatusSelect(
+                        loc,
+                        room
+                    )
+                })
         }
     }
 
@@ -51,7 +59,8 @@ fun InventoryDetailStatusView(
 
 @Composable
 fun StatusRow(
-    localityRoomCountPair: LocalityRoomCountPair
+    localityRoomCountPair: LocalityRoomCountPair,
+    onSelect: (String, String) -> Unit
 ) {
     val processed = localityRoomCountPair.processed
     val all = localityRoomCountPair.all
@@ -59,6 +68,9 @@ fun StatusRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)
+            .clickable {
+                onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
+            }
     ) {
         Text(
             text = localityRoomCountPair.locality,

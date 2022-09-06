@@ -248,4 +248,10 @@ class InventoryDetailViewModel(
             _userFilter.value = it
         }
     }
+
+    fun onLocalityRoomStatusSelect(locality: String, room: String) {
+        _codeFilterLocality.value = locality
+        _codeFilterRoom.value = room
+        filterOutValues()
+    }
 }
