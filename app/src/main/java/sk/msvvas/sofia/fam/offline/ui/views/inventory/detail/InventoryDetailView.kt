@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
@@ -110,32 +111,35 @@ fun InventoryDetailView(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                 ) {
-                    Image(
-                        painter = painterResource(id = (if (statusFilter == 'U') R.drawable.unprocessed_selected else R.drawable.unprocessed_unselected)),
-                        contentDescription = "",
-                        Modifier
-                            .clickable(enabled = true) {
-                                inventoryDetailViewModel.statusFilterUnprocessed()
-                            }
-                            .weight(1f)
+                    StatusFilterButton(
+                        isSelected = (statusFilter == 'U'),
+                        idSelected = R.drawable.unprocessed_selected,
+                        idUnselected = R.drawable.unprocessed_unselected,
+                        text = "Nespracované",
+                        count = inventoryDetailViewModel.countUnprocessed(),
+                        onClick = {
+                            inventoryDetailViewModel.statusFilterUnprocessed()
+                        }
                     )
-                    Image(
-                        painter = painterResource(id = (if (statusFilter == 'P') R.drawable.processed_selected else R.drawable.processed_unselected)),
-                        contentDescription = "",
-                        Modifier
-                            .clickable(enabled = true) {
-                                inventoryDetailViewModel.statusFilterProcessed()
-                            }
-                            .weight(1f)
+                    StatusFilterButton(
+                        isSelected = (statusFilter == 'P'),
+                        idSelected = R.drawable.processed_selected,
+                        idUnselected = R.drawable.processed_unselected,
+                        text = "Spracované",
+                        count = inventoryDetailViewModel.countProcessed(),
+                        onClick = {
+                            inventoryDetailViewModel.statusFilterProcessed()
+                        }
                     )
-                    Image(
-                        painter = painterResource(id = (if (statusFilter == 'S') R.drawable.status_selected else R.drawable.status_unselected)),
-                        contentDescription = "",
-                        Modifier
-                            .clickable(enabled = true) {
-                                inventoryDetailViewModel.statusFilterStatus()
-                            }
-                            .weight(1f)
+                    StatusFilterButton(
+                        isSelected = (statusFilter == 'S'),
+                        idSelected = R.drawable.status_selected,
+                        idUnselected = R.drawable.status_unselected,
+                        text = "Status",
+                        count = -1,
+                        onClick = {
+                            inventoryDetailViewModel.statusFilterStatus()
+                        }
                     )
                 }
                 Row(
@@ -200,6 +204,43 @@ fun InventoryDetailView(
         }
     }
     inventoryDetailViewModel.filterOutValues()
+}
+
+@Composable
+private fun RowScope.StatusFilterButton(
+    isSelected: Boolean,
+    idSelected: Int,
+    idUnselected: Int,
+    text: String,
+    count: Int,
+    onClick: () -> Unit
+) {
+    Column(
+        Modifier
+            .clickable(enabled = true) {
+                onClick()
+            }
+            .weight(1f)
+    ) {
+        Box {
+            Image(
+                painter = painterResource(id = (if (isSelected) idSelected else idUnselected)),
+                contentDescription = ""
+            )
+            if (count >= 0) {
+                Text(
+                    text = count.toString(),
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
+            }
+        }
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = 12.sp
+            )
+        )
+    }
 }
 
 @Composable

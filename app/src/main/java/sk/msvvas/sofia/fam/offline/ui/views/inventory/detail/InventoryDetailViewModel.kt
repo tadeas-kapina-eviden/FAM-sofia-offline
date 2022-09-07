@@ -254,4 +254,19 @@ class InventoryDetailViewModel(
         _codeFilterRoom.value = room
         filterOutValues()
     }
+
+    fun countUnprocessed(): Int {
+        return if (_properties.value != null)
+            _properties.value!!.count {
+                it.recordStatus == 'C' || it.recordStatus == 'X'
+            } else 0
+
+    }
+
+    fun countProcessed(): Int {
+        return if (_properties.value != null)
+            _properties.value!!.count {
+                it.recordStatus == 'S' || it.recordStatus == 'Z' || it.recordStatus == 'N'
+            } else 0
+    }
 }
