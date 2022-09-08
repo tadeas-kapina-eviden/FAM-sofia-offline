@@ -4,13 +4,15 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -22,6 +24,7 @@ import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
+import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 
 @Composable
@@ -174,14 +177,12 @@ fun InventoryDetailView(
                 Text(text = "+ Nový")
             }
         }
-        if (errorHeader.isNotEmpty()) {
-            ErrorModalWindow(
-                errorHeader = errorHeader,
-                errorText = errorText
-            ) {
-                inventoryDetailViewModel.closeErrorAlert()
-            }
-        }
+        ModalWindow(
+            header = errorHeader,
+            body = errorText,
+            buttonText = "Zavrieť",
+            confirm = { inventoryDetailViewModel.closeErrorAlert() }
+        )
 
         if (isCodebookSelectionViewShown) {
             CodebookSelectionView(
@@ -195,12 +196,12 @@ fun InventoryDetailView(
         }
 
         if (codeFilterRoom.isNotEmpty() || codeFilterLocality.isNotEmpty()) {
-            LocalityChangeModalWindow(
-                codeFilterLocality = codeFilterLocality,
-                codeFilterRoom = codeFilterRoom
-            ) {
-                inventoryDetailViewModel.confirmLocalityChange()
-            }
+            ModalWindow(
+                header = "Vstupujete do miestnosti...",
+                body = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
+                buttonText = "OK",
+                confirm = {inventoryDetailViewModel.confirmLocalityChange()}
+            )
         }
     }
     inventoryDetailViewModel.filterOutValues()
@@ -240,118 +241,6 @@ private fun RowScope.StatusFilterButton(
                 fontSize = 12.sp
             )
         )
-    }
-}
-
-@Composable
-private fun BoxScope.ErrorModalWindow(
-    errorHeader: String,
-    errorText: String,
-    close: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = Color(0xBB222222),
-        content = {}
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .align(Alignment.Center)
-            .background(color = MaterialTheme.colors.surface)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colors.primary
-            ),
-    ) {
-        TextField(
-            value = errorHeader,
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        TextField(
-            value = errorText,
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        Row {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { close() }
-            ) {
-                Text(text = "Zavrieť")
-            }
-        }
-    }
-}
-
-@Composable
-private fun BoxScope.LocalityChangeModalWindow(
-    codeFilterLocality: String,
-    codeFilterRoom: String,
-    confirm: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = Color(0xBB222222),
-        content = {}
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .align(Alignment.Center)
-            .background(color = MaterialTheme.colors.surface)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colors.primary
-            ),
-    ) {
-        TextField(
-            value = "Vstupujete do miestnosti...",
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        TextField(
-            value = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        Row {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { confirm() }
-            ) {
-                Text(text = "Ok")
-            }
-        }
     }
 }
 

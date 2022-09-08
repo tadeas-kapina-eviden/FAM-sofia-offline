@@ -1,8 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -11,13 +9,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.InputRow
+import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
 
 
@@ -208,12 +205,12 @@ fun PropertyDetailView(
         }
 
         if (errorHeader.isNotEmpty()) {
-            ErrorModalWindow(
-                errorHeader = errorHeader,
-                errorText = errorText
-            ) {
-                propertyDetailViewModel.closeErrorAlert()
-            }
+            ModalWindow(
+                header = errorHeader,
+                body = errorText,
+                buttonText = "Zavrieť",
+                confirm = { propertyDetailViewModel.closeErrorAlert() }
+            )
         }
     }
 }
@@ -233,60 +230,4 @@ private fun InputRowStyled(
         textFieldTextAlign = TextAlign.End,
         onClick = onClick
     )
-}
-
-@Composable
-private fun BoxScope.ErrorModalWindow(
-    errorHeader: String,
-    errorText: String,
-    close: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = Color(0xBB222222),
-        content = {}
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .align(Alignment.Center)
-            .background(color = MaterialTheme.colors.surface)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colors.primary
-            ),
-    ) {
-        TextField(
-            value = errorHeader,
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        TextField(
-            value = errorText,
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        Row {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { close() }
-            ) {
-                Text(text = "Zavrieť")
-            }
-        }
-    }
 }
