@@ -1,7 +1,10 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
+import sk.msvvas.sofia.fam.offline.ui.components.InputRow
 import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
 
 
@@ -90,52 +94,52 @@ fun PropertyDetailView(
                         .copy(textAlign = TextAlign.End)
                 )
 
-                InputRow(
+                InputRowStyled(
                     label = "Sériové číslo",
                     value = property.serialNumber,
                     onClick = {}
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Invent. číslo",
                     value = property.inventNumber,
                     onClick = {}
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Závod",
                     value = property.werks,
                     onClick = {}
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Lokalita",
                     value = locality,
                     onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Miestnosť",
                     value = room,
                     onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
                 )
-                InputRow(
+                InputRowStyled(
                     label = "z. Os.",
                     value = user,
                     onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Stredisko",
                     value = property.center,
                     onClick = {}
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Pracovisko",
                     value = place,
                     onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Poznámka",
                     value = fixedNote,
                     onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() }
                 )
-                InputRow(
+                InputRowStyled(
                     label = "Vlastná pozn.",
                     value = variableNote,
                     onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() }
@@ -215,40 +219,21 @@ fun PropertyDetailView(
 }
 
 @Composable
-private fun InputRow(
+private fun InputRowStyled(
     label: String,
     value: String,
     onClick: () -> Unit
 ) {
-    Row(
+    InputRow(
+        label = label,
+        value = value,
         modifier = Modifier
             .fillMaxWidth()
-            .drawWithBottomLine(
-                width = 1f,
-                color = MaterialTheme.colors.primary
-            )
-    ) {
-        Text(
-            text = label,
-            modifier = Modifier.weight(2f)
-        )
-        TextField(
-            value = value,
-            enabled = false,
-            onValueChange = {},
-            modifier = Modifier
-                .weight(5f)
-                .clickable(enabled = true) {
-                    onClick()
-                },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.background,
-                textColor = MaterialTheme.colors.primary
-            ),
-            textStyle = LocalTextStyle.current
-                .copy(textAlign = TextAlign.End)
-        )
-    }
+            .drawWithBottomLine(width = 1f, color = MaterialTheme.colors.primary),
+        ratio = 2f / 5f,
+        textFieldTextAlign = TextAlign.End,
+        onClick = onClick
+    )
 }
 
 @Composable

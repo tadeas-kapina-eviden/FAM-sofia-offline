@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.ui.components.InputRow
 
 @Composable
 fun InventoryDetailFiltersComponent(
@@ -31,15 +30,15 @@ fun InventoryDetailFiltersComponent(
             .fillMaxWidth()
             .padding(15.dp)
     ) {
-        InputRow(
+        InputRowStyled(
             label = "Lokalita:",
             value = localityFilter,
             onClick = { inventoryDetailViewModel.showLocationCodebookSelectionView() })
-        InputRow(
+        InputRowStyled(
             label = "Miestnosť:",
             value = roomFilter,
             onClick = { inventoryDetailViewModel.showRoomCodebookSelectionView() })
-        InputRow(
+        InputRowStyled(
             label = "Osoba:",
             value = userFilter,
             onClick = { inventoryDetailViewModel.showUserCodebookSelectionView() })
@@ -81,32 +80,20 @@ fun InventoryDetailFiltersComponent(
 }
 
 @Composable
-private fun InputRow(
+private fun InputRowStyled(
     label: String,
     value: String,
     onClick: () -> Unit
 ) {
-    Row(
+    InputRow(
+        label = label,
+        value = value,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp)
-    ) {
-        Text(
-            text = label,
-            modifier = Modifier
-                .weight(2f)
-                .padding(15.dp),
-            textAlign = TextAlign.End
-        )
-        TextField(
-            value = value,
-            onValueChange = {},
-            enabled = false,
-            modifier = Modifier
-                .weight(3f)
-                .clickable {
-                    onClick()
-                }
-        )
-    }
+            .padding(vertical = 5.dp),
+        ratio = (2f / 3f),
+        labelTextAlign = TextAlign.End,
+        labelTextHorizontalPadding = 15.dp,
+        onClick = onClick
+    )
 }
