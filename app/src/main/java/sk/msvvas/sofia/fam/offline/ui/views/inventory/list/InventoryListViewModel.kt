@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.repository.InventoryRepository
-import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
+import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class InventoryListViewModel(
     inventoryRepository: InventoryRepository,

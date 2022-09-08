@@ -11,6 +11,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     val allData = MutableLiveData<List<PropertyEntity>>()
     val searchResult = MutableLiveData<PropertyEntity>()
     val searchByInventoryIdResult = MutableLiveData<List<PropertyEntity>>()
+    val loaded = MutableLiveData(false)
 
     init {
         getAll()
@@ -66,6 +67,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun getAll() {
         coroutineScope.launch(Dispatchers.Main) {
             allData.value = asyncGetAll().await()
+            loaded.value = true
         }
     }
 

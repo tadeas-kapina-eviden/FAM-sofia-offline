@@ -10,7 +10,7 @@ import sk.msvvas.sofia.fam.offline.data.entities.codebook.RoomCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.UserCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
-import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
+import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 
 class InventoryDetailViewModel(

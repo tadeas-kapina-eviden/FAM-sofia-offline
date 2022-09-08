@@ -1,6 +1,7 @@
-package sk.msvvas.sofia.fam.offline.ui.views.navigation
+package sk.msvvas.sofia.fam.offline.ui.navigation
 
 enum class Routes(val value: String) {
+    LOADING_SCREEN("loading_screen"),
     LOGIN_VIEW("login_view"),
     INVENTORY_LIST("inventory_list"),
     INVENTORY_DETAIL("inventory_detail"),

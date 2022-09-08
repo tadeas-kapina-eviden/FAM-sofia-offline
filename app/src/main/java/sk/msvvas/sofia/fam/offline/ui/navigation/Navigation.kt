@@ -1,4 +1,4 @@
-package sk.msvvas.sofia.fam.offline.ui.views.navigation
+package sk.msvvas.sofia.fam.offline.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -14,6 +14,7 @@ import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListViewModel
+import sk.msvvas.sofia.fam.offline.ui.views.loading.LoadingScreenView
 import sk.msvvas.sofia.fam.offline.ui.views.login.LoginView
 import sk.msvvas.sofia.fam.offline.ui.views.login.LoginViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailView
@@ -36,7 +37,13 @@ fun Navigation(
     )
 
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Routes.LOGIN_VIEW.value) {
+    NavHost(navController = navController, startDestination = Routes.LOADING_SCREEN.value) {
+        composable(route = Routes.LOADING_SCREEN.value) {
+            LoadingScreenView(
+                propertyRepository = propertyRepository,
+                navController = navController
+            )
+        }
         composable(route = Routes.LOGIN_VIEW.value) {
             LoginView(loginViewModel = LoginViewModel(navController))
         }

@@ -26,3 +26,21 @@ fun Modifier.drawWithBottomLine(
         }
     }
 )
+
+fun Modifier.drawWithTopLine(
+    width: Float = 0f,
+    color: Color = Color.Black
+) = this.then(
+    Modifier.drawWithContent {
+        drawContent()
+        clipRect {
+            drawLine(
+                brush = SolidColor(color),
+                strokeWidth = width,
+                cap = StrokeCap.Square,
+                start = Offset.Zero,
+                end = Offset.Zero.copy(x = size.width)
+            )
+        }
+    }
+)

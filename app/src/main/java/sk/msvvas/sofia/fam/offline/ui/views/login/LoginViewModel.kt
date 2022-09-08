@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
+import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class LoginViewModel(
     private val navController: NavController

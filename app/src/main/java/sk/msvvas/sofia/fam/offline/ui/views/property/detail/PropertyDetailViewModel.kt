@@ -8,7 +8,7 @@ import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.entities.codebook.*
 import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
-import sk.msvvas.sofia.fam.offline.ui.views.navigation.Routes
+import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class PropertyDetailViewModel(
     private val propertyRepository: PropertyRepository,
@@ -219,7 +219,8 @@ class PropertyDetailViewModel(
             } else {
                 if (it.variableNote.trim().isEmpty()) {
                     _errorHeader.value = "Vyplňte vlastnú poznámu"
-                    _errorText.value = "Pri neidentifikovanom majetku je nutné vyplniť Vlastnú poznámku - meno/popis majetku"
+                    _errorText.value =
+                        "Pri neidentifikovanom majetku je nutné vyplniť Vlastnú poznámku - meno/popis majetku"
                     return
                 } else {
                     it.textMainNumber = it.variableNote
