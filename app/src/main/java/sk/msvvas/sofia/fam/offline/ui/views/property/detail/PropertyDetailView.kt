@@ -228,7 +228,6 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier
-            .fillMaxWidth()
             .drawWithBottomLine(width = 1f, color = MaterialTheme.colors.primary),
         ratio = 2f / 5f,
         textFieldTextAlign = TextAlign.End,

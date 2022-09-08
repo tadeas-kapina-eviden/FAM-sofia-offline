@@ -89,7 +89,6 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier
-            .fillMaxWidth()
             .padding(vertical = 5.dp),
         ratio = (2f / 3f),
         labelTextAlign = TextAlign.End,
