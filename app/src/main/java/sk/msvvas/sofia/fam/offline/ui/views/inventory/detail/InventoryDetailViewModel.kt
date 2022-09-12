@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.entities.codebook.LocalityCodebookEntity
-import sk.msvvas.sofia.fam.offline.data.entities.codebook.RoomCodebookEntity
-import sk.msvvas.sofia.fam.offline.data.entities.codebook.UserCodebookEntity
-import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
-import sk.msvvas.sofia.fam.offline.data.repository.codebook.AllCodebooksRepository
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.UserCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 

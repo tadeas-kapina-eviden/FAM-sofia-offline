@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import sk.msvvas.sofia.fam.offline.data.database.FamOfflineDatabase
-import sk.msvvas.sofia.fam.offline.data.repository.InventoryRepository
-import sk.msvvas.sofia.fam.offline.data.repository.PropertyRepository
-import sk.msvvas.sofia.fam.offline.data.repository.codebook.*
+import sk.msvvas.sofia.fam.offline.data.application.database.FamOfflineDatabase
+import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.*
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListView

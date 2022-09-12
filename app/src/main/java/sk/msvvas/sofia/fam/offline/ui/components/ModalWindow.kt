@@ -42,7 +42,10 @@ fun BoxScope.ModalWindow(
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface
             ),
-            textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize, textAlign = TextAlign.Center),
+            textStyle = TextStyle(
+                fontSize = MaterialTheme.typography.h6.fontSize,
+                textAlign = TextAlign.Center
+            ),
             onValueChange = {},
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,8 +75,12 @@ fun BoxScope.ModalWindow(
 
 @Preview(showBackground = true)
 @Composable
-fun ModalWindowPreview(){
-    Box(modifier = Modifier.fillMaxSize()){
-        ModalWindow(header = "Modálne okno", body = "Správa v modálnom okne", buttonText = "OK", confirm = {})
+fun ModalWindowPreview() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        ModalWindow(
+            header = "Modálne okno",
+            body = "Správa v modálnom okne",
+            buttonText = "OK",
+            confirm = {})
     }
 }

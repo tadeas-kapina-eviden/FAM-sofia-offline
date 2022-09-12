@@ -21,8 +21,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
-import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView

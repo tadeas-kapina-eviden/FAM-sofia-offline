@@ -8,8 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.model.LocalityRoomCountPair
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.model.LocalityRoomCountPair
 
 @Composable
 fun InventoryDetailStatusView(

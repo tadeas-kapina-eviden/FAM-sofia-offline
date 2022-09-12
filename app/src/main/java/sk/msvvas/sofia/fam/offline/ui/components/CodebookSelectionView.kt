@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.entities.codebook.LocalityCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 
 @Composable
 fun CodebookSelectionView(

@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.InputRow
 import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow

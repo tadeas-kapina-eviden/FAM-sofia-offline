@@ -14,7 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.data.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

@@ -52,7 +52,6 @@ class LoginViewModel(
         }
     }
 
-    //TODO complete login
     fun onLoginButtonClick() {
         if (_loginName.value!!.isEmpty()) {
             _lastError.value = "Zadajte meno užívateľa!"
@@ -67,6 +66,7 @@ class LoginViewModel(
             _lastError.value = "Číslo klienta musí mať 3 znaky!"
             requestClientFocus()
         } else {
+            //TODO complete login
             navController.navigate(Routes.INVENTORY_LIST.value)
         }
     }
