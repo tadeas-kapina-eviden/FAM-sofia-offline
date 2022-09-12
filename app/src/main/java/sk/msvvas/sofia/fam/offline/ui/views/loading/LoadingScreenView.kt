@@ -68,7 +68,7 @@ fun LoadingScreenView(
                 )
                 Button(
                     onClick = {
-                        navController.navigate(Routes.LOGIN_VIEW.value)
+                        navController.navigate(Routes.LOGIN_VIEW.value + "?id=" + (propertyRepository.allData.value!![0].inventoryId))
                     },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)

@@ -17,7 +17,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -55,7 +56,8 @@ fun LoginView(
             placeholder = "Heslo",
             focusRequester = passwordFocusRequester!!,
             keyboardType = KeyboardType.Password,
-            onDone = { loginViewModel.requestClientFocus() }
+            onDone = { loginViewModel.requestClientFocus() },
+            visualTransformation = PasswordVisualTransformation()
         )
         InputField(
             value = client,
@@ -113,13 +115,15 @@ private fun InputField(
     placeholder: String,
     focusRequester: FocusRequester,
     keyboardType: KeyboardType,
-    onDone: () -> Unit
+    onDone: () -> Unit,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     TextField(
         value = value,
         onValueChange = { onChange(it) },
         colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.background),
         placeholder = { Text(text = placeholder) },
+        visualTransformation = visualTransformation,
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .padding(bottom = 5.dp)

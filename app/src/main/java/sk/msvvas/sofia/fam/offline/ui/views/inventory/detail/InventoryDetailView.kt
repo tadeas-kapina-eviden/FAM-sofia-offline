@@ -177,12 +177,14 @@ fun InventoryDetailView(
                 Text(text = "+ Nový")
             }
         }
-        ModalWindow(
-            header = errorHeader,
-            body = errorText,
-            buttonText = "Zavrieť",
-            confirm = { inventoryDetailViewModel.closeErrorAlert() }
-        )
+        if (errorHeader.isNotEmpty()) {
+            ModalWindow(
+                header = errorHeader,
+                body = errorText,
+                buttonText = "Zavrieť",
+                confirm = { inventoryDetailViewModel.closeErrorAlert() }
+            )
+        }
 
         if (isCodebookSelectionViewShown) {
             CodebookSelectionView(
@@ -200,7 +202,7 @@ fun InventoryDetailView(
                 header = "Vstupujete do miestnosti...",
                 body = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
                 buttonText = "OK",
-                confirm = {inventoryDetailViewModel.confirmLocalityChange()}
+                confirm = { inventoryDetailViewModel.confirmLocalityChange() }
             )
         }
     }

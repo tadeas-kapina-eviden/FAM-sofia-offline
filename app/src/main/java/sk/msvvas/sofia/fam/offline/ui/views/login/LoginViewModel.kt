@@ -5,10 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import sk.msvvas.sofia.fam.offline.data.client.Client
+import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class LoginViewModel(
-    private val navController: NavController
+    private val navController: NavController,
+    private val inventoryIDParameter: String
 ) : ViewModel() {
     private val _loginName = MutableLiveData("")
     val loginName: LiveData<String> = _loginName
@@ -66,8 +72,32 @@ class LoginViewModel(
             _lastError.value = "Číslo klienta musí mať 3 znaky!"
             requestClientFocus()
         } else {
-            //TODO complete login
-            navController.navigate(Routes.INVENTORY_LIST.value)
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val response =
+                        Client.validateLogin(_loginName.value!!, _password.value!!, _client.value!!)
+                    if (response) {
+                        ClientData.client = _client.value!!
+                        ClientData.username = _loginName.value!!
+                        ClientData.password = _password.value!!
+                        if (inventoryIDParameter.isEmpty()) {
+                            navController.navigate(Routes.INVENTORY_LIST.value)
+                        } else {
+                            navController.navigate(
+                                Routes.INVENTORY_DETAIL.withArgs(
+                                    inventoryIDParameter
+                                )
+                            )
+                        }
+                    } else {
+                        _lastError.value =
+                            "Klient, meno alebo heslo je nesprávne. Zopakujte prihlásenie!"
+                    }
+                } catch (e: RuntimeException) {
+                    _lastError.value =
+                        "Prihlásenie sa nepodarilo. Skontrolujte pripojenie k internetu!"
+                }
+            }
         }
     }
 

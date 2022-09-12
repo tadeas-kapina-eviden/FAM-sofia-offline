@@ -44,8 +44,20 @@ fun Navigation(
                 navController = navController
             )
         }
-        composable(route = Routes.LOGIN_VIEW.value) {
-            LoginView(loginViewModel = LoginViewModel(navController))
+        composable(route = Routes.addOptionalArgumentsToRoute(Routes.LOGIN_VIEW.value, "id"),
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )) {
+            LoginView(
+                loginViewModel = LoginViewModel(
+                    navController,
+                    inventoryIDParameter = it.arguments?.getString("id")!!
+                )
+            )
         }
         composable(route = Routes.INVENTORY_LIST.value) {
             InventoryListView(
