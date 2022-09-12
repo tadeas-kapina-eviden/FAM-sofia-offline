@@ -75,7 +75,11 @@ class LoginViewModel(
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val response =
-                        Client.validateLogin(_loginName.value!!, _password.value!!, _client.value!!)
+                        Client.validateLogin(
+                            username = _loginName.value!!,
+                            password = _password.value!!,
+                            clientId = _client.value!!
+                        )
                     if (response) {
                         ClientData.client = _client.value!!
                         ClientData.username = _loginName.value!!

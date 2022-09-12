@@ -27,6 +27,12 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         }
     }
 
+    fun deleteAll() {
+        coroutineScope.launch(Dispatchers.IO) {
+            inventoryDao.deleteAll()
+        }
+    }
+
     fun findById(id: String) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResult.value = asyncFind(id).await()
