@@ -77,12 +77,6 @@ data class PropertyEntity(
     @ColumnInfo(name = "workplace_new")
     var workplaceNew: String = "",
 
-    @ColumnInfo(name = "quantity")
-    var quantity: Double = 0.0,
-
-    @ColumnInfo(name = "quantity_new")
-    var quantityNew: Double = 0.0,
-
     @ColumnInfo(name = "fixed_note")
     var fixedNote: String = "",
 

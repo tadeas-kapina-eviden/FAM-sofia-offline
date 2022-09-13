@@ -3,12 +3,17 @@ package sk.msvvas.sofia.fam.offline.data.client
 import com.thoughtworks.xstream.XStream
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.ContentInventoryXml
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.FeedInventoryXml
+import sk.msvvas.sofia.fam.offline.data.client.model.property.FeedPropertyXml
+import sk.msvvas.sofia.fam.offline.data.client.model.transformator.InventoryTransformator
+import sk.msvvas.sofia.fam.offline.data.client.model.transformator.PropertyTransformator
 
 object Client {
 
@@ -51,31 +56,49 @@ object Client {
         client.close()
 
         val output = mapper.fromXML(response.bodyAsText()) as FeedInventoryXml
-        return output.entries.map { entry ->
-            entry.content.inventory.let {
-                InventoryEntity(
-                    id = it.id,
-                    createdAt = it.date,
-                    createdBy = it.personalNumber,
-                    note = it.note,
-                    countAll = it.counts.split("/")[1].toInt(),
-                    countProcessed = it.counts.split("/")[0].toInt(),
-                )
-            }
-        }
+        return InventoryTransformator.inventoryListFromInventoryFeed(output)
     }
 
+    suspend fun getPropertiesByInventoryID(): List<PropertyEntity> {
+        val client = HttpClient(CIO) {
+            install(HttpTimeout) {
+                requestTimeoutMillis = 500000
+            }
+        }
+
+        val additionalParameters = HashMap<String, String>()
+        additionalParameters["\$filter"] =
+            "Inven eq '350' and Zstat eq '' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
+
+        val response: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "GetInventoryItemsSet",
+                additionalParameters = additionalParameters
+            )
+        }
+        client.close()
+
+        val output = mapper.fromXML(response.bodyAsText()) as FeedPropertyXml
+        return PropertyTransformator.propertyListFromPropertyFeed(output)
+    }
 
     private fun buildGetRequest(
         builder: HttpRequestBuilder,
         getPath: String,
         username: String = ClientData.username,
         password: String = ClientData.password,
-        clientId: String = ClientData.client
+        clientId: String = ClientData.client,
+        additionalParameters: HashMap<String, String> = HashMap()
     ) {
         builder.let {
             it.url {
-                buildUrl(this, getPath = getPath, clientId = clientId)
+                buildUrl(
+                    this,
+                    getPath = getPath,
+                    clientId = clientId,
+                    additionalParameters = additionalParameters
+                )
             }
             authorize(it, username = username, password = password)
         }
@@ -83,7 +106,8 @@ object Client {
 
     private fun appendParameters(
         parameters: ParametersBuilder,
-        clientId: String = ClientData.client
+        clientId: String = ClientData.client,
+        additionalParameters: HashMap<String, String>
     ) {
         parameters.append("sap-client", clientId)
         parameters.append("sap-language", "SK")
@@ -95,18 +119,26 @@ object Client {
         parameters.append("Accept-Language", "sk")
         parameters.append("Cache-Contro", "max-age=0")
         parameters.append("Connection", "keep-alive")
+        additionalParameters.forEach {
+            parameters.append(it.key, it.value)
+        }
     }
 
     private fun buildUrl(
         builder: URLBuilder,
         getPath: String,
-        clientId: String = ClientData.client
+        clientId: String = ClientData.client,
+        additionalParameters: HashMap<String, String>
     ) {
         builder.let {
             it.host = HOST
             it.protocol = PROTOCOL
             it.path(basePath, getPath)
-            appendParameters(it.parameters, clientId = clientId)
+            appendParameters(
+                it.parameters,
+                clientId = clientId,
+                additionalParameters = additionalParameters
+            )
         }
     }
 
