@@ -55,7 +55,8 @@ fun Navigation(
             LoginView(
                 loginViewModel = LoginViewModel(
                     navController,
-                    inventoryIDParameter = it.arguments?.getString("id")!!
+                    inventoryIDParameter = it.arguments?.getString("id")!!,
+                    inventoryRepository = inventoryRepository
                 )
             )
         }

@@ -60,10 +60,9 @@ fun InventoryListView(
             ModalWindow(
                 header = "Načítavanie",
                 body = "Sťahujú sa dáta, prosím počkajte",
-                buttonText = ""
-            ) {
-
-            }
+                buttonText = "",
+                confirm = {}
+            )
         }
         if (isDownloadConfirmShown) {
             Surface(

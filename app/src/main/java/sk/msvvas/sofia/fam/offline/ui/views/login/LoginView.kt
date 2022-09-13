@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 
 @Composable
 fun LoginView(
@@ -33,50 +34,63 @@ fun LoginView(
     val loginNameFocusRequester by loginViewModel.loginNameFocusRequester.observeAsState()
     val passwordFocusRequester by loginViewModel.passwordFocusRequester.observeAsState()
     val clientFocusRequester by loginViewModel.clientFocusRequester.observeAsState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        if (lastError.isNotEmpty()) {
-            ErrorAlert(lastError = lastError)
-        }
-        InputField(
-            value = loginName,
-            onChange = { loginViewModel.onLoginNameChanged(it) },
-            placeholder = "Užívateľ",
-            focusRequester = loginNameFocusRequester!!,
-            keyboardType = KeyboardType.Ascii,
-            onDone = { loginViewModel.requestPasswordFocus() }
-        )
-        InputField(
-            value = password,
-            onChange = { loginViewModel.onPasswordChange(it) },
-            placeholder = "Heslo",
-            focusRequester = passwordFocusRequester!!,
-            keyboardType = KeyboardType.Password,
-            onDone = { loginViewModel.requestClientFocus() },
-            visualTransformation = PasswordVisualTransformation()
-        )
-        InputField(
-            value = client,
-            onChange = { loginViewModel.onClientChange(it) },
-            placeholder = "Klient",
-            focusRequester = clientFocusRequester!!,
-            keyboardType = KeyboardType.Number,
-            onDone = { loginViewModel.onLoginButtonClick() }
-        )
-        Button(
-            onClick = { loginViewModel.onLoginButtonClick() },
+
+    val downloadingData by loginViewModel.downloadingData.observeAsState(false)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth(0.8f)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Prihlásenie",
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.h6.fontSize
+            if (lastError.isNotEmpty()) {
+                ErrorAlert(lastError = lastError)
+            }
+            InputField(
+                value = loginName,
+                onChange = { loginViewModel.onLoginNameChanged(it) },
+                placeholder = "Užívateľ",
+                focusRequester = loginNameFocusRequester!!,
+                keyboardType = KeyboardType.Ascii,
+                onDone = { loginViewModel.requestPasswordFocus() }
+            )
+            InputField(
+                value = password,
+                onChange = { loginViewModel.onPasswordChange(it) },
+                placeholder = "Heslo",
+                focusRequester = passwordFocusRequester!!,
+                keyboardType = KeyboardType.Password,
+                onDone = { loginViewModel.requestClientFocus() },
+                visualTransformation = PasswordVisualTransformation()
+            )
+            InputField(
+                value = client,
+                onChange = { loginViewModel.onClientChange(it) },
+                placeholder = "Klient",
+                focusRequester = clientFocusRequester!!,
+                keyboardType = KeyboardType.Number,
+                onDone = { loginViewModel.onLoginButtonClick() }
+            )
+            Button(
+                onClick = { loginViewModel.onLoginButtonClick() },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+            ) {
+                Text(
+                    text = "Prihlásenie",
+                    style = TextStyle(
+                        fontSize = MaterialTheme.typography.h6.fontSize
+                    )
                 )
+            }
+        }
+        if (downloadingData) {
+            ModalWindow(
+                header = "Načítavanie",
+                body = "Sťahujú sa dáta, prosím počkajte",
+                buttonText = "",
+                confirm = {}
             )
         }
     }

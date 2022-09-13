@@ -30,13 +30,6 @@ class InventoryListViewModel(
     private val _downloadingData = MutableLiveData(false)
     val downloadingData: LiveData<Boolean> = _downloadingData
 
-    init {
-        CoroutineScope(Dispatchers.Main).launch {
-            inventoryRepository.deleteAll()
-            inventoryRepository.saveAll(Client.getInventories())
-        }
-    }
-
     fun onSelectInventory(inventoryId: String) {
         _selectedInventoryId.value = inventoryId
         _isDownloadConfirmShown.value = true

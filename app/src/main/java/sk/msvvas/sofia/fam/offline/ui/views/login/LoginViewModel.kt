@@ -8,13 +8,15 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class LoginViewModel(
     private val navController: NavController,
-    private val inventoryIDParameter: String
+    private val inventoryIDParameter: String,
+    private val inventoryRepository: InventoryRepository
 ) : ViewModel() {
     private val _loginName = MutableLiveData("")
     val loginName: LiveData<String> = _loginName
@@ -36,6 +38,10 @@ class LoginViewModel(
 
     private val _clientFocusRequester = MutableLiveData(FocusRequester())
     val clientFocusRequester: LiveData<FocusRequester> = _clientFocusRequester
+
+    private val _downloadingData = MutableLiveData(false)
+    val downloadingData: LiveData<Boolean> = _downloadingData
+
 
     fun onLoginNameChanged(newName: String) {
         if (newName.length <= 12) {
@@ -73,6 +79,7 @@ class LoginViewModel(
             requestClientFocus()
         } else {
             CoroutineScope(Dispatchers.Main).launch {
+                _downloadingData.value = true
                 try {
                     val response =
                         Client.validateLogin(
@@ -85,6 +92,8 @@ class LoginViewModel(
                         ClientData.username = _loginName.value!!
                         ClientData.password = _password.value!!
                         if (inventoryIDParameter.isEmpty()) {
+                            inventoryRepository.deleteAll()
+                            inventoryRepository.saveAll(Client.getInventories())
                             navController.navigate(Routes.INVENTORY_LIST.value)
                         } else {
                             navController.navigate(
@@ -96,10 +105,12 @@ class LoginViewModel(
                     } else {
                         _lastError.value =
                             "Klient, meno alebo heslo je nesprávne. Zopakujte prihlásenie!"
+                        _downloadingData.value = false
                     }
                 } catch (e: RuntimeException) {
                     _lastError.value =
                         "Prihlásenie sa nepodarilo. Skontrolujte pripojenie k internetu!"
+                    _downloadingData.value = false
                 }
             }
         }
