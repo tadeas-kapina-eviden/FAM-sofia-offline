@@ -6,12 +6,12 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit
 
 
 @XStreamAlias("feed")
-data class FeedInventoryXml(
+data class InventoryFeedXml(
     var id: String,
     var updated: String,
     var title: String,
     var author: Author,
     val link: String,
     @XStreamImplicit(itemFieldName = "entry")
-    val entries: List<EntryInventoryXml>
+    val entries: List<InventoryEntryXml>
 )

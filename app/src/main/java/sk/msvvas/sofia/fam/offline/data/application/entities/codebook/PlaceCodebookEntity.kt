@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "places_codebook")
-data class PlacesCodebookEntity(
+data class PlaceCodebookEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,

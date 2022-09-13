@@ -17,7 +17,7 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
         PropertyEntity::class,
         UserCodebookEntity::class,
         RoomCodebookEntity::class,
-        PlacesCodebookEntity::class,
+        PlaceCodebookEntity::class,
         LocalityCodebookEntity::class,
         NoteCodebookEntity::class
     ],
@@ -29,7 +29,7 @@ abstract class FamOfflineDatabase : RoomDatabase() {
     abstract fun propertyDao(): PropertyDao
     abstract fun userCodebookDao(): UserCodebookDao
     abstract fun roomCodebookDao(): RoomCodebookDao
-    abstract fun placesCodebookDao(): PlacesCodebookDao
+    abstract fun placeCodebookDao(): PlaceCodebookDao
     abstract fun localityCodebookDao(): LocalityCodebookDao
     abstract fun noteCodebookDao(): NoteCodebookDao
 

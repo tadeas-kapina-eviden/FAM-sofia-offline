@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 
 @Composable
 fun InventoryListView(
@@ -23,7 +24,7 @@ fun InventoryListView(
     val inventories by inventoryListViewModel.inventories.observeAsState(emptyList())
     val selectedInventoryId by inventoryListViewModel.selectedInventoryId.observeAsState("")
     val isDownloadConfirmShown by inventoryListViewModel.isDownloadConfirmShown.observeAsState(false)
-
+    val downloadingData by inventoryListViewModel.downloadingData.observeAsState(false)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -53,6 +54,15 @@ fun InventoryListView(
                         }
                     )
                 }
+            }
+        }
+        if (downloadingData) {
+            ModalWindow(
+                header = "Načítavanie",
+                body = "Sťahujú sa dáta, prosím počkajte",
+                buttonText = ""
+            ) {
+
             }
         }
         if (isDownloadConfirmShown) {

@@ -1,11 +1,11 @@
 package sk.msvvas.sofia.fam.offline.data.client.model.transformator
 
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.client.model.property.FeedPropertyXml
+import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 
 object PropertyTransformator {
-    fun propertyListFromPropertyFeed(feedPropertyXml: FeedPropertyXml): List<PropertyEntity> {
-        return feedPropertyXml.entries.map { entry ->
+    fun propertyListFromPropertyFeed(propertyFeedXml: PropertyFeedXml): List<PropertyEntity> {
+        return propertyFeedXml.entries.map { entry ->
             entry.content.property.let {
                 PropertyEntity(
                     inventoryId = it.inventoryId,

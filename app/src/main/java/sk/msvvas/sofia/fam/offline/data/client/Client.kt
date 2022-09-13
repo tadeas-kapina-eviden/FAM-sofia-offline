@@ -9,10 +9,10 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.client.model.inventory.ContentInventoryXml
-import sk.msvvas.sofia.fam.offline.data.client.model.inventory.FeedInventoryXml
-import sk.msvvas.sofia.fam.offline.data.client.model.property.ContentPropertyXml
-import sk.msvvas.sofia.fam.offline.data.client.model.property.FeedPropertyXml
+import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyXml
 import sk.msvvas.sofia.fam.offline.data.client.model.transformator.InventoryTransformator
 import sk.msvvas.sofia.fam.offline.data.client.model.transformator.PropertyTransformator
@@ -49,12 +49,12 @@ object Client {
         client.close()
 
         val mapper = XStream()
-        mapper.processAnnotations(FeedInventoryXml::class.java)
-        mapper.processAnnotations(ContentInventoryXml::class.java)
+        mapper.processAnnotations(InventoryFeedXml::class.java)
+        mapper.processAnnotations(InventoryContentXml::class.java)
         mapper.processAnnotations(InventoryXml::class.java)
-        mapper.allowTypes(arrayOf(FeedInventoryXml::class.java))
+        mapper.allowTypes(arrayOf(InventoryFeedXml::class.java))
 
-        val output = mapper.fromXML(response.bodyAsText()) as FeedInventoryXml
+        val output = mapper.fromXML(response.bodyAsText()) as InventoryFeedXml
         return InventoryTransformator.inventoryListFromInventoryFeed(output)
     }
 
@@ -79,12 +79,12 @@ object Client {
         client.close()
 
         val mapper = XStream()
-        mapper.processAnnotations(FeedPropertyXml::class.java)
-        mapper.processAnnotations(ContentPropertyXml::class.java)
+        mapper.processAnnotations(PropertyFeedXml::class.java)
+        mapper.processAnnotations(PropertyContentXml::class.java)
         mapper.processAnnotations(PropertyXml::class.java)
-        mapper.allowTypes(arrayOf(FeedPropertyXml::class.java))
+        mapper.allowTypes(arrayOf(PropertyFeedXml::class.java))
 
-        val output = mapper.fromXML(response.bodyAsText()) as FeedPropertyXml
+        val output = mapper.fromXML(response.bodyAsText()) as PropertyFeedXml
         return PropertyTransformator.propertyListFromPropertyFeed(output)
     }
 

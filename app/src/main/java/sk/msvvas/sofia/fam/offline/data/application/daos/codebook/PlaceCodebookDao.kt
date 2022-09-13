@@ -4,21 +4,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
-import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.PlacesCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.PlaceCodebookEntity
 
 @Dao
-interface PlacesCodebookDao {
+interface PlaceCodebookDao {
 
     @Insert(onConflict = IGNORE)
-    suspend fun save(place: PlacesCodebookEntity)
+    suspend fun save(place: PlaceCodebookEntity)
 
     @Insert(onConflict = IGNORE)
-    suspend fun saveAll(places: List<PlacesCodebookEntity>)
+    suspend fun saveAll(places: List<PlaceCodebookEntity>)
 
     @Query("SELECT * FROM places_codebook")
-    fun getAll(): List<PlacesCodebookEntity>
+    fun getAll(): List<PlaceCodebookEntity>
 
     @Query("SELECT * FROM places_codebook WHERE id = :id")
-    suspend fun findById(id: String): List<PlacesCodebookEntity>
+    suspend fun findById(id: String): List<PlaceCodebookEntity>
 
 }

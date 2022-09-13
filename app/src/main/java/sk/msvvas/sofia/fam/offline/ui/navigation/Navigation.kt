@@ -31,7 +31,7 @@ fun Navigation(
     val allCodebookRepository = AllCodebooksRepository(
         localityCodebookRepository = LocalityCodebookRepository(database.localityCodebookDao()),
         roomCodebookRepository = RoomCodebookRepository(database.roomCodebookDao()),
-        placesCodebookRepository = PlacesCodebookRepository(database.placesCodebookDao()),
+        placeCodebookRepository = PlaceCodebookRepository(database.placeCodebookDao()),
         userCodebookRepository = UserCodebookRepository(database.userCodebookDao()),
         noteCodebookRepository = NoteCodebookRepository(database.noteCodebookDao())
     )
@@ -63,6 +63,7 @@ fun Navigation(
             InventoryListView(
                 inventoryListViewModel = InventoryListViewModel(
                     inventoryRepository = inventoryRepository,
+                    propertyRepository = propertyRepository,
                     navController = navController
                 )
             )

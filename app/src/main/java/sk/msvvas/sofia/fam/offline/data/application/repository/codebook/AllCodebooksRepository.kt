@@ -5,14 +5,14 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
 class AllCodebooksRepository(
     private val localityCodebookRepository: LocalityCodebookRepository,
     private val noteCodebookRepository: NoteCodebookRepository,
-    private val placesCodebookRepository: PlacesCodebookRepository,
+    private val placeCodebookRepository: PlaceCodebookRepository,
     private val roomCodebookRepository: RoomCodebookRepository,
     private val userCodebookRepository: UserCodebookRepository
 ) {
     val allLocalities = localityCodebookRepository.allData
     val allRooms = roomCodebookRepository.allData
     val allUsers = userCodebookRepository.allData
-    val allPlaces = placesCodebookRepository.allData
+    val allPlaces = placeCodebookRepository.allData
     val allNotes = noteCodebookRepository.allData
 
     fun saveLocality(locality: LocalityCodebookEntity) {
@@ -31,12 +31,12 @@ class AllCodebooksRepository(
         roomCodebookRepository.saveAll(rooms)
     }
 
-    fun savePlace(place: PlacesCodebookEntity) {
-        placesCodebookRepository.save(place)
+    fun savePlace(place: PlaceCodebookEntity) {
+        placeCodebookRepository.save(place)
     }
 
-    fun saveAllPlaces(places: List<PlacesCodebookEntity>) {
-        placesCodebookRepository.saveAll(places)
+    fun saveAllPlaces(places: List<PlaceCodebookEntity>) {
+        placeCodebookRepository.saveAll(places)
     }
 
     fun saveUser(user: UserCodebookEntity) {

@@ -1,12 +1,12 @@
 package sk.msvvas.sofia.fam.offline.data.client.model.transformator
 
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
-import sk.msvvas.sofia.fam.offline.data.client.model.inventory.FeedInventoryXml
+import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml
 
 object InventoryTransformator {
 
-    fun inventoryListFromInventoryFeed(feedInventoryXml: FeedInventoryXml): List<InventoryEntity> {
-        return feedInventoryXml.entries.map { entry ->
+    fun inventoryListFromInventoryFeed(inventoryFeedXml: InventoryFeedXml): List<InventoryEntity> {
+        return inventoryFeedXml.entries.map { entry ->
             entry.content.inventory.let {
                 InventoryEntity(
                     id = it.id,

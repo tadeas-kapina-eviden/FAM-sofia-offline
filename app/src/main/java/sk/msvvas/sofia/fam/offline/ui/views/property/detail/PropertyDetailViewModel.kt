@@ -138,9 +138,9 @@ class PropertyDetailViewModel(
     fun showPlaceCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allPlaces.value
-        _codebookSelectionViewIdGetter.value = { (it as PlacesCodebookEntity).id }
+        _codebookSelectionViewIdGetter.value = { (it as PlaceCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
-            { (it as PlacesCodebookEntity).description }
+            { (it as PlaceCodebookEntity).description }
         _codebookSelectionViewLastValue.value = _property.value?.workplaceNew
         _selectCodebook.value = {
             closeCodebookSelectionView()
