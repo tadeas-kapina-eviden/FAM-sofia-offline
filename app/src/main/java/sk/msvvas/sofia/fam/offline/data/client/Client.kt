@@ -11,7 +11,9 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.ContentInventoryXml
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.FeedInventoryXml
+import sk.msvvas.sofia.fam.offline.data.client.model.property.ContentPropertyXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.FeedPropertyXml
+import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyXml
 import sk.msvvas.sofia.fam.offline.data.client.model.transformator.InventoryTransformator
 import sk.msvvas.sofia.fam.offline.data.client.model.transformator.PropertyTransformator
 
@@ -20,15 +22,6 @@ object Client {
     private const val HOST = "sofiafioritest.iedu.sk"
     private val PROTOCOL = URLProtocol.HTTPS
     private const val basePath = "sap/opu/odata/vvs/ZFAMFIORI_SRV"
-
-    private val mapper: XStream = XStream()
-
-    init {
-        mapper.processAnnotations(FeedInventoryXml::class.java)
-        mapper.processAnnotations(ContentInventoryXml::class.java)
-        mapper.processAnnotations(InventoryXml::class.java)
-        mapper.allowTypes(arrayOf(FeedInventoryXml::class.java))
-    }
 
     suspend fun validateLogin(username: String, password: String, clientId: String): Boolean {
         val client = HttpClient(CIO)
@@ -55,6 +48,12 @@ object Client {
         }
         client.close()
 
+        val mapper = XStream()
+        mapper.processAnnotations(FeedInventoryXml::class.java)
+        mapper.processAnnotations(ContentInventoryXml::class.java)
+        mapper.processAnnotations(InventoryXml::class.java)
+        mapper.allowTypes(arrayOf(FeedInventoryXml::class.java))
+
         val output = mapper.fromXML(response.bodyAsText()) as FeedInventoryXml
         return InventoryTransformator.inventoryListFromInventoryFeed(output)
     }
@@ -78,6 +77,12 @@ object Client {
             )
         }
         client.close()
+
+        val mapper = XStream()
+        mapper.processAnnotations(FeedPropertyXml::class.java)
+        mapper.processAnnotations(ContentPropertyXml::class.java)
+        mapper.processAnnotations(PropertyXml::class.java)
+        mapper.allowTypes(arrayOf(FeedPropertyXml::class.java))
 
         val output = mapper.fromXML(response.bodyAsText()) as FeedPropertyXml
         return PropertyTransformator.propertyListFromPropertyFeed(output)
