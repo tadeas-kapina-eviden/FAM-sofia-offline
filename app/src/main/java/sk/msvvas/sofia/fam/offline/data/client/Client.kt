@@ -7,8 +7,8 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
-import sk.msvvas.sofia.fam.offline.data.client.structure.ContentXml
-import sk.msvvas.sofia.fam.offline.data.client.structure.FeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.inventory.ContentInventoryXml
+import sk.msvvas.sofia.fam.offline.data.client.model.inventory.FeedInventoryXml
 
 object Client {
 
@@ -19,10 +19,10 @@ object Client {
     private val mapper: XStream = XStream()
 
     init {
-        mapper.processAnnotations(FeedXml::class.java)
-        mapper.processAnnotations(ContentXml::class.java)
+        mapper.processAnnotations(FeedInventoryXml::class.java)
+        mapper.processAnnotations(ContentInventoryXml::class.java)
         mapper.processAnnotations(InventoryXml::class.java)
-        mapper.allowTypes(arrayOf(FeedXml::class.java))
+        mapper.allowTypes(arrayOf(FeedInventoryXml::class.java))
     }
 
     suspend fun validateLogin(username: String, password: String, clientId: String): Boolean {
@@ -50,13 +50,13 @@ object Client {
         }
         client.close()
 
-        val output = mapper.fromXML(response.bodyAsText()) as FeedXml
+        val output = mapper.fromXML(response.bodyAsText()) as FeedInventoryXml
         return output.entries.map { entry ->
             entry.content.inventory.let {
                 InventoryEntity(
                     id = it.id,
                     createdAt = it.date,
-                    createdBy = it.createdBy,
+                    createdBy = it.personalNumber,
                     note = it.note,
                     countAll = it.counts.split("/")[1].toInt(),
                     countProcessed = it.counts.split("/")[0].toInt(),

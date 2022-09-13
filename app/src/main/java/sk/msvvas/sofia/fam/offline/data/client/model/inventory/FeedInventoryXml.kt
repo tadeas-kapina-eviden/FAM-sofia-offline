@@ -1,16 +1,17 @@
-package sk.msvvas.sofia.fam.offline.data.client.structure
+package sk.msvvas.sofia.fam.offline.data.client.model.inventory
 
+import sk.msvvas.sofia.fam.offline.data.client.model.Author
 import com.thoughtworks.xstream.annotations.XStreamAlias
 import com.thoughtworks.xstream.annotations.XStreamImplicit
 
 
 @XStreamAlias("feed")
-data class FeedXml(
+data class FeedInventoryXml(
     var id: String,
     var updated: String,
     var title: String,
-    var author: AuthorXml,
+    var author: Author,
     val link: String,
     @XStreamImplicit(itemFieldName = "entry")
-    val entries: List<EntryXml>
+    val entries: List<EntryInventoryXml>
 )
