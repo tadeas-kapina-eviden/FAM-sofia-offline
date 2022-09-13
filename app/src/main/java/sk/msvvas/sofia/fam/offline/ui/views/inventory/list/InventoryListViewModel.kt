@@ -26,10 +26,9 @@ class InventoryListViewModel(
     val isDownloadConfirmShown: LiveData<Boolean> = _isDownloadConfirmShown
 
     init {
-        inventoryRepository.deleteAll()
         CoroutineScope(Dispatchers.Main).launch {
+            inventoryRepository.deleteAll()
             inventoryRepository.saveAll(Client.getInventories())
-
         }
     }
 
