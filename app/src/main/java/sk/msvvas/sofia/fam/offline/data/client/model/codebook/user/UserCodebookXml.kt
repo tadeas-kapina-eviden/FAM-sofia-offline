@@ -5,6 +5,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias
 data class UserCodebookXml(
     @XStreamAlias("d:Pernr")
     val id: String,
-    @XStreamAlias("d:PernrText")
+    @XStreamAlias("d:PernrTxt")
     val fullName: String,
 )
