@@ -5,7 +5,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias
 data class NoteCodebookXml(
     @XStreamAlias("d:Xnote")
     val id: String,
-    @XStreamAlias("d:Ktext")
+    @XStreamAlias("d:Descr")
     val description: String,
     @XStreamAlias("d:Flagd")
     val flagged: Boolean,
