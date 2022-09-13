@@ -28,7 +28,7 @@ fun Navigation(
     val inventoryRepository = InventoryRepository(database.inventoryDao())
     val propertyRepository = PropertyRepository(database.propertyDao())
 
-    val allCodebookRepository = AllCodebooksRepository(
+    val allCodebooksRepository = AllCodebooksRepository(
         localityCodebookRepository = LocalityCodebookRepository(database.localityCodebookDao()),
         roomCodebookRepository = RoomCodebookRepository(database.roomCodebookDao()),
         placeCodebookRepository = PlaceCodebookRepository(database.placeCodebookDao()),
@@ -65,6 +65,7 @@ fun Navigation(
                 inventoryListViewModel = InventoryListViewModel(
                     inventoryRepository = inventoryRepository,
                     propertyRepository = propertyRepository,
+                    allCodebooksRepository = allCodebooksRepository,
                     navController = navController
                 )
             )
@@ -82,7 +83,7 @@ fun Navigation(
             InventoryDetailView(
                 inventoryDetailViewModel = InventoryDetailViewModel(
                     propertyRepository = propertyRepository,
-                    allCodebooksRepository = allCodebookRepository,
+                    allCodebooksRepository = allCodebooksRepository,
                     navController = navController,
                     inventoryIdParameter = it.arguments?.getString("id")!!
                 )
@@ -133,7 +134,7 @@ fun Navigation(
             PropertyDetailView(
                 propertyDetailViewModel = PropertyDetailViewModel(
                     propertyRepository = propertyRepository,
-                    allCodebooksRepository = allCodebookRepository,
+                    allCodebooksRepository = allCodebooksRepository,
                     id = it.arguments?.getLong("id")!!,
                     navController = navController,
                     localityFilter = it.arguments?.getString("locality")!!,

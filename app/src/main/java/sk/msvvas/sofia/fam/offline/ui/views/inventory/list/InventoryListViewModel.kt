@@ -10,12 +10,14 @@ import kotlinx.coroutines.launch
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class InventoryListViewModel(
     private val inventoryRepository: InventoryRepository,
     private val propertyRepository: PropertyRepository,
+    private val allCodebooksRepository: AllCodebooksRepository,
     private val navController: NavController
 ) : ViewModel() {
     private val _inventories: LiveData<List<InventoryEntity>> = inventoryRepository.allData
@@ -40,6 +42,11 @@ class InventoryListViewModel(
             _downloadingData.value = true
             _isDownloadConfirmShown.value = false
             propertyRepository.saveAll(Client.getPropertiesByInventoryID(_selectedInventoryId.value!!))
+            allCodebooksRepository.saveAllLocalities(Client.getLocalityCodebooks())
+            allCodebooksRepository.saveAllRooms(Client.getRoomCodebooks())
+            allCodebooksRepository.saveAllPlaces(Client.getPlaceCodebooks())
+            allCodebooksRepository.saveAllUsers(Client.getUserCodebooks())
+            allCodebooksRepository.saveAllNotes(Client.getNoteCodebooks())
             navController.navigate(Routes.INVENTORY_DETAIL.withArgs(_selectedInventoryId.value!!))
         }
     }
