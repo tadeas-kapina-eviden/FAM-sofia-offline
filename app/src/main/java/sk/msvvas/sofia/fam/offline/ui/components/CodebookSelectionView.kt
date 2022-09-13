@@ -94,7 +94,10 @@ fun CodebookSelectionView(
                     state = ScrollState(0)
                 )
         ) {
-            filteredCodebookData.forEach {
+            filteredCodebookData.subList(
+                0,
+                if (filteredCodebookData.size > 100) 100 else filteredCodebookData.size - 1
+            ).forEach {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
