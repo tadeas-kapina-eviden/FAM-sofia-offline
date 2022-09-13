@@ -2,18 +2,10 @@ package sk.msvvas.sofia.fam.offline.data.application.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "properties",
-    foreignKeys = [
-        ForeignKey(
-            entity = InventoryEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["inventory_id"]
-        )
-    ]
+    tableName = "properties"
 )
 data class PropertyEntity(
     @PrimaryKey(autoGenerate = true)
