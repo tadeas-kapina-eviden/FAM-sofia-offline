@@ -59,7 +59,7 @@ object Client {
         return InventoryTransformator.inventoryListFromInventoryFeed(output)
     }
 
-    suspend fun getPropertiesByInventoryID(): List<PropertyEntity> {
+    suspend fun getPropertiesByInventoryID(inventoryId: String): List<PropertyEntity> {
         val client = HttpClient(CIO) {
             install(HttpTimeout) {
                 requestTimeoutMillis = 500000
@@ -68,7 +68,7 @@ object Client {
 
         val additionalParameters = HashMap<String, String>()
         additionalParameters["\$filter"] =
-            "Inven eq '350' and Zstat eq '' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
+            "Inven eq '$inventoryId' and Zstat eq '' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
 
         val response: HttpResponse = client.get {
             buildGetRequest(
