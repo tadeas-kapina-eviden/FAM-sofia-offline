@@ -9,6 +9,22 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityCodebookContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityCodebookFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityCodebookXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.note.NoteCodebookContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.note.NoteCodebookFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.note.NoteCodebookXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.place.PlaceCodebookContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.place.PlaceCodebookFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.place.PlaceCodebookXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.room.RoomCodebookContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.room.RoomCodebookFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.room.RoomCodebookXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.user.UserCodebookContentXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.user.UserCodebookFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.codebook.user.UserCodebookXml
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryContentXml
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyContentXml
@@ -16,6 +32,7 @@ import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyXml
 import sk.msvvas.sofia.fam.offline.data.client.model.transformator.InventoryTransformator
 import sk.msvvas.sofia.fam.offline.data.client.model.transformator.PropertyTransformator
+import sk.msvvas.sofia.fam.offline.data.client.model.transformator.codebook.*
 
 object Client {
 
@@ -56,6 +73,106 @@ object Client {
 
         val output = mapper.fromXML(response.bodyAsText()) as InventoryFeedXml
         return InventoryTransformator.inventoryListFromInventoryFeed(output)
+    }
+
+    suspend fun getLocalityCodebooks(): List<LocalityCodebookEntity> {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "getAllValLocalitySet"
+            )
+        }
+        client.close()
+
+        val mapper = XStream()
+        mapper.processAnnotations(LocalityCodebookFeedXml::class.java)
+        mapper.processAnnotations(LocalityCodebookContentXml::class.java)
+        mapper.processAnnotations(LocalityCodebookXml::class.java)
+        mapper.allowTypes(arrayOf(LocalityCodebookFeedXml::class.java))
+
+        val output = mapper.fromXML(response.bodyAsText()) as LocalityCodebookFeedXml
+        return LocalityCodebookTransformator.localityCodebookListFromLocalityCodebookFeed(output)
+    }
+
+    suspend fun getRoomCodebooks(): List<RoomCodebookEntity> {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "getAllValRoomsSet"
+            )
+        }
+        client.close()
+
+        val mapper = XStream()
+        mapper.processAnnotations(RoomCodebookFeedXml::class.java)
+        mapper.processAnnotations(RoomCodebookContentXml::class.java)
+        mapper.processAnnotations(RoomCodebookXml::class.java)
+        mapper.allowTypes(arrayOf(RoomCodebookFeedXml::class.java))
+
+        val output = mapper.fromXML(response.bodyAsText()) as RoomCodebookFeedXml
+        return RoomCodebookTransformator.roomCodebookListFromRoomCodebookFeed(output)
+    }
+
+    suspend fun getPlaceCodebooks(): List<PlaceCodebookEntity> {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "getAllValPlacesSet"
+            )
+        }
+        client.close()
+
+        val mapper = XStream()
+        mapper.processAnnotations(PlaceCodebookFeedXml::class.java)
+        mapper.processAnnotations(PlaceCodebookContentXml::class.java)
+        mapper.processAnnotations(PlaceCodebookXml::class.java)
+        mapper.allowTypes(arrayOf(PlaceCodebookFeedXml::class.java))
+
+        val output = mapper.fromXML(response.bodyAsText()) as PlaceCodebookFeedXml
+        return PlaceCodebookTransformator.placeCodebookListFromPlaceCodebookFeed(output)
+    }
+
+    suspend fun getUserCodebooks(): List<UserCodebookEntity> {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "getAllValUsersSet"
+            )
+        }
+        client.close()
+
+        val mapper = XStream()
+        mapper.processAnnotations(UserCodebookFeedXml::class.java)
+        mapper.processAnnotations(UserCodebookContentXml::class.java)
+        mapper.processAnnotations(UserCodebookXml::class.java)
+        mapper.allowTypes(arrayOf(UserCodebookFeedXml::class.java))
+
+        val output = mapper.fromXML(response.bodyAsText()) as UserCodebookFeedXml
+        return UserCodebookTransformator.userCodebookListFromUserCodebookFeed(output)
+    }
+
+    suspend fun getNoteCodebooks(): List<NoteCodebookEntity> {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "getAllValNotesSet"
+            )
+        }
+        client.close()
+
+        val mapper = XStream()
+        mapper.processAnnotations(NoteCodebookFeedXml::class.java)
+        mapper.processAnnotations(NoteCodebookContentXml::class.java)
+        mapper.processAnnotations(NoteCodebookXml::class.java)
+        mapper.allowTypes(arrayOf(NoteCodebookFeedXml::class.java))
+
+        val output = mapper.fromXML(response.bodyAsText()) as NoteCodebookFeedXml
+        return NoteCodebookTransformator.noteCodebookListFromNoteCodebookFeed(output)
     }
 
     suspend fun getPropertiesByInventoryID(inventoryId: String): List<PropertyEntity> {
