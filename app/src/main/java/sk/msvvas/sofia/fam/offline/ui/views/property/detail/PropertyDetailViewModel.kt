@@ -18,7 +18,7 @@ class PropertyDetailViewModel(
     private val localityFilter: String,
     private val roomFilter: String,
     private val userFilter: String,
-    inventoryId: String,
+    private val inventoryId: String,
     private val statusFilter: Char,
     val isManual: Boolean,
 ) : ViewModel() {
@@ -258,6 +258,16 @@ class PropertyDetailViewModel(
     fun closeErrorAlert() {
         _errorHeader.value = ""
         _errorText.value = ""
+    }
+
+    fun goBack() {
+        navController.navigate(
+            Routes.INVENTORY_DETAIL.withArgs(inventoryId)
+                    + "?locality=" + localityFilter
+                    + "?room=" + roomFilter
+                    + "?user=" + userFilter
+                    + "?statusFilter=" + statusFilter
+        )
     }
 
 }

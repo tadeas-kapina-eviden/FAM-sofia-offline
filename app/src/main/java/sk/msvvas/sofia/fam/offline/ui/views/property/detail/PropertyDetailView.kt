@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
@@ -216,6 +217,9 @@ fun PropertyDetailView(
                 body = "Dáta sa načítavajú, prosím počkajte."
             )
         }
+    }
+    BackHandler {
+        propertyDetailViewModel.goBack()
     }
 }
 
