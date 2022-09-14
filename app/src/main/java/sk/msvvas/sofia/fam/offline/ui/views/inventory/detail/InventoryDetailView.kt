@@ -46,9 +46,6 @@ fun InventoryDetailView(
     val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState()
     val codeFilterRoom by inventoryDetailViewModel.codeFilterRoom.observeAsState()
     val statusFilter by inventoryDetailViewModel.statusFilter.observeAsState('U')
-    val exitModalShown by inventoryDetailViewModel.exitModalShown.observeAsState(false)
-
-    val activity = (LocalContext.current as? Activity)
 
     val isCodebookSelectionViewShown by inventoryDetailViewModel.isCodebookSelectionViewShown.observeAsState(
         false
@@ -65,6 +62,12 @@ fun InventoryDetailView(
 
     val codebookSelectionViewDescriptionGetter by inventoryDetailViewModel.codebookSelectionViewDescriptionGetter.observeAsState { "" }
     val selectCodebook by inventoryDetailViewModel.selectCodebook.observeAsState { "" }
+    val exitModalShown by inventoryDetailViewModel.exitModalShown.observeAsState(false)
+    val submitInventoryConfirmModalShown by inventoryDetailViewModel.submitInventoryConfirmModalShown.observeAsState(
+        false
+    )
+
+    val activity = (LocalContext.current as? Activity)
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -182,13 +185,36 @@ fun InventoryDetailView(
                         })
                 }
             }
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    inventoryDetailViewModel.onSelectProperty(-1)
-                }) {
-                Text(text = "+ Nový")
+            Row(
+                Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    onClick = {
+                        inventoryDetailViewModel.submitInventoryConfirmModalShow()
+                    }) {
+                    Text(text = "Odoslať inventúru")
+                }
+                Button(
+                    onClick = {
+                        inventoryDetailViewModel.onSelectProperty(-1)
+                    }) {
+                    Text(text = "+ Nový")
+                }
             }
+        }
+        if (submitInventoryConfirmModalShown) {
+            ConfirmModalWindow(
+                header = "Potvrdenie odoslania",
+                body = "Naozaj chcete odoslať inventúru na spracovanie?",
+                confirmButtonText = "Áno",
+                confirmButtonAction = {
+                    inventoryDetailViewModel.submitInventory()
+                },
+                declineButtonText = "Nie",
+                declineButtonAction = {
+                    inventoryDetailViewModel.submitInventoryConfirmModalHide()
+                }
+            )
         }
         if (exitModalShown) {
             ConfirmModalWindow(

@@ -20,6 +20,9 @@ interface PropertyDao {
     @Delete
     suspend fun delete(property: PropertyEntity)
 
+    @Query("DELETE FROM properties")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM properties")
     fun getAll(): List<PropertyEntity>
 
@@ -28,5 +31,4 @@ interface PropertyDao {
 
     @Query("SELECT * FROM properties WHERE inventory_id = :inventoryId")
     suspend fun findByInventoryId(inventoryId: String): List<PropertyEntity>
-
 }

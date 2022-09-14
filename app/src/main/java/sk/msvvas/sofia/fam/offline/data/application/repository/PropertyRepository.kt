@@ -43,6 +43,12 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         }
     }
 
+    fun deleteAll() {
+        coroutineScope.launch(Dispatchers.IO) {
+            propertyDao.deleteAll()
+        }
+    }
+
     fun findById(id: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResult.value = asyncFindById(id).await()

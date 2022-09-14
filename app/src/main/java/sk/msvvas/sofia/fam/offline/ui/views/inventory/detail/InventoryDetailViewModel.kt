@@ -89,6 +89,9 @@ class InventoryDetailViewModel(
     private val _exitModalShown = MutableLiveData(false)
     val exitModalShown: LiveData<Boolean> = _exitModalShown
 
+    private val _submitInventoryConfirmModalShown = MutableLiveData(false)
+    val submitInventoryConfirmModalShown: LiveData<Boolean> = _submitInventoryConfirmModalShown
+
     init {
         propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
     }
@@ -289,5 +292,19 @@ class InventoryDetailViewModel(
 
     fun hideExitModalWindow() {
         _exitModalShown.value = false
+    }
+
+    fun submitInventory() {
+        propertyRepository.deleteAll()
+        navController.navigate(Routes.INVENTORY_LIST.value)
+        //TODO Dokončiť odosielanie na server
+    }
+
+    fun submitInventoryConfirmModalShow() {
+        _submitInventoryConfirmModalShown.value = true
+    }
+
+    fun submitInventoryConfirmModalHide() {
+        _submitInventoryConfirmModalShown.value = true
     }
 }
