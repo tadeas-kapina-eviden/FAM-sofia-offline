@@ -15,11 +15,12 @@ class PropertyDetailViewModel(
     private val allCodebooksRepository: AllCodebooksRepository,
     val id: Long,
     private val navController: NavController,
-    localityFilter: String,
-    roomFilter: String,
-    userFilter: String,
+    private val localityFilter: String,
+    private val roomFilter: String,
+    private val userFilter: String,
     inventoryId: String,
-    val isManual: Boolean
+    private val statusFilter: Char,
+    val isManual: Boolean,
 ) : ViewModel() {
     private val _property: MutableLiveData<PropertyEntity>
     val property: LiveData<PropertyEntity>
@@ -228,7 +229,9 @@ class PropertyDetailViewModel(
                     propertyRepository.save(property = it)
                 }
             }
-            navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
+            navController.navigate(
+                Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "?room=" + roomFilter + "?user=" + userFilter + "?statusFilter=" + statusFilter
+            )
         }
     }
 

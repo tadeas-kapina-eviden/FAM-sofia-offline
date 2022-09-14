@@ -17,7 +17,11 @@ class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
     val navController: NavController,
-    inventoryIdParameter: String
+    inventoryIdParameter: String,
+    localityFilterParameter: String,
+    roomFilterParameter: String,
+    userFilterParameter: String,
+    statusFilterParameter: Char
 ) : ViewModel() {
 
     private val _properties =
@@ -31,22 +35,22 @@ class InventoryDetailViewModel(
     private val _isFiltersShown = MutableLiveData(false)
     val isFiltersShown: LiveData<Boolean> = _isFiltersShown
 
-    private val _inventoryId = MutableLiveData("")
+    private val _inventoryId = MutableLiveData(inventoryIdParameter)
     val inventoryId: LiveData<String> = _inventoryId
 
-    private val _statusFilter = MutableLiveData('U')
+    private val _statusFilter = MutableLiveData(statusFilterParameter)
     val statusFilter: LiveData<Char> = _statusFilter
 
     private val _codeFilter = MutableLiveData("")
     val codeFilter: LiveData<String> = _codeFilter
 
-    private val _localityFilter = MutableLiveData("")
+    private val _localityFilter = MutableLiveData(localityFilterParameter)
     val localityFilter: LiveData<String> = _localityFilter
 
-    private val _roomFilter = MutableLiveData("")
+    private val _roomFilter = MutableLiveData(roomFilterParameter)
     val roomFilter: LiveData<String> = _roomFilter
 
-    private val _userFilter = MutableLiveData("")
+    private val _userFilter = MutableLiveData(userFilterParameter)
     val userFilter: LiveData<String> = _userFilter
 
     private val _scanWithoutDetail = MutableLiveData(false)
@@ -84,7 +88,6 @@ class InventoryDetailViewModel(
     val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
 
     init {
-        _inventoryId.value = inventoryIdParameter
         propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
     }
 
@@ -115,7 +118,7 @@ class InventoryDetailViewModel(
                 navController.navigate(
                     Routes.PROPERTY_DETAIL.withArgs(
                         (-newCount).toString(),
-                    ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value!! + "?isManual=" + false.toString()
+                    ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value!! + "?statusFilter=" + _statusFilter.value + "?isManual=" + false.toString()
                 )
             } else {
                 if (_scanWithoutDetail.value!!) {
@@ -128,7 +131,7 @@ class InventoryDetailViewModel(
                     navController.navigate(
                         Routes.PROPERTY_DETAIL.withArgs(
                             selectedList.first().id.toString()
-                        ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?isManual=" + false.toString()
+                        ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?statusFilter=" + _statusFilter.value!! + "?isManual=" + false.toString()
                     )
                 }
             }
@@ -182,7 +185,7 @@ class InventoryDetailViewModel(
         navController.navigate(
             Routes.PROPERTY_DETAIL.withArgs(
                 computedId.toString(),
-            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value + "?isManual=" + true.toString()
+            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value + "?statusFilter=" + _statusFilter.value + "?isManual=" + true.toString()
         )
     }
 

@@ -31,7 +31,6 @@ import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 fun InventoryDetailView(
     inventoryDetailViewModel: InventoryDetailViewModel
 ) {
-
     val properties by inventoryDetailViewModel.filteredProperties.observeAsState(emptyList())
     val isFiltersShow by inventoryDetailViewModel.isFiltersShown.observeAsState(false)
     val inventoryId by inventoryDetailViewModel.inventoryId.observeAsState("")

@@ -71,13 +71,39 @@ fun Navigation(
             )
         }
         composable(
-            route = Routes.INVENTORY_DETAIL.defineRoute("id"),
+            route = Routes.addOptionalArgumentsToRoute(
+                Routes.INVENTORY_DETAIL.defineRoute("id"),
+                "locality",
+                "room",
+                "user",
+                "statusFilter"
+            ),
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = false
-                }
+                },
+                navArgument("locality") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                },
+                navArgument("room") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                },
+                navArgument("user") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                },
+                navArgument("statusFilter") {
+                    type = NavType.StringType
+                    defaultValue = "U"
+                    nullable = false
+                },
             )
         ) {
             InventoryDetailView(
@@ -85,7 +111,11 @@ fun Navigation(
                     propertyRepository = propertyRepository,
                     allCodebooksRepository = allCodebooksRepository,
                     navController = navController,
-                    inventoryIdParameter = it.arguments?.getString("id")!!
+                    inventoryIdParameter = it.arguments?.getString("id")!!,
+                    localityFilterParameter = it.arguments?.getString("locality")!!,
+                    roomFilterParameter = it.arguments?.getString("room")!!,
+                    userFilterParameter = it.arguments?.getString("user")!!,
+                    statusFilterParameter = it.arguments?.getString("statusFilter")!![0],
                 )
             )
         }
@@ -96,6 +126,7 @@ fun Navigation(
                 "room",
                 "user",
                 "inventoryId",
+                "statusFilter",
                 "isManual"
             ),
             arguments = listOf(
@@ -124,6 +155,11 @@ fun Navigation(
                     defaultValue = ""
                     nullable = false
                 },
+                navArgument("statusFilter") {
+                    type = NavType.StringType
+                    defaultValue = "U"
+                    nullable = false
+                },
                 navArgument("isManual") {
                     type = NavType.BoolType
                     defaultValue = false
@@ -141,6 +177,7 @@ fun Navigation(
                     roomFilter = it.arguments?.getString("room")!!,
                     userFilter = it.arguments?.getString("user")!!,
                     inventoryId = it.arguments?.getString("inventoryId")!!,
+                    statusFilter = it.arguments?.getString("statusFilter")!![0],
                     isManual = it.arguments?.getBoolean("isManual")!!,
                 )
             )
