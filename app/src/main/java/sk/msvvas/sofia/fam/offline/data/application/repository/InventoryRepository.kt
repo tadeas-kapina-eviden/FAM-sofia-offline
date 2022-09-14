@@ -18,6 +18,7 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
     fun save(inventory: InventoryEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             inventoryDao.save(inventory)
+            getAll()
         }
     }
 

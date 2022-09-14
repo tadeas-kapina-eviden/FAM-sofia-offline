@@ -18,12 +18,14 @@ class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
     fun save(userCodebook: UserCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             userCodebookDao.save(userCodebook)
+            getAll()
         }
     }
 
     fun saveAll(userCodebooks: List<UserCodebookEntity>) {
         coroutineScope.launch(Dispatchers.IO) {
             userCodebookDao.saveAll(userCodebooks)
+            getAll()
         }
     }
 

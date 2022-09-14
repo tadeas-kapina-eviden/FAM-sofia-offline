@@ -18,12 +18,14 @@ class RoomCodebookRepository(private val roomCodebookDao: RoomCodebookDao) {
     fun save(roomCodebook: RoomCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             roomCodebookDao.save(roomCodebook)
+            getAll()
         }
     }
 
     fun saveAll(roomCodebooks: List<RoomCodebookEntity>) {
         coroutineScope.launch(Dispatchers.IO) {
             roomCodebookDao.saveAll(roomCodebooks)
+            getAll()
         }
     }
 

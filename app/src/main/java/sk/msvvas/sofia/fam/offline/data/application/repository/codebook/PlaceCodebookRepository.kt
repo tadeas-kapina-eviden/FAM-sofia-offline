@@ -17,12 +17,14 @@ class PlaceCodebookRepository(private val placeCodebookDao: PlaceCodebookDao) {
     fun save(placesCodebook: PlaceCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             placeCodebookDao.save(placesCodebook)
+            getAll()
         }
     }
 
     fun saveAll(placesCodebooks: List<PlaceCodebookEntity>) {
         coroutineScope.launch(Dispatchers.IO) {
             placeCodebookDao.saveAll(placesCodebooks)
+            getAll()
         }
     }
 

@@ -20,12 +20,14 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun save(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.save(property)
+            getAll()
         }
     }
 
     fun saveAll(properties: List<PropertyEntity>) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.saveAll(properties)
+            getAll()
         }
     }
 
