@@ -99,7 +99,10 @@ fun StatusRow(
 fun countLocalityRoomPairs(properties: List<PropertyEntity>): List<LocalityRoomCountPair> {
     val result = mutableListOf<LocalityRoomCountPair>()
     properties.forEach {
-        val pair = LocalityRoomCountPair(it.localityNew, it.roomNew)
+        val pair = LocalityRoomCountPair(
+            if (it.recordStatus == 'Z' || it.recordStatus == 'S') it.localityNew else it.locality,
+            if (it.recordStatus == 'Z' || it.recordStatus == 'S') it.roomNew else it.room,
+            )
         if (pair in result) {
             val toAdd = result[result.indexOf(pair)]
             toAdd.all++
