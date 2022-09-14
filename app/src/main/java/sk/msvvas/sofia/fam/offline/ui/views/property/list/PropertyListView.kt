@@ -43,8 +43,15 @@ fun PropertyListView(
                     .padding(5.dp)
             )
         }
-        properties.forEach {
-            PropertyListItem(property = it, onClick = { id -> changeView(id) })
+        if (properties.isNotEmpty()) {
+            properties
+                .subList(
+                    0,
+                    if (properties.size < 100) properties.size else 100
+                )
+                .forEach {
+                    PropertyListItem(property = it, onClick = { id -> changeView(id) })
+                }
         }
     }
 }
