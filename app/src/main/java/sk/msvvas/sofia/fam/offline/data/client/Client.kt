@@ -184,9 +184,20 @@ object Client {
 
         val additionalParameters = HashMap<String, String>()
         additionalParameters["\$filter"] =
-            "Inven eq '$inventoryId' and Zstat eq '' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
+            "Inven eq '$inventoryId' and Zstat eq 'W' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
 
-        val response: HttpResponse = client.get {
+        val responseUnprocessed: HttpResponse = client.get {
+            buildGetRequest(
+                this,
+                getPath = "GetInventoryItemsSet",
+                additionalParameters = additionalParameters
+            )
+        }
+
+        additionalParameters["\$filter"] =
+            "Inven eq '$inventoryId' and Zstat eq 'P' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
+
+        val responseProcessed: HttpResponse = client.get {
             buildGetRequest(
                 this,
                 getPath = "GetInventoryItemsSet",
@@ -201,8 +212,23 @@ object Client {
         mapper.processAnnotations(PropertyXml::class.java)
         mapper.allowTypes(arrayOf(PropertyFeedXml::class.java))
 
-        val output = mapper.fromXML(response.bodyAsText()) as PropertyFeedXml
-        return PropertyTransformator.propertyListFromPropertyFeed(output)
+        val result = mutableListOf<PropertyEntity>()
+        result.addAll(
+            PropertyTransformator.propertyListFromPropertyFeed(
+                mapper.fromXML(
+                    responseUnprocessed.bodyAsText()
+                ) as PropertyFeedXml
+            )
+        )
+        result.addAll(
+            PropertyTransformator.propertyListFromPropertyFeed(
+                mapper.fromXML(
+                    responseProcessed.bodyAsText()
+                ) as PropertyFeedXml
+            )
+        )
+
+        return result
     }
 
     private fun buildGetRequest(
