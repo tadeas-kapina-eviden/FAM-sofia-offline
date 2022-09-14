@@ -32,6 +32,9 @@ class InventoryListViewModel(
     private val _downloadingData = MutableLiveData(false)
     val downloadingData: LiveData<Boolean> = _downloadingData
 
+    private val _exitModalShown = MutableLiveData(false)
+    val exitModalShown: LiveData<Boolean> = _exitModalShown
+
     fun onSelectInventory(inventoryId: String) {
         _selectedInventoryId.value = inventoryId
         _isDownloadConfirmShown.value = true
@@ -53,5 +56,13 @@ class InventoryListViewModel(
 
     fun onSelectInventoryDecline() {
         _isDownloadConfirmShown.value = false
+    }
+
+    fun showExitModalWindow() {
+        _exitModalShown.value = true
+    }
+
+    fun hideExitModalWindow() {
+        _exitModalShown.value = false
     }
 }
