@@ -35,6 +35,9 @@ fun InventoryDetailView(
     val isFiltersShow by inventoryDetailViewModel.isFiltersShown.observeAsState(false)
     val inventoryId by inventoryDetailViewModel.inventoryId.observeAsState("")
     val codeFilter by inventoryDetailViewModel.codeFilter.observeAsState("")
+    val localityFilter by inventoryDetailViewModel.localityFilter.observeAsState("")
+    val roomFilter by inventoryDetailViewModel.roomFilter.observeAsState("")
+    val userFilter by inventoryDetailViewModel.userFilter.observeAsState("")
     val errorHeader by inventoryDetailViewModel.errorHeader.observeAsState("")
     val errorText by inventoryDetailViewModel.errorText.observeAsState("")
     val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState("")
@@ -153,7 +156,10 @@ fun InventoryDetailView(
                         )
                 ) {
                     Text(
-                        text = "Inv. $inventoryId",
+                        text = "Inv. $inventoryId"
+                                + if (localityFilter.isNotEmpty()) "Lok. $localityFilter" else ""
+                                + if (roomFilter.isNotEmpty()) "Miest. $roomFilter" else ""
+                                + if (userFilter.isNotEmpty()) "Os. $userFilter" else "",
                         modifier = Modifier
                             .padding(horizontal = 15.dp, vertical = 1.dp)
                     )
