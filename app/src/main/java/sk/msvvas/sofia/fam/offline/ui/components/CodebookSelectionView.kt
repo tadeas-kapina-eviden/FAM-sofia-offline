@@ -94,29 +94,31 @@ fun CodebookSelectionView(
                     state = ScrollState(0)
                 )
         ) {
-            filteredCodebookData.subList(
-                0,
-                if (filteredCodebookData.size > 100) 100 else filteredCodebookData.size - 1
-            ).forEach {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 5.dp, horizontal = 15.dp)
-                        .clickable(enabled = true) {
-                            onSelect(idGetter(it))
-                        }
-                ) {
-                    Text(
-                        highlightSelectedText(filterValue, idGetter(it)),
+            if (filteredCodebookData.isNotEmpty()) {
+                filteredCodebookData.subList(
+                    0,
+                    if (filteredCodebookData.size > 100) 100 else filteredCodebookData.size - 1
+                ).forEach {
+                    Row(
                         modifier = Modifier
-                            .weight(2f)
-                    )
-                    Text(
-                        highlightSelectedText(filterValue, descriptionGetter(it)),
-                        modifier = Modifier
-                            .weight(5f),
-                        textAlign = TextAlign.End
-                    )
+                            .fillMaxWidth()
+                            .padding(vertical = 5.dp, horizontal = 15.dp)
+                            .clickable(enabled = true) {
+                                onSelect(idGetter(it))
+                            }
+                    ) {
+                        Text(
+                            highlightSelectedText(filterValue, idGetter(it)),
+                            modifier = Modifier
+                                .weight(2f)
+                        )
+                        Text(
+                            highlightSelectedText(filterValue, descriptionGetter(it)),
+                            modifier = Modifier
+                                .weight(5f),
+                            textAlign = TextAlign.End
+                        )
+                    }
                 }
             }
         }
