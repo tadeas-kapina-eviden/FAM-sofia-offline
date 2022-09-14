@@ -189,12 +189,14 @@ fun InventoryDetailView(
                 Modifier.fillMaxWidth()
             ) {
                 Button(
+                    modifier = Modifier.weight(1f),
                     onClick = {
                         inventoryDetailViewModel.submitInventoryConfirmModalShow()
                     }) {
                     Text(text = "Odoslať inventúru")
                 }
                 Button(
+                    modifier = Modifier.weight(1f),
                     onClick = {
                         inventoryDetailViewModel.onSelectProperty(-1)
                     }) {
