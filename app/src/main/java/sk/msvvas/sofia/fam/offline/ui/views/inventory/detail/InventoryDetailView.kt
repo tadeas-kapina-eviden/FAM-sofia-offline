@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
-import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
 
 @Composable
@@ -184,11 +184,11 @@ fun InventoryDetailView(
             }
         }
         if (errorHeader.isNotEmpty()) {
-            ModalWindow(
+            InformationModalWindow(
                 header = errorHeader,
                 body = errorText,
                 buttonText = "Zavrieť",
-                confirm = { inventoryDetailViewModel.closeErrorAlert() }
+                buttonAction = { inventoryDetailViewModel.closeErrorAlert() }
             )
         }
 
@@ -204,11 +204,11 @@ fun InventoryDetailView(
         }
 
         if (codeFilterRoom.isNotEmpty() || codeFilterLocality.isNotEmpty()) {
-            ModalWindow(
+            InformationModalWindow(
                 header = "Vstupujete do miestnosti...",
                 body = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
                 buttonText = "OK",
-                confirm = { inventoryDetailViewModel.confirmLocalityChange() }
+                buttonAction = { inventoryDetailViewModel.confirmLocalityChange() }
             )
         }
     }

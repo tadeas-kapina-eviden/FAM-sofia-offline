@@ -12,10 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
-import sk.msvvas.sofia.fam.offline.ui.components.InputRow
-import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
-import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
+import sk.msvvas.sofia.fam.offline.ui.components.*
 
 
 @Composable
@@ -205,11 +202,11 @@ fun PropertyDetailView(
         }
 
         if (errorHeader.isNotEmpty()) {
-            ModalWindow(
+            InformationModalWindow(
                 header = errorHeader,
                 body = errorText,
                 buttonText = "Zavrieť",
-                confirm = { propertyDetailViewModel.closeErrorAlert() }
+                buttonAction = { propertyDetailViewModel.closeErrorAlert() }
             )
         }
     }

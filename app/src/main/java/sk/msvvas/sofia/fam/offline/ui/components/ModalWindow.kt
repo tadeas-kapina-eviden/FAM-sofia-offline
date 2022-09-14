@@ -15,10 +15,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BoxScope.ModalWindow(
-    header: String,
-    body: String,
-    buttonText: String,
-    confirm: () -> Unit
+    header: @Composable ColumnScope.() -> Unit = {},
+    body: @Composable ColumnScope.() -> Unit = {},
+    footer: @Composable ColumnScope.() -> Unit = {}
 ) {
     Surface(
         modifier = Modifier
@@ -36,51 +35,170 @@ fun BoxScope.ModalWindow(
                 color = MaterialTheme.colors.primary
             ),
     ) {
-        TextField(
-            value = header,
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            textStyle = TextStyle(
-                fontSize = MaterialTheme.typography.h6.fontSize,
-                textAlign = TextAlign.Center
-            ),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        TextField(
-            value = body,
-            readOnly = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface
-            ),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-        )
-        Row {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = confirm
-            ) {
-                Text(text = buttonText)
-            }
-        }
+        header.invoke(this)
+        body.invoke(this)
+        footer.invoke(this)
     }
+}
+
+@Composable
+fun BoxScope.ConfirmModalWindow(
+    header: String,
+    body: String,
+    confirmButtonText: String,
+    confirmButtonAction: () -> Unit,
+    declineButtonText: String,
+    declineButtonAction: () -> Unit
+) {
+    ModalWindow(
+        header = {
+            TextField(
+                value = header,
+                readOnly = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
+                textStyle = TextStyle(
+                    fontSize = MaterialTheme.typography.h6.fontSize,
+                    textAlign = TextAlign.Center
+                ),
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+        },
+        body = {
+            TextField(
+                value = body,
+                readOnly = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+        },
+        footer = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = confirmButtonAction
+                ) {
+                    Text(text = confirmButtonText)
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = declineButtonAction
+                ) {
+                    Text(text = declineButtonText)
+                }
+            }
+        })
+}
+
+@Composable
+fun BoxScope.InformationModalWindow(
+    header: String,
+    body: String,
+    buttonText: String,
+    buttonAction: () -> Unit
+) {
+    ModalWindow(
+        header = {
+            TextField(
+                value = header,
+                readOnly = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
+                textStyle = TextStyle(
+                    fontSize = MaterialTheme.typography.h6.fontSize,
+                    textAlign = TextAlign.Center
+                ),
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+        },
+        body = {
+            TextField(
+                value = body,
+                readOnly = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+        },
+        footer = {
+            Row {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = buttonAction
+                ) {
+                    Text(text = buttonText)
+                }
+            }
+        })
+}
+
+@Composable
+fun BoxScope.InformationNonClosableModalWindow(
+    header: String,
+    body: String
+) {
+    ModalWindow(
+        header = {
+            TextField(
+                value = header,
+                readOnly = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
+                textStyle = TextStyle(
+                    fontSize = MaterialTheme.typography.h6.fontSize,
+                    textAlign = TextAlign.Center
+                ),
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+        },
+        body = {
+            TextField(
+                value = body,
+                readOnly = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+        },
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ModalWindowPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
-        ModalWindow(
+        InformationModalWindow(
             header = "Modálne okno",
             body = "Správa v modálnom okne",
             buttonText = "OK",
-            confirm = {})
+            buttonAction = {}
+        )
     }
 }

@@ -1,20 +1,17 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.list
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationNonClosableModalWindow
 
 @Composable
 fun InventoryListView(
@@ -57,56 +54,20 @@ fun InventoryListView(
             }
         }
         if (downloadingData) {
-            ModalWindow(
+            InformationNonClosableModalWindow(
                 header = "Načítavanie",
                 body = "Sťahujú sa dáta, prosím počkajte",
-                buttonText = "",
-                confirm = {}
             )
         }
         if (isDownloadConfirmShown) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize(),
-                color = Color(0xBB222222),
-                content = {}
+            ConfirmModalWindow(
+                header = "Naozaj chceš stiahnuť Inventúru s id: $selectedInventoryId?",
+                body = "Po stiahnutí nebudeš mať možnosť pracovať s ostatnými inventúrami, až kým túto neodošleš.",
+                confirmButtonText = "Áno",
+                confirmButtonAction = { inventoryListViewModel.onSelectInventoryConfirm() },
+                declineButtonText = "Nie",
+                declineButtonAction = { inventoryListViewModel.onSelectInventoryDecline() }
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.Center)
-                    .background(color = MaterialTheme.colors.surface)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colors.primary
-                    ),
-            ) {
-                TextField(
-                    value = "Naozaj chceš stiahnuť Inventúru s id: $selectedInventoryId?",
-                    readOnly = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    ),
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                )
-                Row() {
-                    Button(
-                        modifier = Modifier.weight(1f),
-                        onClick = { inventoryListViewModel.onSelectInventoryConfirm() }
-                    ) {
-                        Text(text = "Áno")
-                    }
-                    Button(
-                        modifier = Modifier.weight(1f),
-                        onClick = { inventoryListViewModel.onSelectInventoryDecline() }
-                    ) {
-                        Text(text = "Nie")
-                    }
-                }
-            }
         }
     }
 }

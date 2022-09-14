@@ -20,7 +20,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationNonClosableModalWindow
 
 @Composable
 fun LoginView(
@@ -86,11 +87,9 @@ fun LoginView(
             }
         }
         if (downloadingData) {
-            ModalWindow(
+            InformationNonClosableModalWindow(
                 header = "Načítavanie",
                 body = "Sťahujú sa dáta, prosím počkajte",
-                buttonText = "",
-                confirm = {}
             )
         }
     }
