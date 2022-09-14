@@ -87,6 +87,9 @@ class InventoryDetailViewModel(
     private val _codebookSelectionViewLastValue = MutableLiveData("")
     val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
 
+    private val _exitModalShown = MutableLiveData(false)
+    val exitModalShown: LiveData<Boolean> = _exitModalShown
+
     init {
         propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
     }
@@ -279,5 +282,13 @@ class InventoryDetailViewModel(
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
 
             } else 0
+    }
+
+    fun showExitModalWindow() {
+        _exitModalShown.value = true
+    }
+
+    fun hideExitModalWindow() {
+        _exitModalShown.value = false
     }
 }
