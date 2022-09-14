@@ -51,166 +51,174 @@ fun PropertyDetailView(
     val selectCodebook by propertyDetailViewModel.selectCodebook.observeAsState { "" }
 
     Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(
-                    enabled = true,
-                    state = ScrollState(0)
-                ),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
+        if (property != null) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
-            ) {
-                TextField(
-                    value = if (propertyDetailViewModel.isNew) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.background
-                    )
-                )
-                TextField(
-                    value = property.textMainNumber,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.background
+                    .fillMaxSize()
+                    .verticalScroll(
+                        enabled = true,
+                        state = ScrollState(0)
                     ),
-                    textStyle = LocalTextStyle.current
-                        .copy(textAlign = TextAlign.End)
-                )
-
-                InputRowStyled(
-                    label = "Sériové číslo",
-                    value = property.serialNumber,
-                    onClick = {}
-                )
-                InputRowStyled(
-                    label = "Invent. číslo",
-                    value = property.inventNumber,
-                    onClick = {}
-                )
-                InputRowStyled(
-                    label = "Závod",
-                    value = property.werks,
-                    onClick = {}
-                )
-                InputRowStyled(
-                    label = "Lokalita",
-                    value = locality,
-                    onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
-                )
-                InputRowStyled(
-                    label = "Miestnosť",
-                    value = room,
-                    onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
-                )
-                InputRowStyled(
-                    label = "z. Os.",
-                    value = user,
-                    onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
-                )
-                InputRowStyled(
-                    label = "Stredisko",
-                    value = property.center,
-                    onClick = {}
-                )
-                InputRowStyled(
-                    label = "Pracovisko",
-                    value = place,
-                    onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
-                )
-                InputRowStyled(
-                    label = "Poznámka",
-                    value = fixedNote,
-                    onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() }
-                )
-                InputRowStyled(
-                    label = "Vlastná pozn.",
-                    value = variableNote,
-                    onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() }
-                )
-                Row(
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 20.dp
-                        )
+                        .padding(horizontal = 15.dp)
                 ) {
-                    Row(modifier = Modifier.weight(1f)) {
-                        Checkbox(
-                            checked = propertyDetailViewModel.isManual,
-                            onCheckedChange = {},
-                            enabled = false
+                    TextField(
+                        value = if (propertyDetailViewModel.isNew) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = MaterialTheme.colors.background
                         )
-                        Text(
-                            text = "Manuálny",
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    Row(modifier = Modifier.weight(1f)) {
-                        Checkbox(
-                            checked = propertyDetailViewModel.isNew,
-                            onCheckedChange = {},
-                            enabled = false
-                        )
-                        Text(
-                            text = "Nový",
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
+                    )
+                    TextField(
+                        value = property.textMainNumber,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = MaterialTheme.colors.background
+                        ),
+                        textStyle = LocalTextStyle.current
+                            .copy(textAlign = TextAlign.End)
+                    )
+
+                    InputRowStyled(
+                        label = "Sériové číslo",
+                        value = property.serialNumber,
+                        onClick = {}
+                    )
+                    InputRowStyled(
+                        label = "Invent. číslo",
+                        value = property.inventNumber,
+                        onClick = {}
+                    )
+                    InputRowStyled(
+                        label = "Závod",
+                        value = property.werks,
+                        onClick = {}
+                    )
+                    InputRowStyled(
+                        label = "Lokalita",
+                        value = locality,
+                        onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
+                    )
+                    InputRowStyled(
+                        label = "Miestnosť",
+                        value = room,
+                        onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
+                    )
+                    InputRowStyled(
+                        label = "z. Os.",
+                        value = user,
+                        onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
+                    )
+                    InputRowStyled(
+                        label = "Stredisko",
+                        value = property.center,
+                        onClick = {}
+                    )
+                    InputRowStyled(
+                        label = "Pracovisko",
+                        value = place,
+                        onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
+                    )
+                    InputRowStyled(
+                        label = "Poznámka",
+                        value = fixedNote,
+                        onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() }
+                    )
+                    InputRowStyled(
+                        label = "Vlastná pozn.",
+                        value = variableNote,
+                        onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() }
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = 20.dp
+                            )
+                    ) {
+                        Row(modifier = Modifier.weight(1f)) {
+                            Checkbox(
+                                checked = propertyDetailViewModel.isManual,
+                                onCheckedChange = {},
+                                enabled = false
+                            )
+                            Text(
+                                text = "Manuálny",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
+                        Row(modifier = Modifier.weight(1f)) {
+                            Checkbox(
+                                checked = propertyDetailViewModel.isNew,
+                                onCheckedChange = {},
+                                enabled = false
+                            )
+                            Text(
+                                text = "Nový",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
                     }
                 }
-            }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                if ("SZN".contains(property.recordStatus)) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    if ("SZN".contains(property.recordStatus)) {
+                        Button(
+                            onClick = { propertyDetailViewModel.rollback() },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(text = "Vráť na originál")
+                        }
+                    }
                     Button(
-                        onClick = { propertyDetailViewModel.rollback() },
+                        onClick = { propertyDetailViewModel.submit() },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(text = "Vráť na originál")
+                        Text(text = "Potvrď")
                     }
                 }
-                Button(
-                    onClick = { propertyDetailViewModel.submit() },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = "Potvrď")
-                }
             }
-        }
-        if (isCodebookSelectionViewShown) {
-            CodebookSelectionView(
-                codebookData = codebookSelectionViewData,
-                lastFilerValue = codebookSelectionViewLastValue,
-                idGetter = codebookSelectionViewIdGetter,
-                descriptionGetter = codebookSelectionViewDescriptionGetter,
-                onSelect = selectCodebook,
-                onClose = { propertyDetailViewModel.closeCodebookSelectionView() }
-            )
-        }
+            if (isCodebookSelectionViewShown) {
+                CodebookSelectionView(
+                    codebookData = codebookSelectionViewData,
+                    lastFilerValue = codebookSelectionViewLastValue,
+                    idGetter = codebookSelectionViewIdGetter,
+                    descriptionGetter = codebookSelectionViewDescriptionGetter,
+                    onSelect = selectCodebook,
+                    onClose = { propertyDetailViewModel.closeCodebookSelectionView() }
+                )
+            }
 
-        if (propertyDetailViewModel.property.value != null) {
-            propertyDetailViewModel.lateInitVarsData()
-        }
+            if (propertyDetailViewModel.property.value != null) {
+                propertyDetailViewModel.lateInitVarsData()
+            }
 
-        if (errorHeader.isNotEmpty()) {
-            InformationModalWindow(
-                header = errorHeader,
-                body = errorText,
-                buttonText = "Zavrieť",
-                buttonAction = { propertyDetailViewModel.closeErrorAlert() }
+            if (errorHeader.isNotEmpty()) {
+                InformationModalWindow(
+                    header = errorHeader,
+                    body = errorText,
+                    buttonText = "Zavrieť",
+                    buttonAction = { propertyDetailViewModel.closeErrorAlert() }
+                )
+            }
+        } else {
+            InformationNonClosableModalWindow(
+                header = "Načítavanie",
+                body = "Dáta sa načítavajú, prosím počkajte."
             )
         }
     }
 }
+
 
 @Composable
 private fun InputRowStyled(
