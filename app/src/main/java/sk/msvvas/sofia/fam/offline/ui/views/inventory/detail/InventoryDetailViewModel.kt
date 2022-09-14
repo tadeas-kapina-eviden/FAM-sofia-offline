@@ -12,7 +12,6 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepositor
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
-
 class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
@@ -62,11 +61,11 @@ class InventoryDetailViewModel(
     private val _errorText = MutableLiveData("")
     val errorText: LiveData<String> = _errorText
 
-    private val _codeFilterLocality = MutableLiveData("")
-    var codeFilterLocality: LiveData<String> = _codeFilterLocality
+    private val _codeFilterLocality = MutableLiveData<String?>(null)
+    var codeFilterLocality: LiveData<String?> = _codeFilterLocality
 
-    private val _codeFilterRoom = MutableLiveData("")
-    var codeFilterRoom: LiveData<String> = _codeFilterRoom
+    private val _codeFilterRoom = MutableLiveData<String?>(null)
+    var codeFilterRoom: LiveData<String?> = _codeFilterRoom
 
     private val _isCodebookSelectionViewShown = MutableLiveData(false)
     val isCodebookSelectionViewShown: LiveData<Boolean> = _isCodebookSelectionViewShown
@@ -155,8 +154,8 @@ class InventoryDetailViewModel(
     fun confirmLocalityChange() {
         _localityFilter.value = _codeFilterLocality.value
         _roomFilter.value = codeFilterRoom.value
-        _codeFilterLocality.value = ""
-        _codeFilterRoom.value = ""
+        _codeFilterLocality.value = null
+        _codeFilterRoom.value = null
     }
 
     fun runFilters() {

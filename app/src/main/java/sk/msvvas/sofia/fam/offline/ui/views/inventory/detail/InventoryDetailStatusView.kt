@@ -64,29 +64,35 @@ fun StatusRow(
 ) {
     val processed = localityRoomCountPair.processed
     val all = localityRoomCountPair.all
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-            .clickable {
-                onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
-            }
-    ) {
-        Text(
-            text = localityRoomCountPair.locality,
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+            onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
+        }) {
+        Row(
             modifier = Modifier
-                .weight(1f)
-        )
-        Text(
-            text = localityRoomCountPair.room,
-            modifier = Modifier
-                .weight(1f)
-        )
-        Text(
-            text = "$processed/$all",
-            modifier = Modifier
-                .weight(1f)
-        )
+                .fillMaxWidth()
+                .clickable {
+                    onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
+                }
+                .padding(15.dp)
+        ) {
+            Text(
+                text = localityRoomCountPair.locality,
+                modifier = Modifier
+                    .weight(1f)
+            )
+            Text(
+                text = localityRoomCountPair.room,
+                modifier = Modifier
+                    .weight(1f)
+            )
+            Text(
+                text = "$processed/$all",
+                modifier = Modifier
+                    .weight(1f)
+            )
+        }
     }
 }
 

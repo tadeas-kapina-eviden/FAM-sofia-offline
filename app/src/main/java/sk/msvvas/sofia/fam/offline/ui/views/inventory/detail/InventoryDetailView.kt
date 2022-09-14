@@ -43,8 +43,8 @@ fun InventoryDetailView(
     val userFilter by inventoryDetailViewModel.userFilter.observeAsState("")
     val errorHeader by inventoryDetailViewModel.errorHeader.observeAsState("")
     val errorText by inventoryDetailViewModel.errorText.observeAsState("")
-    val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState("")
-    val codeFilterRoom by inventoryDetailViewModel.codeFilterRoom.observeAsState("")
+    val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState()
+    val codeFilterRoom by inventoryDetailViewModel.codeFilterRoom.observeAsState()
     val statusFilter by inventoryDetailViewModel.statusFilter.observeAsState('U')
     val exitModalShown by inventoryDetailViewModel.exitModalShown.observeAsState(false)
 
@@ -224,7 +224,7 @@ fun InventoryDetailView(
             )
         }
 
-        if (codeFilterRoom.isNotEmpty() || codeFilterLocality.isNotEmpty()) {
+        if (codeFilterRoom != null || codeFilterLocality != null) {
             InformationModalWindow(
                 header = "Vstupujete do miestnosti...",
                 body = "Lokalita: $codeFilterLocality\nMiestnosť: $codeFilterRoom",
