@@ -30,9 +30,9 @@ import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyContentXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyXml
-import sk.msvvas.sofia.fam.offline.data.client.model.transformator.InventoryTransformator
-import sk.msvvas.sofia.fam.offline.data.client.model.transformator.PropertyTransformator
-import sk.msvvas.sofia.fam.offline.data.client.model.transformator.codebook.*
+import sk.msvvas.sofia.fam.offline.data.transformator.InventoryTransformator
+import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
+import sk.msvvas.sofia.fam.offline.data.transformator.codebook.*
 
 object Client {
 

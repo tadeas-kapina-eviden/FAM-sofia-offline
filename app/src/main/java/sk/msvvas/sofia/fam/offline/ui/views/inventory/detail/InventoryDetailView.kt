@@ -21,8 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
-import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
@@ -114,7 +113,7 @@ fun InventoryDetailView(
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(0.5f)
+                        .fillMaxWidth(0.75f)
                 ) {
                     StatusFilterButton(
                         isSelected = (statusFilter == 'U'),
@@ -168,7 +167,9 @@ fun InventoryDetailView(
                     InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel)
                 } else {
                     PropertyListView(
-                        properties = propertyEntityListToPropertyPreviewList(properties),
+                        properties = PropertyTransformator.propertyEntityListToPropertyPreviewList(
+                            properties
+                        ),
                         changeView = {
                             inventoryDetailViewModel.onSelectProperty(it)
                         })
@@ -229,6 +230,7 @@ private fun RowScope.StatusFilterButton(
                 onClick()
             }
             .weight(1f)
+            .padding(8.dp)
     ) {
         Box {
             Image(
@@ -246,19 +248,8 @@ private fun RowScope.StatusFilterButton(
             text = text,
             style = TextStyle(
                 fontSize = 12.sp
-            )
-        )
-    }
-}
-
-fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
-    return propertyEntities.map {
-        PropertyPreviewModel(
-            id = it.id,
-            textMainNumber = it.textMainNumber,
-            status = it.recordStatus,
-            subNumber = it.subnumber,
-            propertyNumber = it.propertyNumber
+            ),
+            maxLines = 1
         )
     }
 }

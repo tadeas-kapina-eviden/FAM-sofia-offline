@@ -1,4 +1,4 @@
-package sk.msvvas.sofia.fam.offline.data.client.model.transformator
+package sk.msvvas.sofia.fam.offline.data.transformator
 
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml

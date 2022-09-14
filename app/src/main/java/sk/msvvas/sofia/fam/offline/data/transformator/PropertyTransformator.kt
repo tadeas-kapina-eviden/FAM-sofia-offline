@@ -1,6 +1,7 @@
-package sk.msvvas.sofia.fam.offline.data.client.model.transformator
+package sk.msvvas.sofia.fam.offline.data.transformator
 
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 
 object PropertyTransformator {
@@ -31,6 +32,18 @@ object PropertyTransformator {
                     variableNote = it.variableNote
                 )
             }
+        }
+    }
+
+    fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
+        return propertyEntities.map {
+            PropertyPreviewModel(
+                id = it.id,
+                textMainNumber = it.textMainNumber,
+                status = it.recordStatus,
+                subNumber = it.subnumber,
+                propertyNumber = it.propertyNumber
+            )
         }
     }
 }
