@@ -4,7 +4,16 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 
+/**
+ * Transformator for transforming PropertyEntity to PropertyXml and back
+ */
 object PropertyTransformator {
+
+    /**
+     * Function for transforming Feed of Properties to List of PropertyEntities
+     * @param propertyFeedXml xml feed of Properties
+     * @return list of PropertyEntities
+     */
     fun propertyListFromPropertyFeed(propertyFeedXml: PropertyFeedXml): List<PropertyEntity> {
         if(propertyFeedXml.entries == null || propertyFeedXml.entries.isEmpty())
             return emptyList()
