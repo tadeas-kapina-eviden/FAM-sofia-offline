@@ -5,6 +5,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.codebook.user.UserCodebookF
 
 object UserCodebookTransformator {
     fun userCodebookListFromUserCodebookFeed(userCodebookFeedXml: UserCodebookFeedXml): List<UserCodebookEntity> {
+        if(userCodebookFeedXml.entries == null || userCodebookFeedXml.entries.isEmpty())
+            return emptyList()
         return userCodebookFeedXml.entries.map { entry ->
             entry.content.user.let {
                 UserCodebookEntity(

@@ -5,6 +5,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.codebook.place.PlaceCodeboo
 
 object PlaceCodebookTransformator {
     fun placeCodebookListFromPlaceCodebookFeed(placeCodebookFeedXml: PlaceCodebookFeedXml): List<PlaceCodebookEntity> {
+        if(placeCodebookFeedXml.entries == null || placeCodebookFeedXml.entries.isEmpty())
+            return emptyList()
         return placeCodebookFeedXml.entries.map { entry ->
             entry.content.place.let {
                 PlaceCodebookEntity(

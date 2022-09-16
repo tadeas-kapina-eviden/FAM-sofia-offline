@@ -5,6 +5,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.codebook.note.NoteCodebookF
 
 object NoteCodebookTransformator {
     fun noteCodebookListFromNoteCodebookFeed(noteCodebookFeedXml: NoteCodebookFeedXml): List<NoteCodebookEntity> {
+        if(noteCodebookFeedXml.entries == null || noteCodebookFeedXml.entries.isEmpty())
+            return emptyList()
         return noteCodebookFeedXml.entries.map { entry ->
             entry.content.note.let {
                 NoteCodebookEntity(

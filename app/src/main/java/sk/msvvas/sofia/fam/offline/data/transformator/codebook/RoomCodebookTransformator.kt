@@ -5,6 +5,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.codebook.room.RoomCodebookF
 
 object RoomCodebookTransformator {
     fun roomCodebookListFromRoomCodebookFeed(roomCodebookFeedXml: RoomCodebookFeedXml): List<RoomCodebookEntity> {
+        if(roomCodebookFeedXml.entries == null || roomCodebookFeedXml.entries.isEmpty())
+            return emptyList()
         return roomCodebookFeedXml.entries.map { entry ->
             entry.content.room.let {
                 RoomCodebookEntity(

@@ -5,6 +5,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityC
 
 object LocalityCodebookTransformator {
     fun localityCodebookListFromLocalityCodebookFeed(localityCodebookFeedXml: LocalityCodebookFeedXml): List<LocalityCodebookEntity> {
+        if(localityCodebookFeedXml.entries == null || localityCodebookFeedXml.entries.isEmpty())
+            return emptyList()
         return localityCodebookFeedXml.entries.map { entry ->
             entry.content.locality.let {
                 LocalityCodebookEntity(

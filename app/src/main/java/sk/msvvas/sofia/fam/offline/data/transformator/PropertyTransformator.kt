@@ -6,6 +6,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 
 object PropertyTransformator {
     fun propertyListFromPropertyFeed(propertyFeedXml: PropertyFeedXml): List<PropertyEntity> {
+        if(propertyFeedXml.entries == null || propertyFeedXml.entries.isEmpty())
+            return emptyList()
         return propertyFeedXml.entries.map { entry ->
             entry.content.property.let {
                 PropertyEntity(

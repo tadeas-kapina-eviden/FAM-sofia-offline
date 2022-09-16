@@ -6,6 +6,8 @@ import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml
 object InventoryTransformator {
 
     fun inventoryListFromInventoryFeed(inventoryFeedXml: InventoryFeedXml): List<InventoryEntity> {
+        if(inventoryFeedXml.entries == null || inventoryFeedXml.entries.isEmpty())
+            return emptyList()
         return inventoryFeedXml.entries.map { entry ->
             entry.content.inventory.let {
                 InventoryEntity(
