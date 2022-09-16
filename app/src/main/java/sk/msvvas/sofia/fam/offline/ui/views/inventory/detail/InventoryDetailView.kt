@@ -277,7 +277,7 @@ fun InventoryDetailView(
         if (isCodebookSelectionViewShown) {
             CodebookSelectionView(
                 codebookData = codebookSelectionViewData,
-                lastFilerValue = codebookSelectionViewLastValue,
+                lastFilterValue = codebookSelectionViewLastValue,
                 idGetter = codebookSelectionViewIdGetter,
                 descriptionGetter = codebookSelectionViewDescriptionGetter,
                 onSelect = selectCodebook,

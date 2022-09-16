@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,17 +25,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 
+
+/**
+ * Component used for selecting data from various codebooks
+ * @param codebookData list of selectable codebooks
+ * @param lastFilterValue value of filter when view pop up (usually last selected value)
+ * @param idGetter function to get value of id from codebook
+ * @param descriptionGetter function to get value of description form codebook
+ * @param onSelect function that is executed when one of codebook is selected or is clicked done button on keyboard
+ * @param onClose function, that is executed when close or back buttons are clicked
+ */
 @Composable
 fun CodebookSelectionView(
     codebookData: List<Any>,
-    lastFilerValue: String,
+    lastFilterValue: String,
     idGetter: (Any) -> String,
     descriptionGetter: (Any) -> String,
     onSelect: (String) -> Any,
     onClose: () -> Unit
 ) {
     var filterValue by remember {
-        mutableStateOf(lastFilerValue)
+        mutableStateOf(lastFilterValue)
     }
 
     var filteredCodebookData by remember {
@@ -123,8 +134,17 @@ fun CodebookSelectionView(
             Text(text = "OK")
         }
     }
+    BackHandler {
+        onClose()
+    }
 }
 
+/**
+ * Function for highlighting part of text in text block
+ * Highlighted text is bold
+ * @param selected text we want to highlight
+ * @param text full text
+ */
 fun highlightSelectedText(selected: String, text: String): AnnotatedString {
     if (selected.isEmpty() || !text.contains(selected) || text.split(selected).size > 2)
         return buildAnnotatedString { append(text) }
@@ -145,6 +165,10 @@ fun highlightSelectedText(selected: String, text: String): AnnotatedString {
         }
 }
 
+/**
+ * Function to find first appear of wanted text in String
+ * @param predicate text we want to find
+ */
 private fun String.find(predicate: String): Int {
     for (i in 0..(this.length - predicate.length))
         if (predicate == this.subSequence(i, i + predicate.length))
@@ -152,6 +176,9 @@ private fun String.find(predicate: String): Int {
     return Int.MAX_VALUE
 }
 
+/**
+ * Default preview for Codebook selection view
+ */
 @Preview(showBackground = true)
 @Composable
 fun CodebookSelectionPreview() {
@@ -170,7 +197,7 @@ fun CodebookSelectionPreview() {
                 description = "Zdlhavy popis tretej lokality"
             ),
         ),
-        lastFilerValue = "",
+        lastFilterValue = "",
         idGetter = {
             (it as LocalityCodebookEntity).id
         },
