@@ -2,9 +2,9 @@ package sk.msvvas.sofia.fam.offline.ui.views.inventory.list
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,19 +41,15 @@ fun InventoryListView(
                     .padding(15.dp)
                     .fillMaxWidth()
             )
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(
-                        enabled = true,
-                        state = ScrollState(0)
-                    )
             ) {
-                inventories.forEach {
+                items(inventories) { item ->
                     InventoryListItem(
-                        inventory = it,
+                        inventory = item,
                         onClick = {
-                            inventoryListViewModel.onSelectInventory(it.id)
+                            inventoryListViewModel.onSelectInventory(item.id)
                         }
                     )
                 }

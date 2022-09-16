@@ -1,12 +1,12 @@
 package sk.msvvas.sofia.fam.offline.ui.components
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -85,40 +85,31 @@ fun CodebookSelectionView(
                 imeAction = ImeAction.Done
             )
         )
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .verticalScroll(
-                    enabled = true,
-                    state = ScrollState(0)
-                )
         ) {
-            if (filteredCodebookData.isNotEmpty()) {
-                filteredCodebookData.subList(
-                    0,
-                    if (filteredCodebookData.size > 100) 100 else filteredCodebookData.size - 1
-                ).forEach {
-                    Row(
+            items(filteredCodebookData) { item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp, horizontal = 15.dp)
+                        .clickable(enabled = true) {
+                            onSelect(idGetter(item))
+                        }
+                ) {
+                    Text(
+                        highlightSelectedText(filterValue, idGetter(item)),
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp, horizontal = 15.dp)
-                            .clickable(enabled = true) {
-                                onSelect(idGetter(it))
-                            }
-                    ) {
-                        Text(
-                            highlightSelectedText(filterValue, idGetter(it)),
-                            modifier = Modifier
-                                .weight(2f)
-                        )
-                        Text(
-                            highlightSelectedText(filterValue, descriptionGetter(it)),
-                            modifier = Modifier
-                                .weight(5f),
-                            textAlign = TextAlign.End
-                        )
-                    }
+                            .weight(2f)
+                    )
+                    Text(
+                        highlightSelectedText(filterValue, descriptionGetter(item)),
+                        modifier = Modifier
+                            .weight(5f),
+                        textAlign = TextAlign.End
+                    )
                 }
             }
         }

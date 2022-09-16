@@ -2,8 +2,12 @@ package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -24,11 +28,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
-import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
+import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
-import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListView
+import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
+import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListItem
 
 @Composable
 fun InventoryDetailView(
@@ -74,115 +79,143 @@ fun InventoryDetailView(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 5.dp)
-                    .verticalScroll(
-                        enabled = true,
-                        state = ScrollState(0)
-                    )
                     .weight(1f)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    TextField(
-                        value = codeFilter,
-                        onValueChange = {
-                            inventoryDetailViewModel.onCodeFilterChange(it)
-                        },
+                item {
+                    Row(
                         modifier = Modifier
-                            .weight(1f),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done,
-                            autoCorrect = false,
-                            capitalization = KeyboardCapitalization.Characters,
-                            keyboardType = KeyboardType.Ascii
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                inventoryDetailViewModel.runCodeFilter()
-                            }
-                        ),
-                    )
-                    Button(
-                        onClick = { inventoryDetailViewModel.onFiltersShowClick() },
-                        modifier = Modifier
-                            .weight(1f)
+                            .fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Zobraziť filtre"
+                        TextField(
+                            value = codeFilter,
+                            onValueChange = {
+                                inventoryDetailViewModel.onCodeFilterChange(it)
+                            },
+                            modifier = Modifier
+                                .weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Done,
+                                autoCorrect = false,
+                                capitalization = KeyboardCapitalization.Characters,
+                                keyboardType = KeyboardType.Ascii
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    inventoryDetailViewModel.runCodeFilter()
+                                }
+                            ),
                         )
+                        Button(
+                            onClick = { inventoryDetailViewModel.onFiltersShowClick() },
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Zobraziť filtre"
+                            )
+                        }
                     }
                 }
                 if (isFiltersShow) {
-                    InventoryDetailFiltersComponent(inventoryDetailViewModel)
+                    item { InventoryDetailFiltersComponent(inventoryDetailViewModel) }
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(0.75f)
-                ) {
-                    StatusFilterButton(
-                        isSelected = (statusFilter == 'U'),
-                        idSelected = R.drawable.unprocessed_selected,
-                        idUnselected = R.drawable.unprocessed_unselected,
-                        text = "Nespracované",
-                        count = inventoryDetailViewModel.countUnprocessed(),
-                        onClick = {
-                            inventoryDetailViewModel.statusFilterUnprocessed()
-                        }
-                    )
-                    StatusFilterButton(
-                        isSelected = (statusFilter == 'P'),
-                        idSelected = R.drawable.processed_selected,
-                        idUnselected = R.drawable.processed_unselected,
-                        text = "Spracované",
-                        count = inventoryDetailViewModel.countProcessed(),
-                        onClick = {
-                            inventoryDetailViewModel.statusFilterProcessed()
-                        }
-                    )
-                    StatusFilterButton(
-                        isSelected = (statusFilter == 'S'),
-                        idSelected = R.drawable.status_selected,
-                        idUnselected = R.drawable.status_unselected,
-                        text = "Status",
-                        count = -1,
-                        onClick = {
-                            inventoryDetailViewModel.statusFilterStatus()
-                        }
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colors.primary
-                        )
-                ) {
-                    Text(
-                        text = "Inv. $inventoryId"
-                                + if (localityFilter.isNotEmpty()) "Lok. $localityFilter" else ""
-                                + if (roomFilter.isNotEmpty()) "Miest. $roomFilter" else ""
-                                + if (userFilter.isNotEmpty()) "Os. $userFilter" else "",
+                item {
+                    Row(
                         modifier = Modifier
-                            .padding(horizontal = 15.dp, vertical = 1.dp)
-                    )
+                            .fillMaxWidth(0.75f)
+                    ) {
+                        StatusFilterButton(
+                            isSelected = (statusFilter == 'U'),
+                            idSelected = R.drawable.unprocessed_selected,
+                            idUnselected = R.drawable.unprocessed_unselected,
+                            text = "Nespracované",
+                            count = inventoryDetailViewModel.countUnprocessed(),
+                            onClick = {
+                                inventoryDetailViewModel.statusFilterUnprocessed()
+                            }
+                        )
+                        StatusFilterButton(
+                            isSelected = (statusFilter == 'P'),
+                            idSelected = R.drawable.processed_selected,
+                            idUnselected = R.drawable.processed_unselected,
+                            text = "Spracované",
+                            count = inventoryDetailViewModel.countProcessed(),
+                            onClick = {
+                                inventoryDetailViewModel.statusFilterProcessed()
+                            }
+                        )
+                        StatusFilterButton(
+                            isSelected = (statusFilter == 'S'),
+                            idSelected = R.drawable.status_selected,
+                            idUnselected = R.drawable.status_unselected,
+                            text = "Status",
+                            count = -1,
+                            onClick = {
+                                inventoryDetailViewModel.statusFilterStatus()
+                            }
+                        )
+                    }
+                }
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colors.primary
+                            )
+                    ) {
+                        Text(
+                            text = "Inv. $inventoryId"
+                                    + if (localityFilter.isNotEmpty()) "Lok. $localityFilter" else ""
+                                    + if (roomFilter.isNotEmpty()) "Miest. $roomFilter" else ""
+                                    + if (userFilter.isNotEmpty()) "Os. $userFilter" else "",
+                            modifier = Modifier
+                                .padding(horizontal = 15.dp, vertical = 1.dp)
+                        )
+                    }
                 }
                 if (statusFilter == 'S') {
-                    InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel)
+                    item { InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel) }
                 } else {
-                    PropertyListView(
-                        properties = PropertyTransformator.propertyEntityListToPropertyPreviewList(
-                            properties
-                        ),
-                        changeView = {
-                            inventoryDetailViewModel.onSelectProperty(it)
-                        })
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .drawWithBottomLine(
+                                    width = 1f,
+                                    color = MaterialTheme.colors.primary
+                                )
+                                .padding(horizontal = 15.dp, vertical = 10.dp)
+                        ) {
+                            Text(
+                                text = "Názov",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(
+                                text = "Status",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(5.dp)
+                            )
+                        }
+                    }
+                    items(properties) { item ->
+                        PropertyListItem(
+                            property = PropertyPreviewModel(
+                                id = item.id,
+                                textMainNumber = item.textMainNumber,
+                                propertyNumber = item.propertyNumber,
+                                status = item.recordStatus,
+                                subNumber = item.subnumber
+                            ),
+                            onClick = { id -> inventoryDetailViewModel.onSelectProperty(id) })
+                    }
                 }
             }
             Row(
