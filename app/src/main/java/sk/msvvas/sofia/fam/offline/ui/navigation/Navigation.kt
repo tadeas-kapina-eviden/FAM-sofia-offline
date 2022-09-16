@@ -20,6 +20,11 @@ import sk.msvvas.sofia.fam.offline.ui.views.login.LoginViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailView
 import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailViewModel
 
+
+/**
+ * Component for handling navigation in Application
+ * @param database Local database of application
+ */
 @Composable
 fun Navigation(
     database: FamOfflineDatabase
@@ -44,7 +49,7 @@ fun Navigation(
                 navController = navController
             )
         }
-        composable(route = Routes.addOptionalArgumentsToRoute(Routes.LOGIN_VIEW.value, "id"),
+        composable(route = Routes.addOptionalParametersToRoute(Routes.LOGIN_VIEW.value, "id"),
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.StringType
@@ -71,7 +76,7 @@ fun Navigation(
             )
         }
         composable(
-            route = Routes.addOptionalArgumentsToRoute(
+            route = Routes.addOptionalParametersToRoute(
                 Routes.INVENTORY_DETAIL.defineRoute("id"),
                 "locality",
                 "room",
@@ -120,7 +125,7 @@ fun Navigation(
             )
         }
         composable(
-            route = Routes.addOptionalArgumentsToRoute(
+            route = Routes.addOptionalParametersToRoute(
                 Routes.PROPERTY_DETAIL.defineRoute("id"),
                 "locality",
                 "room",
