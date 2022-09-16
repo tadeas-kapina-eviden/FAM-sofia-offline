@@ -19,7 +19,7 @@ interface PropertyDao {
 
     /**
      * Insert multiple items to property table
-     * @param propertyEntities list property data
+     * @param propertyEntities list of properties data
      */
     @Insert(onConflict = IGNORE)
     suspend fun saveAll(propertyEntities: List<PropertyEntity>)
