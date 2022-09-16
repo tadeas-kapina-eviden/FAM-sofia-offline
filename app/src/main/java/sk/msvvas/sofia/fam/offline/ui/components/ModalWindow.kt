@@ -13,6 +13,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * Pop up window with shadowing background
+ * @param header content of header of footer
+ * @param body content of body of footer
+ * @param footer content of footer of footer
+ */
 @Composable
 fun BoxScope.ModalWindow(
     header: @Composable ColumnScope.() -> Unit = {},
@@ -41,6 +47,15 @@ fun BoxScope.ModalWindow(
     }
 }
 
+/**
+ * Modal window for actions that need to be confirmed
+ * @param header text in header of window
+ * @param body text in body of window
+ * @param confirmButtonText text for confirm button in footer
+ * @param confirmButtonAction function executed when confirm button is clicked
+ * @param declineButtonText text for confirm button in footer
+ * @param declineButtonAction function executed when decline button is clicked
+ */
 @Composable
 fun BoxScope.ConfirmModalWindow(
     header: String,
@@ -101,6 +116,14 @@ fun BoxScope.ConfirmModalWindow(
         })
 }
 
+/**
+ * Modal window used for showing information
+ * Can be dismissed by button
+ * @param header text in header of window
+ * @param body text in body of window
+ * @param buttonText text in button of window
+ * @param buttonAction function that is executed when button is clicked (used for dismissing window)
+ */
 @Composable
 fun BoxScope.InformationModalWindow(
     header: String,
@@ -151,6 +174,12 @@ fun BoxScope.InformationModalWindow(
         })
 }
 
+/**
+ * Modal window used for showing information
+ * Cannot be dismissed by user - used primary when application loading data
+ * @param header text in header of window
+ * @param body text in body of window
+ */
 @Composable
 fun BoxScope.InformationNonClosableModalWindow(
     header: String,
@@ -190,6 +219,9 @@ fun BoxScope.InformationNonClosableModalWindow(
     )
 }
 
+/**
+ * Default preview for Modal window
+ */
 @Preview(showBackground = true)
 @Composable
 fun ModalWindowPreview() {
