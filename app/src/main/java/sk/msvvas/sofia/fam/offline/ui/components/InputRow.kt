@@ -13,6 +13,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+/**
+ * Component with label and input field in same row
+ * Used for selection value via external function
+ * @param label text value of label
+ * @param value text value of input
+ * @param modifier custom modifier for row container
+ * @param ratio ratio of label/input text field
+ * @param labelTextAlign align for label text
+ * @param textFieldTextAlign align for text in input text field
+ * @param labelTextHorizontalPadding horizontal padding of label
+ * @param onClick function executed when user click on input text field (change textField value or open another view for selection value)
+ */
 @Composable
 fun InputRow(
     label: String,
@@ -55,6 +67,10 @@ fun InputRow(
     }
 }
 
+
+/**
+ * Default preview for InputRow
+ */
 @Preview(showBackground = true)
 @Composable
 fun InputRowPreview() {
