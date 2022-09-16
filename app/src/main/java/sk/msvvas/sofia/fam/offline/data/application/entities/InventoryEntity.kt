@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Entity for inventories table in local database
+ */
 @Entity(tableName = "inventories")
 data class InventoryEntity(
     @PrimaryKey

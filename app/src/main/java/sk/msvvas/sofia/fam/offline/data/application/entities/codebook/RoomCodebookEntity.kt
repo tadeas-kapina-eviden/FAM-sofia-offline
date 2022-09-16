@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Entity for rooms_codebook table in local database
+ */
 @Entity(
     tableName = "rooms_codebook",
 )
