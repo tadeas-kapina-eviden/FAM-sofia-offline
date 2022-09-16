@@ -15,7 +15,7 @@ object PropertyTransformator {
      * @return list of PropertyEntities
      */
     fun propertyListFromPropertyFeed(propertyFeedXml: PropertyFeedXml): List<PropertyEntity> {
-        if(propertyFeedXml.entries == null || propertyFeedXml.entries.isEmpty())
+        if (propertyFeedXml.entries == null || propertyFeedXml.entries.isEmpty())
             return emptyList()
         return propertyFeedXml.entries.map { entry ->
             entry.content.property.let {
@@ -46,6 +46,11 @@ object PropertyTransformator {
         }
     }
 
+    /**
+     * Function for transforming property entity list to property preview list
+     * @param propertyEntities list of property entities
+     * @return list of property preview models
+     */
     fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
         return propertyEntities.map {
             PropertyPreviewModel(

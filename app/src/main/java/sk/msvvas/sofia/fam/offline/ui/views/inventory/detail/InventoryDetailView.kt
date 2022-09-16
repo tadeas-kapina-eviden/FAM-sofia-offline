@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
-import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
+import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
 import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
@@ -205,15 +205,9 @@ fun InventoryDetailView(
                             )
                         }
                     }
-                    items(properties) { item ->
+                    items(PropertyTransformator.propertyEntityListToPropertyPreviewList(properties)) { item ->
                         PropertyListItem(
-                            property = PropertyPreviewModel(
-                                id = item.id,
-                                textMainNumber = item.textMainNumber,
-                                propertyNumber = item.propertyNumber,
-                                status = item.recordStatus,
-                                subNumber = item.subnumber
-                            ),
+                            property = item,
                             onClick = { id -> inventoryDetailViewModel.onSelectProperty(id) })
                     }
                 }
