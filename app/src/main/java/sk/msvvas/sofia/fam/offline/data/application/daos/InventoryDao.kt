@@ -14,7 +14,7 @@ interface InventoryDao {
 
     /**
      * Insert one item to inventory table
-     * @param inventoryEntity property data
+     * @param inventoryEntity inventory data
      */
     @Insert(onConflict = IGNORE)
     suspend fun save(inventoryEntity: InventoryEntity)
