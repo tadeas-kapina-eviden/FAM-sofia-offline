@@ -8,6 +8,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.clipRect
 
+/**
+ * Modifier used to draw component with border only at bottom side
+ * @param width width of border
+ * @param color color of border
+ */
 fun Modifier.drawWithBottomLine(
     width: Float = 0f,
     color: Color = Color.Black
@@ -27,6 +32,11 @@ fun Modifier.drawWithBottomLine(
     }
 )
 
+/**
+ * Modifier used to draw component with border only at top side
+ * @param width width of border
+ * @param color color of border
+ */
 fun Modifier.drawWithTopLine(
     width: Float = 0f,
     color: Color = Color.Black
