@@ -11,12 +11,14 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebo
 class RoomCodebookRepository(private val roomCodebookDao: RoomCodebookDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     /**
      * All data from room_codebook table
      * Get by getAll function
      * @see getAll
      */
     val allData = MutableLiveData<List<RoomCodebookEntity>>()
+
     /**
      * Last searched item from room_codebook table
      * Get by findById function

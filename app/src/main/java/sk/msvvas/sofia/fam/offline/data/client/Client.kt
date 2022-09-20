@@ -27,6 +27,7 @@ import sk.msvvas.sofia.fam.offline.data.client.model.codebook.user.UserCodebookF
 import sk.msvvas.sofia.fam.offline.data.client.model.codebook.user.UserCodebookXml
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryContentXml
 import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.inventory.InventoryXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyContentXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyXml
@@ -34,12 +35,32 @@ import sk.msvvas.sofia.fam.offline.data.transformator.InventoryTransformator
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
 import sk.msvvas.sofia.fam.offline.data.transformator.codebook.*
 
+/**
+ * Object with functions used for making request to back-end
+ */
 object Client {
-
+    /**
+     * Domain of back-end server
+     */
     private const val HOST = "sofiafioritest.iedu.sk"
+
+    /**
+     * URL protocol used in requests
+     */
     private val PROTOCOL = URLProtocol.HTTPS
+
+    /**
+     * First part of URL path constant for all requests
+     */
     private const val basePath = "sap/opu/odata/vvs/ZFAMFIORI_SRV"
 
+    /**
+     * Function that test connection with server with entered login data
+     * @param username login name of user
+     * @param password password of user
+     * @param clientId id of school client
+     * @return true if can connect to server (login data are valid), false if cannot connect (login data are invalid or device isn't connected to internet)
+     */
     suspend fun validateLogin(username: String, password: String, clientId: String): Boolean {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -55,6 +76,12 @@ object Client {
         return response.status.isSuccess()
     }
 
+    /**
+     * Function to get list of all inventories from back-end for logged user
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all inventories converted to entities for local database
+     */
     suspend fun getInventories(): List<InventoryEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -75,6 +102,12 @@ object Client {
         return InventoryTransformator.inventoryListFromInventoryFeed(output)
     }
 
+    /**
+     * Function to get list of all locality codebooks from back-end for logged user
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all locality codebooks converted to entities for local database
+     */
     suspend fun getLocalityCodebooks(): List<LocalityCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -95,6 +128,12 @@ object Client {
         return LocalityCodebookTransformator.localityCodebookListFromLocalityCodebookFeed(output)
     }
 
+    /**
+     * Function to get list of all room codebooks from back-end for logged user
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all room codebooks converted to entities for local database
+     */
     suspend fun getRoomCodebooks(): List<RoomCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -115,6 +154,12 @@ object Client {
         return RoomCodebookTransformator.roomCodebookListFromRoomCodebookFeed(output)
     }
 
+    /**
+     * Function to get list of all place codebooks from back-end for logged user
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all place codebooks converted to entities for local database
+     */
     suspend fun getPlaceCodebooks(): List<PlaceCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -135,6 +180,12 @@ object Client {
         return PlaceCodebookTransformator.placeCodebookListFromPlaceCodebookFeed(output)
     }
 
+    /**
+     * Function to get list of all user codebooks from back-end for logged user
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all user codebooks converted to entities for local database
+     */
     suspend fun getUserCodebooks(): List<UserCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -155,6 +206,12 @@ object Client {
         return UserCodebookTransformator.userCodebookListFromUserCodebookFeed(output)
     }
 
+    /**
+     * Function to get list of all note codebooks from back-end for logged user
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all note codebooks converted to entities for local database
+     */
     suspend fun getNoteCodebooks(): List<NoteCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
@@ -175,6 +232,12 @@ object Client {
         return NoteCodebookTransformator.noteCodebookListFromNoteCodebookFeed(output)
     }
 
+    /**
+     * Function to get list of all properties from back-end for logged user for selected inventory
+     * User login data are taken from ClientData object
+     * @see ClientData
+     * @return list of all properties converted to entities for local database
+     */
     suspend fun getPropertiesByInventoryID(inventoryId: String): List<PropertyEntity> {
         val client = HttpClient(CIO) {
             install(HttpTimeout) {
@@ -231,6 +294,16 @@ object Client {
         return result
     }
 
+    /**
+     * Build default get request with custom parameters parameters
+     * @param builder builder of get request
+     * @param getPath last part of request path
+     * @param username user login name (is taken from ClientData by default)
+     * @param password user password (is taken from ClientData by default)
+     * @param clientId id of school client (is taken from ClientData by default)
+     * @param additionalParameters additional url parameters (added to default parameters)
+     * @see ClientData
+     */
     private fun buildGetRequest(
         builder: HttpRequestBuilder,
         getPath: String,
@@ -252,6 +325,13 @@ object Client {
         }
     }
 
+    /**
+     * Append base and additional parameters to get request
+     * @param parameters parameter builder from get request
+     * @param clientId school client id (is taken from ClientData by default)
+     * @param additionalParameters additional url parameters (added to default parameters)
+     * @see ClientData
+     */
     private fun appendParameters(
         parameters: ParametersBuilder,
         clientId: String = ClientData.client,
@@ -272,6 +352,13 @@ object Client {
         }
     }
 
+    /**
+     * Build URL of request
+     * @param builder url builder from request
+     * @param getPath last part of request path
+     * @param clientId id of school client (is taken from ClientData by default)
+     * @param additionalParameters additional url parameters (added to default parameters)
+     */
     private fun buildUrl(
         builder: URLBuilder,
         getPath: String,
@@ -290,6 +377,13 @@ object Client {
         }
     }
 
+    /**
+     * Add basic authorization to request
+     * @param builder builder of get request
+     * @param username user login name (is taken from ClientData by default)
+     * @param password user password (is taken from ClientData by default)
+     * @see ClientData
+     */
     private fun authorize(
         builder: HttpRequestBuilder,
         username: String = ClientData.username,

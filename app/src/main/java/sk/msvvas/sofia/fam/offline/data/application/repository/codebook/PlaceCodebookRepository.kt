@@ -11,12 +11,14 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.PlaceCodeb
 class PlaceCodebookRepository(private val placeCodebookDao: PlaceCodebookDao) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     /**
      * All data from place_codebook table
      * Get by getAll function
      * @see getAll
      */
     val allData = MutableLiveData<List<PlaceCodebookEntity>>()
+
     /**
      * Last searched item from place_codebook table
      * Get by findById function
