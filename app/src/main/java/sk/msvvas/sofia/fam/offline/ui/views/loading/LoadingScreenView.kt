@@ -18,6 +18,13 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepositor
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
+/**
+ * Application intro view
+ * Show loading screen until property repository is loaded,
+ * Then show a screen for choose next steps
+ * @param propertyRepository property repository of local database
+ * @param navController nav controller from application Navigation
+ */
 @Composable
 fun LoadingScreenView(
     propertyRepository: PropertyRepository,
@@ -26,6 +33,7 @@ fun LoadingScreenView(
 
     val loaded by propertyRepository.loaded.observeAsState(false)
     var exitModalShown by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         if (!loaded) {
             Box(

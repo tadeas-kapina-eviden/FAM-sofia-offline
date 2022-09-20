@@ -23,6 +23,7 @@ import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailViewMo
 
 /**
  * Component for handling navigation in Application
+ * Holds instances for nav controller and all repositories
  * @param database Local database of application
  */
 @Composable

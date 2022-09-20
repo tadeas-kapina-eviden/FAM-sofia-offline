@@ -20,9 +20,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.InformationNonClosableModalWindow
 
+/**
+ * View for login to back-end
+ * @param loginViewModel view model for view
+ */
 @Composable
 fun LoginView(
     loginViewModel: LoginViewModel
@@ -100,6 +103,11 @@ fun LoginView(
 
 }
 
+
+/**
+ * Error alert styled for LoginView
+ * @param lastError message shown in error
+ */
 @Composable
 private fun ErrorAlert(
     lastError: String
@@ -121,6 +129,16 @@ private fun ErrorAlert(
     )
 }
 
+/**
+ * Input TextField styled for login view
+ * @param value actual value in text field
+ * @param onChange function executed when values is changed
+ * @param placeholder placeholder for text field
+ * @param focusRequester focus requester for text field
+ * @param keyboardType type of keyboard used for input
+ * @param onDone function executed, when done is pressed on keyboard
+ * @param visualTransformation visual transformation for text
+ */
 @Composable
 private fun InputField(
     value: String,
