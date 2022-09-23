@@ -13,11 +13,18 @@ import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
+/**
+ * View Model for Login view
+ * @param navController NavController from application Navigation
+ * @param inventoryIDParameter inventory id of downloaded inventory (empty if none)
+ * @param inventoryRepository inventory repository for local database
+ */
 class LoginViewModel(
     private val navController: NavController,
     private val inventoryIDParameter: String,
     private val inventoryRepository: InventoryRepository
 ) : ViewModel() {
+
     private val _loginName = MutableLiveData("")
     val loginName: LiveData<String> = _loginName
 
@@ -39,20 +46,31 @@ class LoginViewModel(
     private val _clientFocusRequester = MutableLiveData(FocusRequester())
     val clientFocusRequester: LiveData<FocusRequester> = _clientFocusRequester
 
+    /**
+     * Variable hold
+     */
     private val _downloadingData = MutableLiveData(false)
     val downloadingData: LiveData<Boolean> = _downloadingData
 
-
+    /**
+     * Function executed when loginName text field was changed
+     */
     fun onLoginNameChanged(newName: String) {
         if (newName.length <= 12) {
             _loginName.value = newName
         }
     }
 
+    /**
+     * Function executed when password text field was changed
+     */
     fun onPasswordChange(newPassword: String) {
         _password.value = newPassword
     }
 
+    /**
+     * Function executed when client text field was changed
+     */
     fun onClientChange(newClient: String) {
         if (newClient.length <= 3) {
             newClient.forEach {
@@ -64,6 +82,10 @@ class LoginViewModel(
         }
     }
 
+    /**
+     * Function executed when login button was clicked
+     * Validate inputs and try to connect to back-end
+     */
     fun onLoginButtonClick() {
         if (_loginName.value!!.isEmpty()) {
             _lastError.value = "Zadajte meno užívateľa!"
