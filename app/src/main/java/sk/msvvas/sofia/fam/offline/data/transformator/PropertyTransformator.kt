@@ -3,6 +3,7 @@ package sk.msvvas.sofia.fam.offline.data.transformator
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
+import sk.msvvas.sofia.fam.offline.data.client.model.submit.PropertyModelJson
 
 /**
  * Transformator for transforming PropertyEntity to PropertyXml and back
@@ -44,6 +45,34 @@ object PropertyTransformator {
                 )
             }
         }
+    }
+
+    fun propertyEntityToPropertyModelJson(propertyEntity: PropertyEntity): PropertyModelJson {
+        return PropertyModelJson(
+            inventoryId = propertyEntity.inventoryId,
+            inventNumber = propertyEntity.inventNumber,
+            serialNumber = propertyEntity.serialNumber,
+            client = propertyEntity.client,
+            propertyNumber = propertyEntity.propertyNumber,
+            subnumber = propertyEntity.subnumber,
+            textMainNumber = propertyEntity.textMainNumber,
+            recordStatus = propertyEntity.recordStatus,
+            werks = propertyEntity.werks,
+            locality = propertyEntity.locality,
+            localityNew = propertyEntity.localityNew,
+            room = propertyEntity.room,
+            roomNew = propertyEntity.roomNew,
+            personalNumber = propertyEntity.personalNumber,
+            personalNumberNew = propertyEntity.personalNumberNew,
+            center = propertyEntity.center,
+            centerNew = propertyEntity.centerNew,
+            workplace = propertyEntity.workplace,
+            workplaceNew = propertyEntity.workplaceNew,
+            fixedNote = propertyEntity.fixedNote,
+            variableNote = propertyEntity.variableNote,
+            isManual = propertyEntity.isManual
+
+        )
     }
 
     /**
