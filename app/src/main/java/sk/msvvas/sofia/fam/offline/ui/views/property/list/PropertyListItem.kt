@@ -16,6 +16,11 @@ import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
 
+/**
+ * Component show basic information of property in inventory detail
+ * @param property property information to show
+ * @param onClick Function that executed when row is clicked
+ */
 @Composable
 fun PropertyListItem(
     property: PropertyPreviewModel,
