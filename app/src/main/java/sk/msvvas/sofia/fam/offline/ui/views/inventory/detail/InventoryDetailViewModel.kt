@@ -4,16 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.UserCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
+import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
+    private val inventoryRepository: InventoryRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
     val navController: NavController,
     inventoryIdParameter: String,
@@ -295,8 +301,15 @@ class InventoryDetailViewModel(
     }
 
     fun submitInventory() {
-        propertyRepository.deleteAll()
-        navController.navigate(Routes.INVENTORY_LIST.value)
+        CoroutineScope(Dispatchers.Main).launch {
+            Client.submitProcessedProperties(
+                inventoryRepository.allData.value!!.filter { it.id == propertyRepository.searchByInventoryIdResult.value!![0].inventoryId }[0],
+                propertyRepository.searchByInventoryIdResult.value!!
+            )
+            propertyRepository.deleteAll()
+
+            navController.navigate(Routes.INVENTORY_LIST.value)
+        }
         //TODO Dokončiť odosielanie na server
     }
 

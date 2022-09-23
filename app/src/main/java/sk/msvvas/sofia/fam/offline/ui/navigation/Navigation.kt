@@ -115,6 +115,7 @@ fun Navigation(
             InventoryDetailView(
                 inventoryDetailViewModel = InventoryDetailViewModel(
                     propertyRepository = propertyRepository,
+                    inventoryRepository = inventoryRepository,
                     allCodebooksRepository = allCodebooksRepository,
                     navController = navController,
                     inventoryIdParameter = it.arguments?.getString("id")!!,

@@ -3,7 +3,6 @@ package sk.msvvas.sofia.fam.offline.data.client
 import com.thoughtworks.xstream.XStream
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -64,7 +63,7 @@ object Client {
     suspend fun validateLogin(username: String, password: String, clientId: String): Boolean {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getInventoryGeneralSet",
                 username = username,
@@ -85,7 +84,7 @@ object Client {
     suspend fun getInventories(): List<InventoryEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getInventoryGeneralSet"
             )
@@ -111,7 +110,7 @@ object Client {
     suspend fun getLocalityCodebooks(): List<LocalityCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getAllValLocalitySet"
             )
@@ -137,7 +136,7 @@ object Client {
     suspend fun getRoomCodebooks(): List<RoomCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getAllValRoomsSet"
             )
@@ -163,7 +162,7 @@ object Client {
     suspend fun getPlaceCodebooks(): List<PlaceCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getAllValPlacesSet"
             )
@@ -189,7 +188,7 @@ object Client {
     suspend fun getUserCodebooks(): List<UserCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getAllValUsersSet"
             )
@@ -215,7 +214,7 @@ object Client {
     suspend fun getNoteCodebooks(): List<NoteCodebookEntity> {
         val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "getAllValNotesSet"
             )
@@ -239,18 +238,14 @@ object Client {
      * @return list of all properties converted to entities for local database
      */
     suspend fun getPropertiesByInventoryID(inventoryId: String): List<PropertyEntity> {
-        val client = HttpClient(CIO) {
-            install(HttpTimeout) {
-                requestTimeoutMillis = 500000
-            }
-        }
+        val client = HttpClient(CIO)
 
         val additionalParameters = HashMap<String, String>()
         additionalParameters["\$filter"] =
             "Inven eq '$inventoryId' and Zstat eq 'W' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
 
         val responseUnprocessed: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "GetInventoryItemsSet",
                 additionalParameters = additionalParameters
@@ -261,7 +256,7 @@ object Client {
             "Inven eq '$inventoryId' and Zstat eq 'P' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
 
         val responseProcessed: HttpResponse = client.get {
-            buildGetRequest(
+            buildRequest(
                 this,
                 getPath = "GetInventoryItemsSet",
                 additionalParameters = additionalParameters
@@ -290,8 +285,30 @@ object Client {
                 ) as PropertyFeedXml
             )
         )
-
         return result
+    }
+
+    suspend fun submitProcessedProperties(
+        inventoryEntity: InventoryEntity,
+        properties: List<PropertyEntity>
+    ) {
+
+        val token = fetchTokenRequest()
+        val client = HttpClient(CIO)
+        client.post {
+            buildRequest(
+                this,
+                getPath = "",
+            )
+            header("X-CSRF-TOKEN", token)
+            setBody(
+                //TODO
+                InventoryTransformator.inventoryEntityToInventoryModelJson(
+                    inventoryEntity,
+                    properties
+                )
+            )
+        }
     }
 
     /**
@@ -304,7 +321,7 @@ object Client {
      * @param additionalParameters additional url parameters (added to default parameters)
      * @see ClientData
      */
-    private fun buildGetRequest(
+    private fun buildRequest(
         builder: HttpRequestBuilder,
         getPath: String,
         username: String = ClientData.username,
@@ -375,6 +392,21 @@ object Client {
                 additionalParameters = additionalParameters
             )
         }
+    }
+
+    /**
+     * Function to fetch token from fever for sending locally processed data
+     * @return X-CSRF-Token from backend
+     */
+    private suspend fun fetchTokenRequest(): String? {
+        val client = HttpClient(CIO)
+        return client.get {
+            buildRequest(
+                this,
+                getPath = "",
+            )
+            header("X-CSRF-Token", "Fetch")
+        }.headers["X-CSRF-Token"]
     }
 
     /**
