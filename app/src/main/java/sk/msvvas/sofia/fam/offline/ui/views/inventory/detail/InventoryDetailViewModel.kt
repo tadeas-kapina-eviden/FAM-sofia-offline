@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -302,15 +303,19 @@ class InventoryDetailViewModel(
 
     fun submitInventory() {
         CoroutineScope(Dispatchers.Main).launch {
-            Client.submitProcessedProperties(
+            val responseStatus = Client.submitProcessedProperties(
                 inventoryRepository.allData.value!!.filter { it.id == propertyRepository.searchByInventoryIdResult.value!![0].inventoryId }[0],
                 propertyRepository.searchByInventoryIdResult.value!!
             )
-            propertyRepository.deleteAll()
-
-            navController.navigate(Routes.INVENTORY_LIST.value)
+            if (responseStatus == HttpStatusCode.Created) {
+                propertyRepository.deleteAll()
+                navController.navigate(Routes.INVENTORY_LIST.value)
+            } else {
+                _errorHeader.value = "Chyba!"
+                _errorText.value =
+                    "Nastala chyba - položby sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+            }
         }
-        //TODO Dokončiť odosielanie na server
     }
 
     fun submitInventoryConfirmModalShow() {
@@ -318,6 +323,6 @@ class InventoryDetailViewModel(
     }
 
     fun submitInventoryConfirmModalHide() {
-        _submitInventoryConfirmModalShown.value = true
+        _submitInventoryConfirmModalShown.value = false
     }
 }

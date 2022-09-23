@@ -11,7 +11,7 @@ data class InventoryModelJson(
     fun toJSON(): String {
         val propertiesEntriesStringBuilder = StringBuilder()
         properties.forEach {
-            propertiesEntriesStringBuilder.append(it.toString())
+            propertiesEntriesStringBuilder.append(it.toJSON())
             propertiesEntriesStringBuilder.append(",\n")
         }
         propertiesEntriesStringBuilder.deleteCharAt(propertiesEntriesStringBuilder.lastIndex - 1)

@@ -3,6 +3,7 @@ package sk.msvvas.sofia.fam.offline.data.client
 import com.thoughtworks.xstream.XStream
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.cookies.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -238,7 +239,9 @@ object Client {
      * @return list of all properties converted to entities for local database
      */
     suspend fun getPropertiesByInventoryID(inventoryId: String): List<PropertyEntity> {
-        val client = HttpClient(CIO)
+        val client = HttpClient(CIO) {
+            install(HttpCookies)
+        }
 
         val additionalParameters = HashMap<String, String>()
         additionalParameters["\$filter"] =
@@ -291,24 +294,27 @@ object Client {
     suspend fun submitProcessedProperties(
         inventoryEntity: InventoryEntity,
         properties: List<PropertyEntity>
-    ) {
+    ): HttpStatusCode {
+        val client = HttpClient(CIO) {
+            install(HttpCookies)
+        }
+        val token = fetchTokenRequest(client)
 
-        val token = fetchTokenRequest()
-        val client = HttpClient(CIO)
-        client.post {
+        return client.post {
             buildRequest(
                 this,
-                getPath = "",
+                getPath = "InventoryDataSet",
             )
+
+            header("Content-Type", "application/json")
             header("X-CSRF-TOKEN", token)
             setBody(
-                //TODO
                 InventoryTransformator.inventoryEntityToInventoryModelJson(
                     inventoryEntity,
                     properties
-                )
+                ).toJSON()
             )
-        }
+        }.status
     }
 
     /**
@@ -398,8 +404,9 @@ object Client {
      * Function to fetch token from fever for sending locally processed data
      * @return X-CSRF-Token from backend
      */
-    private suspend fun fetchTokenRequest(): String? {
-        val client = HttpClient(CIO)
+    private suspend fun fetchTokenRequest(
+        client: HttpClient
+    ): String? {
         return client.get {
             buildRequest(
                 this,
