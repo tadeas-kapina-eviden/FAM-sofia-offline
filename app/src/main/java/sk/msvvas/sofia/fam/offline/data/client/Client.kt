@@ -55,6 +55,13 @@ object Client {
     private const val basePath = "sap/opu/odata/vvs/ZFAMFIORI_SRV"
 
     /**
+     * Global instance of HttpClient
+     */
+    private val client: HttpClient = HttpClient(CIO) {
+        install(HttpCookies)
+    }
+
+    /**
      * Function that test connection with server with entered login data
      * @param username login name of user
      * @param password password of user
@@ -62,7 +69,6 @@ object Client {
      * @return true if can connect to server (login data are valid), false if cannot connect (login data are invalid or device isn't connected to internet)
      */
     suspend fun validateLogin(username: String, password: String, clientId: String): Boolean {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
@@ -72,7 +78,6 @@ object Client {
                 clientId = clientId
             )
         }
-        client.close()
         return response.status.isSuccess()
     }
 
@@ -83,14 +88,12 @@ object Client {
      * @return list of all inventories converted to entities for local database
      */
     suspend fun getInventories(): List<InventoryEntity> {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
                 getPath = "getInventoryGeneralSet"
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(InventoryFeedXml::class.java)
@@ -109,14 +112,12 @@ object Client {
      * @return list of all locality codebooks converted to entities for local database
      */
     suspend fun getLocalityCodebooks(): List<LocalityCodebookEntity> {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
                 getPath = "getAllValLocalitySet"
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(LocalityCodebookFeedXml::class.java)
@@ -135,14 +136,12 @@ object Client {
      * @return list of all room codebooks converted to entities for local database
      */
     suspend fun getRoomCodebooks(): List<RoomCodebookEntity> {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
                 getPath = "getAllValRoomsSet"
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(RoomCodebookFeedXml::class.java)
@@ -161,14 +160,12 @@ object Client {
      * @return list of all place codebooks converted to entities for local database
      */
     suspend fun getPlaceCodebooks(): List<PlaceCodebookEntity> {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
                 getPath = "getAllValPlacesSet"
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(PlaceCodebookFeedXml::class.java)
@@ -187,14 +184,12 @@ object Client {
      * @return list of all user codebooks converted to entities for local database
      */
     suspend fun getUserCodebooks(): List<UserCodebookEntity> {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
                 getPath = "getAllValUsersSet"
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(UserCodebookFeedXml::class.java)
@@ -213,14 +208,12 @@ object Client {
      * @return list of all note codebooks converted to entities for local database
      */
     suspend fun getNoteCodebooks(): List<NoteCodebookEntity> {
-        val client = HttpClient(CIO)
         val response: HttpResponse = client.get {
             buildRequest(
                 this,
                 getPath = "getAllValNotesSet"
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(NoteCodebookFeedXml::class.java)
@@ -239,10 +232,6 @@ object Client {
      * @return list of all properties converted to entities for local database
      */
     suspend fun getPropertiesByInventoryID(inventoryId: String): List<PropertyEntity> {
-        val client = HttpClient(CIO) {
-            install(HttpCookies)
-        }
-
         val additionalParameters = HashMap<String, String>()
         additionalParameters["\$filter"] =
             "Inven eq '$inventoryId' and Zstat eq 'W' and Stort eq '' and Raumn eq '' and Pernr eq '' and Anlue eq '' and Kostl eq ''"
@@ -265,7 +254,6 @@ object Client {
                 additionalParameters = additionalParameters
             )
         }
-        client.close()
 
         val mapper = XStream()
         mapper.processAnnotations(PropertyFeedXml::class.java)
@@ -295,10 +283,7 @@ object Client {
         inventoryEntity: InventoryEntity,
         properties: List<PropertyEntity>
     ): HttpStatusCode {
-        val client = HttpClient(CIO) {
-            install(HttpCookies)
-        }
-        val token = fetchTokenRequest(client)
+        val token = fetchTokenRequest()
 
         return client.post {
             buildRequest(
@@ -404,9 +389,7 @@ object Client {
      * Function to fetch token from fever for sending locally processed data
      * @return X-CSRF-Token from backend
      */
-    private suspend fun fetchTokenRequest(
-        client: HttpClient
-    ): String? {
+    private suspend fun fetchTokenRequest(): String? {
         return client.get {
             buildRequest(
                 this,
