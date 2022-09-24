@@ -1,11 +1,17 @@
 package sk.msvvas.sofia.fam.offline.ui.views.login
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -14,13 +20,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.ui.components.InformationNonClosableModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 
 /**
  * View for login to back-end
@@ -42,11 +51,17 @@ fun LoginView(
     val downloadingData by loginViewModel.downloadingData.observeAsState(false)
 
     Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = "",
+            modifier = Modifier.fillMaxSize()
+        )
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .align(Alignment.Center)
+                .background(color = Color(0x66ffffff), shape = RoundedCornerShape(10.dp))
+                .fillMaxWidth(0.85f),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (lastError.isNotEmpty()) {
                 ErrorAlert(lastError = lastError)
@@ -57,7 +72,13 @@ fun LoginView(
                 placeholder = "Užívateľ",
                 focusRequester = loginNameFocusRequester!!,
                 keyboardType = KeyboardType.Ascii,
-                onDone = { loginViewModel.requestPasswordFocus() }
+                onDone = { loginViewModel.requestPasswordFocus() },
+                modifier = Modifier.padding(
+                    top = 40.dp,
+                    start = 30.dp,
+                    end = 30.dp,
+                    bottom = 10.dp
+                )
             )
             InputField(
                 value = password,
@@ -66,7 +87,7 @@ fun LoginView(
                 focusRequester = passwordFocusRequester!!,
                 keyboardType = KeyboardType.Password,
                 onDone = { loginViewModel.requestClientFocus() },
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
             )
             InputField(
                 value = client,
@@ -74,20 +95,19 @@ fun LoginView(
                 placeholder = "Klient",
                 focusRequester = clientFocusRequester!!,
                 keyboardType = KeyboardType.Number,
-                onDone = { loginViewModel.onLoginButtonClick() }
+                onDone = { loginViewModel.onLoginButtonClick() },
             )
-            Button(
+            StyledTextButton(
                 onClick = { loginViewModel.onLoginButtonClick() },
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-            ) {
-                Text(
-                    text = "Prihlásenie",
-                    style = TextStyle(
-                        fontSize = MaterialTheme.typography.h6.fontSize
+                    .padding(
+                        bottom = 40.dp,
+                        start = 30.dp,
+                        end = 30.dp
                     )
-                )
-            }
+                    .fillMaxWidth(),
+                text = "Prihlásiť sa"
+            )
         }
         if (downloadingData) {
             InformationNonClosableModalWindow(
@@ -117,8 +137,8 @@ private fun ErrorAlert(
         onValueChange = { },
         colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface),
         modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .padding(bottom = 5.dp)
+            .fillMaxWidth()
+            .padding(bottom = 10.dp)
             .border(
                 border = BorderStroke(
                     width = 1.dp,
@@ -147,6 +167,7 @@ private fun InputField(
     focusRequester: FocusRequester,
     keyboardType: KeyboardType,
     onDone: () -> Unit,
+    modifier: Modifier = Modifier.padding(bottom = 10.dp, start = 30.dp, end = 30.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     TextField(
@@ -155,9 +176,7 @@ private fun InputField(
         colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.background),
         placeholder = { Text(text = placeholder) },
         visualTransformation = visualTransformation,
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .padding(bottom = 5.dp)
+        modifier = modifier
             .border(
                 border = BorderStroke(
                     width = 1.dp,

@@ -173,19 +173,17 @@ fun PropertyDetailView(
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
                     if ("SZN".contains(property.recordStatus)) {
-                        Button(
+                        StyledTextButton(
                             onClick = { propertyDetailViewModel.rollback() },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(text = "Vráť na originál")
-                        }
+                            modifier = Modifier.weight(1f),
+                            text = "Vráť na originál"
+                        )
                     }
-                    Button(
+                    StyledTextButton(
                         onClick = { propertyDetailViewModel.submit() },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(text = "Potvrď")
-                    }
+                        modifier = Modifier.weight(1f),
+                        text = "Potvrď"
+                    )
                 }
             }
             if (isCodebookSelectionViewShown) {
