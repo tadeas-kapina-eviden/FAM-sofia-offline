@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.ui.components.InputRow
+import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 
 @Composable
 fun InventoryDetailFiltersComponent(
@@ -70,11 +70,10 @@ fun InventoryDetailFiltersComponent(
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Button(
+            StyledTextButton(
                 onClick = { inventoryDetailViewModel.runFilters() },
-            ) {
-                Text(text = "Spustiť filtre")
-            }
+                text = "Spustiť filtre"
+            )
         }
     }
 }

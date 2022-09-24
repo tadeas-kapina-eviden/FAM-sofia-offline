@@ -8,7 +8,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
@@ -124,15 +127,14 @@ fun CodebookSelectionView(
                 }
             }
         }
-        Button(
+        StyledTextButton(
             onClick = {
                 onSelect(filterValue)
             },
+            text = "OK",
             modifier = Modifier
                 .fillMaxWidth()
-        ) {
-            Text(text = "OK")
-        }
+        )
     }
     BackHandler {
         onClose()

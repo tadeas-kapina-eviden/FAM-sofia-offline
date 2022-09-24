@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -111,15 +110,12 @@ fun InventoryDetailView(
                                 }
                             ),
                         )
-                        Button(
+                        StyledTextButton(
                             onClick = { inventoryDetailViewModel.onFiltersShowClick() },
                             modifier = Modifier
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "Zobraziť filtre"
-                            )
-                        }
+                                .weight(1f),
+                            text = "Zobraziť filtre"
+                        )
                     }
                 }
                 if (isFiltersShow) {
@@ -216,20 +212,20 @@ fun InventoryDetailView(
             Row(
                 Modifier.fillMaxWidth()
             ) {
-                Button(
+                StyledTextButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         inventoryDetailViewModel.submitInventoryConfirmModalShow()
-                    }) {
-                    Text(text = "Odoslať inventúru")
-                }
-                Button(
+                    },
+                    text = "Odoslať inventúru"
+                )
+                StyledTextButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         inventoryDetailViewModel.onSelectProperty(-1)
-                    }) {
-                    Text(text = "+ Nový")
-                }
+                    },
+                    text = "+Nový"
+                )
             }
         }
         if (submitInventoryConfirmModalShown) {

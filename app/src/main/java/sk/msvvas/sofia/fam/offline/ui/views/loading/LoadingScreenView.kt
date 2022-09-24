@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 /**
@@ -58,15 +58,14 @@ fun LoadingScreenView(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                     )
-                    Button(
+                    StyledTextButton(
                         onClick = {
                             navController.navigate(Routes.LOGIN_VIEW.value)
                         },
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text("Pokračovať na prihlásenie")
-                    }
+                            .align(Alignment.CenterHorizontally),
+                        text = "Pokračovať na prihlásenia"
+                    )
                 }
             } else {
                 Column(
@@ -79,16 +78,15 @@ fun LoadingScreenView(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                     )
-                    Button(
+                    StyledTextButton(
                         onClick = {
                             navController.navigate(Routes.LOGIN_VIEW.value + "?id=" + (propertyRepository.allData.value!![0].inventoryId))
                         },
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text("Pokračovať na prihlásenie")
-                    }
-                    Button(
+                            .align(Alignment.CenterHorizontally),
+                        text = "Pokračovať na prihlásenie"
+                    )
+                    StyledTextButton(
                         onClick = {
                             navController.navigate(
                                 Routes.INVENTORY_DETAIL.withArgs(
@@ -97,10 +95,9 @@ fun LoadingScreenView(
                             )
                         },
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text("Pokračovať bez prihlásenia")
-                    }
+                            .align(Alignment.CenterHorizontally),
+                        text = "Pokračovať bez prihlásenia"
+                    )
                 }
             }
         }

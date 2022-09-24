@@ -3,7 +3,10 @@ package sk.msvvas.sofia.fam.offline.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,18 +103,16 @@ fun BoxScope.ConfirmModalWindow(
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Button(
+                StyledTextButton(
                     modifier = Modifier.weight(1f),
-                    onClick = confirmButtonAction
-                ) {
-                    Text(text = confirmButtonText)
-                }
-                Button(
+                    onClick = confirmButtonAction,
+                    text = confirmButtonText
+                )
+                StyledTextButton(
                     modifier = Modifier.weight(1f),
-                    onClick = declineButtonAction
-                ) {
-                    Text(text = declineButtonText)
-                }
+                    onClick = declineButtonAction,
+                    text = declineButtonText
+                )
             }
         })
 }
@@ -164,12 +165,11 @@ fun BoxScope.InformationModalWindow(
         },
         footer = {
             Row {
-                Button(
+                StyledTextButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = buttonAction
-                ) {
-                    Text(text = buttonText)
-                }
+                    onClick = buttonAction,
+                    text = buttonText
+                )
             }
         })
 }
