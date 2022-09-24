@@ -99,6 +99,9 @@ class InventoryDetailViewModel(
     private val _submitInventoryConfirmModalShown = MutableLiveData(false)
     val submitInventoryConfirmModalShown: LiveData<Boolean> = _submitInventoryConfirmModalShown
 
+    private val _loadingData = MutableLiveData(false)
+    val loadingData: LiveData<Boolean> = _loadingData
+
     init {
         propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
     }
@@ -303,6 +306,8 @@ class InventoryDetailViewModel(
 
     fun submitInventory() {
         CoroutineScope(Dispatchers.Main).launch {
+            _submitInventoryConfirmModalShown.value = false
+            _loadingData.value = true
             val responseStatus = Client.submitProcessedProperties(
                 inventoryRepository.allData.value!!.filter { it.id == propertyRepository.searchByInventoryIdResult.value!![0].inventoryId }[0],
                 propertyRepository.searchByInventoryIdResult.value!!
@@ -311,6 +316,7 @@ class InventoryDetailViewModel(
                 propertyRepository.deleteAll()
                 navController.navigate(Routes.INVENTORY_LIST.value)
             } else {
+                _loadingData.value = false
                 _errorHeader.value = "Chyba!"
                 _errorText.value =
                     "Nastala chyba - položby sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "

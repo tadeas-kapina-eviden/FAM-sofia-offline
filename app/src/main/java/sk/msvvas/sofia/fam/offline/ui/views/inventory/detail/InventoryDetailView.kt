@@ -29,10 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
-import sk.msvvas.sofia.fam.offline.ui.components.CodebookSelectionView
-import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
-import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
-import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
+import sk.msvvas.sofia.fam.offline.ui.components.*
 import sk.msvvas.sofia.fam.offline.ui.views.property.list.PropertyListItem
 
 @Composable
@@ -69,6 +66,10 @@ fun InventoryDetailView(
     val selectCodebook by inventoryDetailViewModel.selectCodebook.observeAsState { "" }
     val exitModalShown by inventoryDetailViewModel.exitModalShown.observeAsState(false)
     val submitInventoryConfirmModalShown by inventoryDetailViewModel.submitInventoryConfirmModalShown.observeAsState(
+        false
+    )
+
+    val loadingData by inventoryDetailViewModel.loadingData.observeAsState(
         false
     )
 
@@ -243,6 +244,12 @@ fun InventoryDetailView(
                 declineButtonAction = {
                     inventoryDetailViewModel.submitInventoryConfirmModalHide()
                 }
+            )
+        }
+        if (loadingData) {
+            InformationNonClosableModalWindow(
+                header = "Načítavanie",
+                body = "Odosielajú sa dáta, prosím počkajte",
             )
         }
         if (exitModalShown) {
