@@ -198,10 +198,12 @@ class PropertyDetailViewModel(
                 if (_user.value == "")
                     _user.value = it.personalNumberNew
                 _place.value = it.workplaceNew
-                val note = allCodebooksRepository.allNotes.value!!.filter { note ->
-                    note.id == it.fixedNote
-                }[0]
-                _fixedNote.value = "${note.id}/${note.description}"
+                if (it.fixedNote != "") {
+                    val note = allCodebooksRepository.allNotes.value!!.filter { note ->
+                        note.id == it.fixedNote
+                    }[0]
+                    _fixedNote.value = "${note.id}/${note.description}"
+                }
                 _variableNote.value = it.variableNote
             }
         }
