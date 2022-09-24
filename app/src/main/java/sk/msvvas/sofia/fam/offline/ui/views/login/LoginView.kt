@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.R
-import sk.msvvas.sofia.fam.offline.ui.components.InformationNonClosableModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationNonCloseableModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 
 /**
@@ -110,7 +110,7 @@ fun LoginView(
             )
         }
         if (downloadingData) {
-            InformationNonClosableModalWindow(
+            InformationNonCloseableModalWindow(
                 header = "Načítavanie",
                 body = "Sťahujú sa dáta, prosím počkajte",
             )
@@ -173,7 +173,11 @@ private fun InputField(
     TextField(
         value = value,
         onValueChange = { onChange(it) },
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.background),
+        colors = TextFieldDefaults
+            .textFieldColors(
+                backgroundColor = MaterialTheme.colors.secondary,
+                textColor = MaterialTheme.colors.primary
+            ),
         placeholder = { Text(text = placeholder) },
         visualTransformation = visualTransformation,
         modifier = modifier
@@ -192,6 +196,7 @@ private fun InputField(
             onDone = {
                 onDone()
             }),
-        singleLine = true
-    )
+        singleLine = true,
+
+        )
 }

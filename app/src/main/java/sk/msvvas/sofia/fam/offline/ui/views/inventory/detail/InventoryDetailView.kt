@@ -243,7 +243,7 @@ fun InventoryDetailView(
             )
         }
         if (loadingData) {
-            InformationNonClosableModalWindow(
+            InformationNonCloseableModalWindow(
                 header = "Načítavanie",
                 body = "Odosielajú sa dáta, prosím počkajte",
             )

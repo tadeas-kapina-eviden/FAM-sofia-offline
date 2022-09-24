@@ -181,7 +181,7 @@ fun BoxScope.InformationModalWindow(
  * @param body text in body of window
  */
 @Composable
-fun BoxScope.InformationNonClosableModalWindow(
+fun BoxScope.InformationNonCloseableModalWindow(
     header: String,
     body: String
 ) {

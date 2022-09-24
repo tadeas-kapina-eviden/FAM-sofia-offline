@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.navigation
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -30,7 +31,6 @@ import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailViewMo
 fun Navigation(
     database: FamOfflineDatabase
 ) {
-
     val inventoryRepository = InventoryRepository(database.inventoryDao())
     val propertyRepository = PropertyRepository(database.propertyDao())
 

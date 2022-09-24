@@ -6,6 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun StyledButton(
@@ -16,10 +17,10 @@ fun StyledButton(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.secondary,
-            contentColor = MaterialTheme.colors.primary,
-            disabledBackgroundColor = MaterialTheme.colors.secondaryVariant,
-            disabledContentColor = MaterialTheme.colors.primaryVariant
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.secondary,
+            disabledBackgroundColor = MaterialTheme.colors.primary,
+            disabledContentColor = MaterialTheme.colors.secondary
         ),
         modifier = modifier
     ) {
@@ -35,6 +36,6 @@ fun StyledTextButton(
     modifier: Modifier = Modifier
 ) {
     StyledButton(onClick = onClick, modifier = modifier) {
-        Text(text = text)
+        Text(text = text, textAlign = TextAlign.Center)
     }
 }

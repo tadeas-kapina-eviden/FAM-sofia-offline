@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
-import sk.msvvas.sofia.fam.offline.ui.components.InformationNonClosableModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationNonCloseableModalWindow
 
 @Composable
 fun InventoryListView(
@@ -56,7 +56,7 @@ fun InventoryListView(
             }
         }
         if (downloadingData) {
-            InformationNonClosableModalWindow(
+            InformationNonCloseableModalWindow(
                 header = "Načítavanie",
                 body = "Sťahujú sa dáta, prosím počkajte",
             )

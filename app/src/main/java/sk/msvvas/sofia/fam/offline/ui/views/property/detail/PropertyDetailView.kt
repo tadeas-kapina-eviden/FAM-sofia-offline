@@ -210,7 +210,7 @@ fun PropertyDetailView(
                 )
             }
         } else {
-            InformationNonClosableModalWindow(
+            InformationNonCloseableModalWindow(
                 header = "Načítavanie",
                 body = "Dáta sa načítavajú, prosím počkajte."
             )

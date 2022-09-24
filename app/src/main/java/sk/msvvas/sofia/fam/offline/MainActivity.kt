@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import sk.msvvas.sofia.fam.offline.data.application.database.FamOfflineDatabase
 import sk.msvvas.sofia.fam.offline.ui.navigation.Navigation
+import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,9 @@ class MainActivity : ComponentActivity() {
         val database = FamOfflineDatabase.getInstance(applicationContext)
 
         setContent {
-            Navigation(database = database)
+            FAMInventuraOfflineClientTheme{
+                Navigation(database = database)
+            }
         }
     }
 }
