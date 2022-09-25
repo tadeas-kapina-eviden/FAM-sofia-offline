@@ -1,7 +1,10 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,21 +29,25 @@ fun InventoryDetailStatusView(
             Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
+
         ) {
             Text(
                 text = "Lokalita",
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = "Miestnosť",
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = "Spracované/celkom",
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                color = MaterialTheme.colors.primary
             )
         }
         localityRoomPairs.forEach {
@@ -65,10 +72,17 @@ fun StatusRow(
     val processed = localityRoomCountPair.processed
     val all = localityRoomCountPair.all
     Box(modifier = Modifier
+        .padding(bottom = 2.dp)
         .fillMaxWidth()
         .clickable {
             onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
-        }) {
+        }
+        .border(
+            width = 1.dp,
+            color = MaterialTheme.colors.primary,
+            shape = RoundedCornerShape(8.dp)
+        )
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,17 +94,20 @@ fun StatusRow(
             Text(
                 text = localityRoomCountPair.locality,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = localityRoomCountPair.room,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = "$processed/$all",
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                color = MaterialTheme.colors.primary
             )
         }
     }
@@ -102,7 +119,7 @@ fun countLocalityRoomPairs(properties: List<PropertyEntity>): List<LocalityRoomC
         val pair = LocalityRoomCountPair(
             if (it.recordStatus == 'Z' || it.recordStatus == 'S') it.localityNew else it.locality,
             if (it.recordStatus == 'Z' || it.recordStatus == 'S') it.roomNew else it.room,
-            )
+        )
         if (pair in result) {
             val toAdd = result[result.indexOf(pair)]
             toAdd.all++
