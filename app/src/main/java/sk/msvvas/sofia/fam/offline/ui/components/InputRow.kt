@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 
 /**
  * Component with label and input field in same row
@@ -76,17 +77,19 @@ fun InputRow(
 @Preview(showBackground = true)
 @Composable
 fun InputRowPreview() {
-    InputRow(
-        label = "Lokalita: ",
-        value = "AB-52",
-        modifier = Modifier
-            .drawWithBottomLine(
-                width = 1f,
-                color = MaterialTheme.colors.primary
-            ),
-        ratio = 2f / 5f,
-        labelTextAlign = TextAlign.End,
-        labelTextHorizontalPadding = 15.dp,
-        onClick = {}
-    )
+    FAMInventuraOfflineClientTheme {
+        InputRow(
+            label = "Lokalita: ",
+            value = "AB-52",
+            modifier = Modifier
+                .drawWithBottomLine(
+                    width = 1f,
+                    color = MaterialTheme.colors.primary
+                ),
+            ratio = 2f / 5f,
+            labelTextAlign = TextAlign.End,
+            labelTextHorizontalPadding = 15.dp,
+            onClick = {}
+        )
+    }
 }

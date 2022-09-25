@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
+import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 
 /**
  * Component show basic information of property in inventory detail
@@ -72,16 +73,18 @@ fun PropertyListItem(
 @Preview(showBackground = true)
 @Composable
 fun PropertyListItemPreview() {
-    PropertyListItem(
-        property = PropertyPreviewModel(
-            id = 10,
-            textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
-            propertyNumber = "22005779",
-            subNumber = "45",
-            status = 'S'
-        ),
-        onClick = {
+    FAMInventuraOfflineClientTheme {
+        PropertyListItem(
+            property = PropertyPreviewModel(
+                id = 10,
+                textMainNumber = "PROGRAM 4 JS VIRTUAL DYN. MACH",
+                propertyNumber = "22005779",
+                subNumber = "45",
+                status = 'S'
+            ),
+            onClick = {
 
-        }
-    )
+            }
+        )
+    }
 }

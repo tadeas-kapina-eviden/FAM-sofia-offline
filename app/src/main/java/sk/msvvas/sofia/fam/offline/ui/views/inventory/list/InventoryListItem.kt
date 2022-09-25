@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -81,17 +82,19 @@ fun InventoryListItem(
 @Preview(showBackground = true)
 @Composable
 fun InventoryListItemPreview() {
-    InventoryListItem(
-        InventoryEntity(
-            id = "350",
-            note = "UCJ",
-            createdAt = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-            createdBy = "110SEVCOVA",
-            countProcessed = 44,
-            countAll = 44
-        ),
-        onClick = {
+    FAMInventuraOfflineClientTheme {
+        InventoryListItem(
+            InventoryEntity(
+                id = "350",
+                note = "UCJ",
+                createdAt = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                createdBy = "110SEVCOVA",
+                countProcessed = 44,
+                countAll = 44
+            ),
+            onClick = {
 
-        }
-    )
+            }
+        )
+    }
 }
