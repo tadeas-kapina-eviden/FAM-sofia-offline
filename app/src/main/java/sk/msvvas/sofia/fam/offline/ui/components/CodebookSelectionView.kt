@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
+import java.util.*
 
 
 /**
@@ -81,9 +82,19 @@ fun CodebookSelectionView(
             onValueChange = {
                 filterValue = it
                 filteredCodebookData = codebookData.filter { codebook ->
-                    filterValue.isEmpty() || idGetter(codebook).contains(filterValue) || descriptionGetter(
-                        codebook
-                    ).contains(filterValue)
+                    filterValue.isEmpty()
+                            || idGetter(codebook).lowercase()
+                        .contains(
+                            filterValue.lowercase(
+                                Locale.getDefault()
+                            )
+                        )
+                            || descriptionGetter(codebook).lowercase()
+                        .contains(
+                            filterValue.lowercase(
+                                Locale.getDefault()
+                            )
+                        )
                 }
             },
             modifier = Modifier
@@ -101,6 +112,7 @@ fun CodebookSelectionView(
                 textColor = MaterialTheme.colors.primary,
                 backgroundColor = MaterialTheme.colors.secondary,
                 focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primaryVariant
             )
         )
         LazyColumn(
@@ -160,6 +172,7 @@ fun highlightSelectedText(selected: String, text: String): AnnotatedString {
         return buildAnnotatedString { append(text) }
     else
         return buildAnnotatedString {
+            //TODO fix filtered text highlighting (case-insensitive)
             val unselected: List<String> = text.split(selected)
             if (unselected.size > 1 || text.find(unselected[0]) == 0)
                 append(unselected[0])
