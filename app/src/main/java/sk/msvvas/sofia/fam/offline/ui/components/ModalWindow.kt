@@ -3,10 +3,10 @@ package sk.msvvas.sofia.fam.offline.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,14 +34,16 @@ fun BoxScope.ModalWindow(
         color = MaterialTheme.colors.onSurface,
         content = {},
     )
+
     Column(
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .align(Alignment.Center)
-            .background(color = MaterialTheme.colors.surface)
+            .background(color = MaterialTheme.colors.surface, shape = RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                shape = RoundedCornerShape(12.dp)
             ),
     ) {
         header.invoke(this)
@@ -70,40 +72,37 @@ fun BoxScope.ConfirmModalWindow(
 ) {
     ModalWindow(
         header = {
-            TextField(
-                value = header,
-                readOnly = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    textColor = MaterialTheme.colors.primary
-                ),
-                textStyle = TextStyle(
+            Text(
+                text = header,
+                color = MaterialTheme.colors.primary,
+                style = TextStyle(
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     textAlign = TextAlign.Center
                 ),
-                onValueChange = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .drawWithBottomLine(color = MaterialTheme.colors.primary, width = 1f)
+                    .padding(10.dp),
             )
         },
         body = {
-            TextField(
-                value = body,
-                readOnly = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    textColor = MaterialTheme.colors.primary
-                ),
-                onValueChange = {},
+            Text(
+                text = body,
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .drawWithBottomLine(color = MaterialTheme.colors.primary, width = 1f)
+                    .padding(10.dp),
             )
         },
         footer = {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
             ) {
                 StyledTextButton(
                     modifier = Modifier.weight(1f),
@@ -136,41 +135,38 @@ fun BoxScope.InformationModalWindow(
 ) {
     ModalWindow(
         header = {
-            TextField(
-                value = header,
-                readOnly = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    textColor = MaterialTheme.colors.primary
-                ),
-                textStyle = TextStyle(
+            Text(
+                text = header,
+                color = MaterialTheme.colors.primary,
+                style = TextStyle(
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     textAlign = TextAlign.Center,
                 ),
-                onValueChange = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .drawWithBottomLine(color = MaterialTheme.colors.primary, width = 1f)
+                    .padding(10.dp),
             )
         },
         body = {
-            TextField(
-                value = body,
-                readOnly = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    textColor = MaterialTheme.colors.primary
-                ),
-                onValueChange = {},
+            Text(
+                text = body,
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .drawWithBottomLine(color = MaterialTheme.colors.primary, width = 1f)
+                    .padding(10.dp),
             )
         },
         footer = {
             Row {
                 StyledTextButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
                     onClick = buttonAction,
                     text = buttonText
                 )
@@ -191,35 +187,28 @@ fun BoxScope.InformationNonCloseableModalWindow(
 ) {
     ModalWindow(
         header = {
-            TextField(
-                value = header,
-                readOnly = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    textColor = MaterialTheme.colors.primary
-                ),
-                textStyle = TextStyle(
+            Text(
+                text = header,
+                color = MaterialTheme.colors.primary,
+                style = TextStyle(
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     textAlign = TextAlign.Center
                 ),
-                onValueChange = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .drawWithBottomLine(color = MaterialTheme.colors.primary, width = 1f)
+                    .padding(10.dp),
             )
         },
         body = {
-            TextField(
-                value = body,
-                readOnly = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    textColor = MaterialTheme.colors.primary
-                ),
-                onValueChange = {},
+            Text(
+                text = body,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .padding(10.dp),
             )
         },
     )
