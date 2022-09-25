@@ -47,8 +47,8 @@ enum class Routes(val value: String) {
          */
         fun addOptionalParametersToRoute(route: String, vararg params: String): String {
             val result = StringBuilder(route)
-            params.forEach {
-                result.append("?$it={$it}")
+            params.forEachIndexed { index, it ->
+                result.append("${if (index == 0) "?" else "&"}$it={$it}")
             }
             return result.toString()
         }

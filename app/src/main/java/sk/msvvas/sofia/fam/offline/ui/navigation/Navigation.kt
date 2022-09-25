@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.ui.navigation
 
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -50,11 +49,20 @@ fun Navigation(
                 navController = navController
             )
         }
-        composable(route = Routes.addOptionalParametersToRoute(Routes.LOGIN_VIEW.value, "id"),
+        composable(route = Routes.addOptionalParametersToRoute(
+            Routes.LOGIN_VIEW.value,
+            "id",
+            "submit"
+        ),
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.StringType
                     defaultValue = ""
+                    nullable = true
+                },
+                navArgument("submit") {
+                    type = NavType.StringType
+                    defaultValue = "0"
                     nullable = true
                 }
             )) {
@@ -62,7 +70,8 @@ fun Navigation(
                 loginViewModel = LoginViewModel(
                     navController,
                     inventoryIDParameter = it.arguments?.getString("id")!!,
-                    inventoryRepository = inventoryRepository
+                    inventoryRepository = inventoryRepository,
+                    submitInventory = it.arguments?.getString("submit")!! == "1"
                 )
             )
         }
@@ -82,7 +91,8 @@ fun Navigation(
                 "locality",
                 "room",
                 "user",
-                "statusFilter"
+                "statusFilter",
+                "submit"
             ),
             arguments = listOf(
                 navArgument("id") {
@@ -110,6 +120,11 @@ fun Navigation(
                     defaultValue = "U"
                     nullable = false
                 },
+                navArgument("submit") {
+                    type = NavType.StringType
+                    defaultValue = "0"
+                    nullable = false
+                }
             )
         ) {
             InventoryDetailView(
@@ -123,6 +138,7 @@ fun Navigation(
                     roomFilterParameter = it.arguments?.getString("room")!!,
                     userFilterParameter = it.arguments?.getString("user")!!,
                     statusFilterParameter = it.arguments?.getString("statusFilter")!![0],
+                    submitInventory = it.arguments?.getString("submit")!! == "1"
                 )
             )
         }

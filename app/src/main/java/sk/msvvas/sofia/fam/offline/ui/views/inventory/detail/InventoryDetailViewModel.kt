@@ -16,6 +16,7 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryReposito
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.data.client.Client
+import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 class InventoryDetailViewModel(
@@ -27,7 +28,8 @@ class InventoryDetailViewModel(
     localityFilterParameter: String,
     roomFilterParameter: String,
     userFilterParameter: String,
-    statusFilterParameter: Char
+    statusFilterParameter: Char,
+    submitInventory: Boolean
 ) : ViewModel() {
 
     private val _properties =
@@ -99,11 +101,18 @@ class InventoryDetailViewModel(
     private val _submitInventoryConfirmModalShown = MutableLiveData(false)
     val submitInventoryConfirmModalShown: LiveData<Boolean> = _submitInventoryConfirmModalShown
 
+    private val _requireLoginModalShown = MutableLiveData(false)
+    val requireLoginModalShown: LiveData<Boolean> = _requireLoginModalShown
+
     private val _loadingData = MutableLiveData(false)
     val loadingData: LiveData<Boolean> = _loadingData
 
     init {
-        propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
+        if (!submitInventory) {
+            propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
+        } else {
+            submitInventory()
+        }
     }
 
     fun onFiltersShowClick() {
@@ -133,7 +142,7 @@ class InventoryDetailViewModel(
                 navController.navigate(
                     Routes.PROPERTY_DETAIL.withArgs(
                         (-newCount).toString(),
-                    ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value!! + "?statusFilter=" + _statusFilter.value + "?isManual=" + false.toString()
+                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + false.toString()
                 )
             } else {
                 if (_scanWithoutDetail.value!!) {
@@ -146,7 +155,7 @@ class InventoryDetailViewModel(
                     navController.navigate(
                         Routes.PROPERTY_DETAIL.withArgs(
                             selectedList.first().id.toString()
-                        ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?statusFilter=" + _statusFilter.value!! + "?isManual=" + false.toString()
+                        ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&statusFilter=" + _statusFilter.value!! + "&isManual=" + false.toString()
                     )
                 }
             }
@@ -200,7 +209,7 @@ class InventoryDetailViewModel(
         navController.navigate(
             Routes.PROPERTY_DETAIL.withArgs(
                 computedId.toString(),
-            ) + "?locality=" + _localityFilter.value!! + "?room=" + _roomFilter.value!! + "?user=" + _userFilter.value!! + "?inventoryId=" + _inventoryId.value + "?statusFilter=" + _statusFilter.value + "?isManual=" + true.toString()
+            ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString()
         )
     }
 
@@ -305,6 +314,11 @@ class InventoryDetailViewModel(
     }
 
     fun submitInventory() {
+        if (ClientData.username.isEmpty()) {
+            requireLoginModalShow()
+            submitInventoryConfirmModalHide()
+            return
+        }
         CoroutineScope(Dispatchers.Main).launch {
             _submitInventoryConfirmModalShown.value = false
             _loadingData.value = true
@@ -324,11 +338,23 @@ class InventoryDetailViewModel(
         }
     }
 
+    fun requireLoginModalShow() {
+        _requireLoginModalShown.value = true
+    }
+
+    fun requireLoginModalHide() {
+        _requireLoginModalShown.value = false
+    }
+
     fun submitInventoryConfirmModalShow() {
         _submitInventoryConfirmModalShown.value = true
     }
 
     fun submitInventoryConfirmModalHide() {
         _submitInventoryConfirmModalShown.value = false
+    }
+
+    fun toLogin() {
+        navController.navigate(Routes.LOGIN_VIEW.value + "?id=${inventoryId.value}&submit=1")
     }
 }

@@ -67,6 +67,9 @@ fun InventoryDetailView(
     val submitInventoryConfirmModalShown by inventoryDetailViewModel.submitInventoryConfirmModalShown.observeAsState(
         false
     )
+    val requireLoginModalShown by inventoryDetailViewModel.requireLoginModalShown.observeAsState(
+        false
+    )
 
     val loadingData by inventoryDetailViewModel.loadingData.observeAsState(
         false
@@ -240,6 +243,16 @@ fun InventoryDetailView(
                 declineButtonAction = {
                     inventoryDetailViewModel.submitInventoryConfirmModalHide()
                 }
+            )
+        }
+        if (requireLoginModalShown) {
+            ConfirmModalWindow(
+                header = "Vyžaduje sa prihlásenie!",
+                body = "Pre pokračovanie sa musíte prihlásiť.",
+                confirmButtonText = "Pokračovať",
+                confirmButtonAction = { inventoryDetailViewModel.toLogin() },
+                declineButtonText = "Zrušiť",
+                declineButtonAction = { inventoryDetailViewModel.requireLoginModalHide() }
             )
         }
         if (loadingData) {

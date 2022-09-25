@@ -22,7 +22,8 @@ import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 class LoginViewModel(
     private val navController: NavController,
     private val inventoryIDParameter: String,
-    private val inventoryRepository: InventoryRepository
+    private val inventoryRepository: InventoryRepository,
+    private val submitInventory: Boolean
 ) : ViewModel() {
 
     private val _loginName = MutableLiveData("v_developer")
@@ -110,9 +111,11 @@ class LoginViewModel(
                             clientId = _client.value!!
                         )
                     if (response) {
+
                         ClientData.client = _client.value!!
                         ClientData.username = _loginName.value!!
                         ClientData.password = _password.value!!
+
                         if (inventoryIDParameter.isEmpty()) {
                             inventoryRepository.deleteAll()
                             inventoryRepository.saveAll(Client.getInventories())
@@ -120,8 +123,10 @@ class LoginViewModel(
                         } else {
                             navController.navigate(
                                 Routes.INVENTORY_DETAIL.withArgs(
-                                    inventoryIDParameter
-                                )
+                                    inventoryIDParameter,
+                                ) + "?submit=${
+                                    if (submitInventory) "1" else "0"
+                                }"
                             )
                         }
                     } else {

@@ -238,7 +238,7 @@ class PropertyDetailViewModel(
                 }
             }
             navController.navigate(
-                Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "?room=" + roomFilter + "?user=" + userFilter + "?statusFilter=" + statusFilter
+                Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "&room=" + roomFilter + "&user=" + userFilter + "&statusFilter=" + statusFilter
             )
         }
     }
@@ -272,9 +272,9 @@ class PropertyDetailViewModel(
         navController.navigate(
             Routes.INVENTORY_DETAIL.withArgs(inventoryId)
                     + "?locality=" + localityFilter
-                    + "?room=" + roomFilter
-                    + "?user=" + userFilter
-                    + "?statusFilter=" + statusFilter
+                    + "&room=" + roomFilter
+                    + "&user=" + userFilter
+                    + "&statusFilter=" + statusFilter
         )
     }
 
