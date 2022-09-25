@@ -28,6 +28,7 @@ fun PropertyListItem(
 ) {
     Row(
         modifier = Modifier
+            .padding(bottom = 1.dp)
             .fillMaxWidth()
             .border(
                 shape = RoundedCornerShape(8.dp),
@@ -40,7 +41,7 @@ fun PropertyListItem(
     ) {
         Column(
             modifier = Modifier
-                .weight(1f)
+                .weight(3f)
         ) {
             Text(
                 text = property.textMainNumber,
@@ -67,7 +68,7 @@ fun PropertyListItem(
                 }
             },
             modifier = Modifier
-                .weight(1f)
+                .weight(2f)
                 .padding(5.dp),
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.primaryVariant,
