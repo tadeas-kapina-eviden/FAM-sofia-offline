@@ -1,20 +1,19 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.list
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
-import sk.msvvas.sofia.fam.offline.ui.components.drawWithBottomLine
 import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 
 /**
@@ -30,8 +29,9 @@ fun PropertyListItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .drawWithBottomLine(
-                width = 1f,
+            .border(
+                shape = RoundedCornerShape(8.dp),
+                width = 1.dp,
                 color = MaterialTheme.colors.primary
             )
             .clickable {
@@ -44,11 +44,14 @@ fun PropertyListItem(
         ) {
             Text(
                 text = property.textMainNumber,
-                style = TextStyle(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp)
             )
             Text(
                 text = property.propertyNumber + "/" + property.subNumber,
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primaryVariant,
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp)
             )
         }
@@ -65,7 +68,9 @@ fun PropertyListItem(
             },
             modifier = Modifier
                 .weight(1f)
-                .padding(5.dp)
+                .padding(5.dp),
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.primaryVariant,
         )
     }
 }
