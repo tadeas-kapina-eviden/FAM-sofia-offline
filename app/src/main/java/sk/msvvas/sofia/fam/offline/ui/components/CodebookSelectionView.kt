@@ -8,10 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
@@ -27,6 +24,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
+import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 
 
 /**
@@ -74,7 +72,8 @@ fun CodebookSelectionView(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close button.",
-                modifier = Modifier.clickable { onClose() }
+                modifier = Modifier.clickable { onClose() },
+                tint = MaterialTheme.colors.primary
             )
         }
         TextField(
@@ -97,6 +96,11 @@ fun CodebookSelectionView(
             ),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
+            ),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = MaterialTheme.colors.primary,
+                backgroundColor = MaterialTheme.colors.secondary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
             )
         )
         LazyColumn(
@@ -111,18 +115,22 @@ fun CodebookSelectionView(
                         .padding(vertical = 5.dp, horizontal = 15.dp)
                         .clickable(enabled = true) {
                             onSelect(idGetter(item))
-                        }
+                        },
                 ) {
                     Text(
                         highlightSelectedText(filterValue, idGetter(item)),
                         modifier = Modifier
-                            .weight(2f)
+                            .weight(2f),
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.primary
                     )
                     Text(
                         highlightSelectedText(filterValue, descriptionGetter(item)),
                         modifier = Modifier
                             .weight(5f),
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.primary
                     )
                 }
             }
@@ -184,29 +192,31 @@ private fun String.find(predicate: String): Int {
 @Preview(showBackground = true)
 @Composable
 fun CodebookSelectionPreview() {
-    CodebookSelectionView(
-        codebookData = listOf(
-            LocalityCodebookEntity(
-                id = "12345",
-                description = "Zdlhavy popis prvej lokality"
+    FAMInventuraOfflineClientTheme {
+        CodebookSelectionView(
+            codebookData = listOf(
+                LocalityCodebookEntity(
+                    id = "12345",
+                    description = "Zdlhavy popis prvej lokality"
+                ),
+                LocalityCodebookEntity(
+                    id = "25745",
+                    description = "Zdlhavy popis druhej lokality"
+                ),
+                LocalityCodebookEntity(
+                    id = "15875",
+                    description = "Zdlhavy popis tretej lokality"
+                ),
             ),
-            LocalityCodebookEntity(
-                id = "25745",
-                description = "Zdlhavy popis druhej lokality"
-            ),
-            LocalityCodebookEntity(
-                id = "15875",
-                description = "Zdlhavy popis tretej lokality"
-            ),
-        ),
-        lastFilterValue = "",
-        idGetter = {
-            (it as LocalityCodebookEntity).id
-        },
-        descriptionGetter = {
-            (it as LocalityCodebookEntity).description
-        },
-        onSelect = {},
-        onClose = {}
-    )
+            lastFilterValue = "",
+            idGetter = {
+                (it as LocalityCodebookEntity).id
+            },
+            descriptionGetter = {
+                (it as LocalityCodebookEntity).description
+            },
+            onSelect = {},
+            onClose = {}
+        )
+    }
 }
