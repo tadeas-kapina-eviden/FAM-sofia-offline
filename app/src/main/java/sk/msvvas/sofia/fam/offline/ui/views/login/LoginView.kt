@@ -22,10 +22,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.ui.components.InformationNonCloseableModalWindow
@@ -135,7 +137,15 @@ private fun ErrorAlert(
     TextField(
         value = lastError,
         onValueChange = { },
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface),
+        colors = TextFieldDefaults
+            .textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface,
+                textColor = MaterialTheme.colors.primary,
+                placeholderColor = MaterialTheme.colors.primaryVariant
+            ),
+        textStyle = TextStyle(
+            textAlign = TextAlign.Center,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp)
