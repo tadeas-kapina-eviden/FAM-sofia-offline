@@ -47,6 +47,8 @@ fun InputRow(
                 .padding(horizontal = labelTextHorizontalPadding)
                 .align(Alignment.CenterVertically),
             textAlign = labelTextAlign,
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.primary
         )
         TextField(
             value = value,
@@ -75,7 +77,7 @@ fun InputRow(
 @Composable
 fun InputRowPreview() {
     InputRow(
-        label = "lokalita: ",
+        label = "Lokalita: ",
         value = "AB-52",
         modifier = Modifier
             .drawWithBottomLine(

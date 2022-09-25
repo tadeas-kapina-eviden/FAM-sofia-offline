@@ -6,12 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
@@ -26,7 +25,11 @@ fun InventoryListItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .border(width = 1.dp, color = MaterialTheme.colors.primary)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colors.primary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .clickable {
                 onClick()
             }
@@ -38,30 +41,38 @@ fun InventoryListItem(
         ) {
             Text(
                 text = inventory.id,
-                style = TextStyle(fontWeight = FontWeight.Bold),
                 modifier = Modifier
-                    .padding(bottom = 5.dp)
+                    .padding(bottom = 5.dp),
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.primary,
             )
             Text(
                 text = inventory.note,
                 modifier = Modifier
-                    .padding(bottom = 15.dp)
+                    .padding(bottom = 15.dp),
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = "Dátum:\t" + inventory.createdAt,
                 modifier = Modifier
-                    .padding(bottom = 5.dp)
-
+                    .padding(bottom = 5.dp),
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = "Založené:\t" + inventory.createdBy,
                 modifier = Modifier
-                    .padding(bottom = 5.dp)
+                    .padding(bottom = 5.dp),
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary
             )
             Text(
                 text = "Spracované/Celkom: \t" + inventory.countProcessed + "/" + inventory.countAll,
                 modifier = Modifier
-                    .padding(bottom = 5.dp)
+                    .padding(bottom = 5.dp),
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary
             )
         }
     }
