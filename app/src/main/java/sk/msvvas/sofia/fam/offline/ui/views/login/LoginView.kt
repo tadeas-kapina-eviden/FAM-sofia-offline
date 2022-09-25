@@ -194,7 +194,8 @@ private fun InputField(
         colors = TextFieldDefaults
             .textFieldColors(
                 backgroundColor = MaterialTheme.colors.secondary,
-                textColor = MaterialTheme.colors.primary
+                textColor = MaterialTheme.colors.primary,
+                placeholderColor = MaterialTheme.colors.primaryVariant
             ),
         placeholder = { Text(text = placeholder) },
         visualTransformation = visualTransformation,
