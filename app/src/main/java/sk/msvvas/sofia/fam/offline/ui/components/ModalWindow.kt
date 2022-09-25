@@ -10,11 +10,11 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 
 /**
  * Pop up window with shadowing background
@@ -31,8 +31,8 @@ fun BoxScope.ModalWindow(
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = Color(0xBB222222),
-        content = {}
+        color = MaterialTheme.colors.onSurface,
+        content = {},
     )
     Column(
         modifier = Modifier
@@ -74,7 +74,8 @@ fun BoxScope.ConfirmModalWindow(
                 value = header,
                 readOnly = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
+                    textColor = MaterialTheme.colors.primary
                 ),
                 textStyle = TextStyle(
                     fontSize = MaterialTheme.typography.h6.fontSize,
@@ -91,7 +92,8 @@ fun BoxScope.ConfirmModalWindow(
                 value = body,
                 readOnly = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
+                    textColor = MaterialTheme.colors.primary
                 ),
                 onValueChange = {},
                 modifier = Modifier
@@ -138,11 +140,12 @@ fun BoxScope.InformationModalWindow(
                 value = header,
                 readOnly = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
+                    textColor = MaterialTheme.colors.primary
                 ),
                 textStyle = TextStyle(
                     fontSize = MaterialTheme.typography.h6.fontSize,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 ),
                 onValueChange = {},
                 modifier = Modifier
@@ -155,7 +158,8 @@ fun BoxScope.InformationModalWindow(
                 value = body,
                 readOnly = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
+                    textColor = MaterialTheme.colors.primary
                 ),
                 onValueChange = {},
                 modifier = Modifier
@@ -191,7 +195,8 @@ fun BoxScope.InformationNonCloseableModalWindow(
                 value = header,
                 readOnly = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
+                    textColor = MaterialTheme.colors.primary
                 ),
                 textStyle = TextStyle(
                     fontSize = MaterialTheme.typography.h6.fontSize,
@@ -208,7 +213,8 @@ fun BoxScope.InformationNonCloseableModalWindow(
                 value = body,
                 readOnly = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
+                    textColor = MaterialTheme.colors.primary
                 ),
                 onValueChange = {},
                 modifier = Modifier
@@ -225,12 +231,14 @@ fun BoxScope.InformationNonCloseableModalWindow(
 @Preview(showBackground = true)
 @Composable
 fun ModalWindowPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        InformationModalWindow(
-            header = "Modálne okno",
-            body = "Správa v modálnom okne",
-            buttonText = "OK",
-            buttonAction = {}
-        )
+    FAMInventuraOfflineClientTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            InformationModalWindow(
+                header = "Modálne okno",
+                body = "Správa v modálnom okne",
+                buttonText = "OK",
+                buttonAction = {}
+            )
+        }
     }
 }
