@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.drawscope.clipRect
  * @param color color of border
  */
 fun Modifier.drawWithBottomLine(
-    width: Float = 0f,
+    width: Float,
     color: Color = Color.Black
 ) = this.then(
     Modifier.drawWithContent {
@@ -38,7 +38,7 @@ fun Modifier.drawWithBottomLine(
  * @param color color of border
  */
 fun Modifier.drawWithTopLine(
-    width: Float = 0f,
+    width: Float,
     color: Color = Color.Black
 ) = this.then(
     Modifier.drawWithContent {
@@ -50,6 +50,44 @@ fun Modifier.drawWithTopLine(
                 cap = StrokeCap.Square,
                 start = Offset.Zero,
                 end = Offset.Zero.copy(x = size.width)
+            )
+        }
+    }
+)
+
+fun Modifier.drawWithRightLine(
+    width: Float,
+    color: Color = Color.Black
+) = this.then(
+    Modifier.drawWithContent {
+        drawContent()
+        clipRect {
+            drawLine(
+                brush = SolidColor(color),
+                strokeWidth = width,
+                cap = StrokeCap.Square,
+                start = Offset.Zero.copy(x = size.width),
+                end = Offset.Zero.copy(x = size.width, y = size.height)
+            )
+        }
+    }
+)
+
+fun Modifier.drawWithLeftLine(
+    width: Float,
+    color: Color = Color.Black
+) = this.then(
+    Modifier.drawWithContent {
+        drawContent()
+        clipRect {
+            drawLine(
+                brush = SolidColor(color),
+                strokeWidth = width,
+                cap = StrokeCap.Square,
+                start = Offset.Zero,
+                end = Offset.Zero.copy(
+                    y = size.height
+                )
             )
         }
     }

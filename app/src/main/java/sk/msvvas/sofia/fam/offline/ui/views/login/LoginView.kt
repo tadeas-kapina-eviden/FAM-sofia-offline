@@ -195,7 +195,7 @@ private fun InputField(
             .textFieldColors(
                 backgroundColor = MaterialTheme.colors.secondary,
                 textColor = MaterialTheme.colors.primary,
-                placeholderColor = MaterialTheme.colors.primaryVariant
+                placeholderColor = MaterialTheme.colors.primaryVariant,
             ),
         placeholder = { Text(text = placeholder) },
         visualTransformation = visualTransformation,
@@ -204,7 +204,7 @@ private fun InputField(
                 border = BorderStroke(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
-                )
+                ),
             )
             .focusRequester(focusRequester),
         keyboardOptions = KeyboardOptions(

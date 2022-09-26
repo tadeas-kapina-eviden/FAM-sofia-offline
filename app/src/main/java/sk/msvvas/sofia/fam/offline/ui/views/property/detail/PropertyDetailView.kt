@@ -65,7 +65,6 @@ fun PropertyDetailView(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 15.dp)
                 ) {
                     TextField(
                         value = if (propertyDetailViewModel.isNew) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
@@ -74,7 +73,8 @@ fun PropertyDetailView(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondary
+                            backgroundColor = MaterialTheme.colors.secondary,
+                            textColor = MaterialTheme.colors.primary
                         )
                     )
                     TextField(
@@ -84,12 +84,12 @@ fun PropertyDetailView(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondary
+                            backgroundColor = MaterialTheme.colors.secondary,
+                            textColor = MaterialTheme.colors.primary
                         ),
                         textStyle = LocalTextStyle.current
                             .copy(textAlign = TextAlign.End)
                     )
-
                     InputRowStyled(
                         label = "Sériové číslo",
                         value = property.serialNumber,
@@ -157,22 +157,30 @@ fun PropertyDetailView(
                             Checkbox(
                                 checked = propertyDetailViewModel.isManual,
                                 onCheckedChange = {},
-                                enabled = false
+                                enabled = false,
+                                colors = CheckboxDefaults.colors(
+                                    disabledColor = MaterialTheme.colors.primaryVariant
+                                )
                             )
                             Text(
                                 text = "Manuálny",
-                                modifier = Modifier.align(Alignment.CenterVertically)
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                color = MaterialTheme.colors.primaryVariant
                             )
                         }
                         Row(modifier = Modifier.weight(1f)) {
                             Checkbox(
                                 checked = propertyDetailViewModel.isNew,
                                 onCheckedChange = {},
-                                enabled = false
+                                enabled = false,
+                                colors = CheckboxDefaults.colors(
+                                    disabledColor = MaterialTheme.colors.primaryVariant
+                                )
                             )
                             Text(
                                 text = "Nový",
-                                modifier = Modifier.align(Alignment.CenterVertically)
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                color = MaterialTheme.colors.primaryVariant
                             )
                         }
                     }
@@ -239,14 +247,15 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier
-            .drawWithBottomLine(width = 1f, color = MaterialTheme.colors.primary),
-        ratio = 2f / 5f,
+            .padding(bottom = 2.dp),
+        ratio = 3f / 5f,
         textFieldTextAlign = TextAlign.End,
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         textFieldColors = TextFieldDefaults.textFieldColors(
             disabledTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
             backgroundColor = MaterialTheme.colors.secondary
         ),
-        onClick = onClick
+        onClick = onClick,
+        labelTextHorizontalPadding = 15.dp
     )
 }
