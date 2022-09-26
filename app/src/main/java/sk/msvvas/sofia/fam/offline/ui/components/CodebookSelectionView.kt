@@ -62,7 +62,7 @@ fun CodebookSelectionView(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                color = MaterialTheme.colors.background,
+                color = MaterialTheme.colors.secondary,
             )
     ) {
         Row(

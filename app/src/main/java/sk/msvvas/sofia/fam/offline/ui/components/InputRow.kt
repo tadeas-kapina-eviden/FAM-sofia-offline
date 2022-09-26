@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -33,7 +34,13 @@ fun InputRow(
     modifier: Modifier,
     ratio: Float,
     labelTextAlign: TextAlign = TextAlign.Start,
+    labelTextColor: Color = MaterialTheme.colors.primary,
     textFieldTextAlign: TextAlign = TextAlign.Start,
+    textFieldColors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        disabledTextColor = MaterialTheme.colors.primary,
+        textColor = MaterialTheme.colors.primary,
+        backgroundColor = MaterialTheme.colors.secondary
+    ),
     labelTextHorizontalPadding: Dp = 0.dp,
     onClick: () -> Unit
 ) {
@@ -49,7 +56,7 @@ fun InputRow(
                 .align(Alignment.CenterVertically),
             textAlign = labelTextAlign,
             style = MaterialTheme.typography.body1,
-            color = MaterialTheme.colors.primary
+            color = labelTextColor
         )
         TextField(
             value = value,
@@ -60,12 +67,9 @@ fun InputRow(
                 .clickable(enabled = true) {
                     onClick()
                 },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.background,
-                textColor = MaterialTheme.colors.primary
-            ),
+            colors = textFieldColors,
             textStyle = LocalTextStyle.current
-                .copy(textAlign = textFieldTextAlign)
+                .copy(textAlign = textFieldTextAlign),
         )
     }
 }

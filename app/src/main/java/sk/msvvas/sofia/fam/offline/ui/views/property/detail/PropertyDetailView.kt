@@ -74,7 +74,7 @@ fun PropertyDetailView(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.background
+                            backgroundColor = MaterialTheme.colors.secondary
                         )
                     )
                     TextField(
@@ -84,7 +84,7 @@ fun PropertyDetailView(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.background
+                            backgroundColor = MaterialTheme.colors.secondary
                         ),
                         textStyle = LocalTextStyle.current
                             .copy(textAlign = TextAlign.End)
@@ -108,17 +108,20 @@ fun PropertyDetailView(
                     InputRowStyled(
                         label = "Lokalita",
                         value = locality,
-                        onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() }
+                        onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() },
+                        enabled = true
                     )
                     InputRowStyled(
                         label = "Miestnosť",
                         value = room,
-                        onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() }
+                        onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() },
+                        enabled = true
                     )
                     InputRowStyled(
                         label = "z. Os.",
                         value = user,
-                        onClick = { propertyDetailViewModel.showUserCodebookSelectionView() }
+                        onClick = { propertyDetailViewModel.showUserCodebookSelectionView() },
+                        enabled = true
                     )
                     InputRowStyled(
                         label = "Stredisko",
@@ -128,17 +131,20 @@ fun PropertyDetailView(
                     InputRowStyled(
                         label = "Pracovisko",
                         value = place,
-                        onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() }
+                        onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() },
+                        enabled = true
                     )
                     InputRowStyled(
                         label = "Poznámka",
                         value = fixedNote,
-                        onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() }
+                        onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() },
+                        enabled = true
                     )
                     InputRowStyled(
                         label = "Vlastná pozn.",
                         value = variableNote,
-                        onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() }
+                        onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() },
+                        enabled = true
                     )
                     Row(
                         modifier = Modifier
@@ -226,6 +232,7 @@ fun PropertyDetailView(
 private fun InputRowStyled(
     label: String,
     value: String,
+    enabled: Boolean = false,
     onClick: () -> Unit
 ) {
     InputRow(
@@ -235,6 +242,11 @@ private fun InputRowStyled(
             .drawWithBottomLine(width = 1f, color = MaterialTheme.colors.primary),
         ratio = 2f / 5f,
         textFieldTextAlign = TextAlign.End,
+        labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
+        textFieldColors = TextFieldDefaults.textFieldColors(
+            disabledTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
+            backgroundColor = MaterialTheme.colors.secondary
+        ),
         onClick = onClick
     )
 }
