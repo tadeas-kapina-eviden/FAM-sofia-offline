@@ -43,7 +43,7 @@ data class PropertyModelJson(
                 "\t\t\t\t\"Bukrs\":\"1000\",\n" +
                 "\t\t\t\t\"Anln1\":\"$propertyNumber\",\n" +
                 "\t\t\t\t\"Anln2\":\"$subnumber\",\n" +
-                "\t\t\t\t\"Txt50\":\"$textMainNumber\",\n" +
+                "\t\t\t\t\"Txt50\":\"${textMainNumber.replace("\"", "\\\"")}\",\n" +
                 "\t\t\t\t\"Zstat\":\"$recordStatus\",\n" +
                 "\t\t\t\t\"Werks\":\"$werks\",\n" +
                 "\t\t\t\t\"Werksn\":\"$werks\",\n" +
