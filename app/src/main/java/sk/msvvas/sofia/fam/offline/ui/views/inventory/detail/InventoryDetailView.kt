@@ -8,16 +8,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -79,6 +86,10 @@ fun InventoryDetailView(
 
     val activity = (LocalContext.current as? Activity)
 
+    val focusRequester = remember {
+        FocusRequester()
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -101,7 +112,13 @@ fun InventoryDetailView(
                                 inventoryDetailViewModel.onCodeFilterChange(it)
                             },
                             modifier = Modifier
-                                .weight(1f),
+                                .weight(1f)
+                                .border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colors.primary,
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .focusRequester(focusRequester),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Done,
@@ -113,6 +130,12 @@ fun InventoryDetailView(
                                 onDone = {
                                     inventoryDetailViewModel.runCodeFilter()
                                 }
+                            ),
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = MaterialTheme.colors.secondary,
+                                textColor = MaterialTheme.colors.primary,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent
                             ),
                         )
                         StyledTextButton(
@@ -178,7 +201,8 @@ fun InventoryDetailView(
                                     + if (roomFilter.isNotEmpty()) "Miest. $roomFilter" else ""
                                     + if (userFilter.isNotEmpty()) "Os. $userFilter" else "",
                             modifier = Modifier
-                                .padding(horizontal = 15.dp, vertical = 1.dp)
+                                .padding(horizontal = 15.dp, vertical = 1.dp),
+                            color = MaterialTheme.colors.primary
                         )
                     }
                 }
@@ -197,13 +221,15 @@ fun InventoryDetailView(
                         ) {
                             Text(
                                 text = "Názov",
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(3f),
+                                color = MaterialTheme.colors.primary
                             )
                             Text(
                                 text = "Status",
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .padding(5.dp)
+                                    .weight(2f)
+                                    .padding(start = 5.dp),
+                                color = MaterialTheme.colors.primary
                             )
                         }
                     }
@@ -310,6 +336,10 @@ fun InventoryDetailView(
     inventoryDetailViewModel.filterOutValues()
     BackHandler {
         inventoryDetailViewModel.showExitModalWindow()
+    }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        focusRequester.captureFocus()
     }
 }
 
