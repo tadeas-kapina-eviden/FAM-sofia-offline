@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,7 +54,8 @@ fun InventoryDetailFiltersComponent(
                 modifier = Modifier
                     .weight(2f)
                     .padding(15.dp),
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                color = MaterialTheme.colors.primary
             )
             Column(
                 modifier = Modifier
@@ -61,7 +64,11 @@ fun InventoryDetailFiltersComponent(
                 Checkbox(
                     checked = scanWithoutDetail,
                     onCheckedChange = { inventoryDetailViewModel.onScanWithoutDetailButtonClick() },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = MaterialTheme.colors.primary,
+                        uncheckedColor = MaterialTheme.colors.primary
+                    )
                 )
             }
         }
