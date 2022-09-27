@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -79,7 +76,7 @@ fun LoginView(
             InputField(
                 value = loginName,
                 onChange = { loginViewModel.onLoginNameChanged(it) },
-                placeholder = "Užívateľ",
+                label = "Užívateľ",
                 focusRequester = loginNameFocusRequester!!,
                 keyboardType = KeyboardType.Ascii,
                 onDone = { loginViewModel.requestPasswordFocus() },
@@ -93,7 +90,7 @@ fun LoginView(
             InputField(
                 value = password,
                 onChange = { loginViewModel.onPasswordChange(it) },
-                placeholder = "Heslo",
+                label = "Heslo",
                 focusRequester = passwordFocusRequester!!,
                 keyboardType = KeyboardType.Password,
                 onDone = { loginViewModel.requestClientFocus() },
@@ -102,7 +99,7 @@ fun LoginView(
             InputField(
                 value = client,
                 onChange = { loginViewModel.onClientChange(it) },
-                placeholder = "Klient",
+                label = "Klient",
                 focusRequester = clientFocusRequester!!,
                 keyboardType = KeyboardType.Number,
                 onDone = { loginViewModel.onLoginButtonClick() },
@@ -171,7 +168,7 @@ private fun ErrorAlert(
  * Input TextField styled for login view
  * @param value actual value in text field
  * @param onChange function executed when values is changed
- * @param placeholder placeholder for text field
+ * @param label placeholder for text field
  * @param focusRequester focus requester for text field
  * @param keyboardType type of keyboard used for input
  * @param onDone function executed, when done is pressed on keyboard
@@ -181,14 +178,14 @@ private fun ErrorAlert(
 private fun InputField(
     value: String,
     onChange: (String) -> Unit,
-    placeholder: String,
+    label: String,
     focusRequester: FocusRequester,
     keyboardType: KeyboardType,
     onDone: () -> Unit,
     modifier: Modifier = Modifier.padding(bottom = 10.dp, start = 30.dp, end = 30.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
-    TextField(
+    OutlinedTextField(
         value = value,
         onValueChange = { onChange(it) },
         colors = TextFieldDefaults
@@ -197,15 +194,15 @@ private fun InputField(
                 textColor = MaterialTheme.colors.primary,
                 placeholderColor = MaterialTheme.colors.primaryVariant,
             ),
-        placeholder = { Text(text = placeholder) },
+        label = { Text(text = label) },
         visualTransformation = visualTransformation,
         modifier = modifier
-            .border(
+            /*.border(
                 border = BorderStroke(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-            )
+            )*/
             .focusRequester(focusRequester),
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
@@ -216,6 +213,5 @@ private fun InputField(
                 onDone()
             }),
         singleLine = true,
-
-        )
+    )
 }
