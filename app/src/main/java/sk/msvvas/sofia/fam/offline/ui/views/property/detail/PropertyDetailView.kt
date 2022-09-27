@@ -50,6 +50,7 @@ fun PropertyDetailView(
 
     val codebookSelectionViewDescriptionGetter by propertyDetailViewModel.codebookSelectionViewDescriptionGetter.observeAsState { "" }
     val selectCodebook by propertyDetailViewModel.selectCodebook.observeAsState { "" }
+    val deleteCodebook by propertyDetailViewModel.deleteCodebook.observeAsState {}
 
     Box {
         if (property != null) {
@@ -207,7 +208,8 @@ fun PropertyDetailView(
                     idGetter = codebookSelectionViewIdGetter,
                     descriptionGetter = codebookSelectionViewDescriptionGetter,
                     onSelect = selectCodebook,
-                    onClose = { propertyDetailViewModel.closeCodebookSelectionView() }
+                    onClose = { propertyDetailViewModel.closeCodebookSelectionView() },
+                    onDelete = deleteCodebook
                 )
             }
 

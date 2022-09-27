@@ -81,6 +81,9 @@ class PropertyDetailViewModel(
     private val _selectCodebook = MutableLiveData<(String) -> Unit> {}
     val selectCodebook: LiveData<(String) -> Unit> = _selectCodebook
 
+    private val _deleteCodebook = MutableLiveData {}
+    val deleteCodebook: LiveData<() -> Unit> = _deleteCodebook
+
     private val _codebookSelectionViewLastValue = MutableLiveData("")
     val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
 
@@ -106,6 +109,11 @@ class PropertyDetailViewModel(
             property.value!!.localityNew = it
             _locality.value = it
         }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            property.value!!.localityNew = ""
+            _locality.value = ""
+        }
     }
 
     fun showRoomCodebookSelectionView() {
@@ -119,6 +127,11 @@ class PropertyDetailViewModel(
             closeCodebookSelectionView()
             _room.value = it
             property.value!!.roomNew = it
+        }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            property.value!!.roomNew = ""
+            _room.value = ""
         }
     }
 
@@ -134,6 +147,11 @@ class PropertyDetailViewModel(
             _user.value = it
             property.value!!.personalNumberNew = it
         }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            property.value!!.personalNumberNew = ""
+            _user.value = ""
+        }
     }
 
     fun showPlaceCodebookSelectionView() {
@@ -147,6 +165,11 @@ class PropertyDetailViewModel(
             closeCodebookSelectionView()
             _place.value = it
             property.value!!.workplaceNew = it
+        }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            property.value!!.workplaceNew = ""
+            _place.value = ""
         }
     }
 
@@ -165,6 +188,11 @@ class PropertyDetailViewModel(
             _fixedNote.value = "${note.id}/${note.description}"
             property.value!!.fixedNote = it
         }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            property.value!!.fixedNote = ""
+            _fixedNote.value = ""
+        }
     }
 
     fun showVariableNoteCodebookSelectionView() {
@@ -178,6 +206,11 @@ class PropertyDetailViewModel(
             closeCodebookSelectionView()
             _variableNote.value = it
             property.value!!.variableNote = it
+        }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            property.value!!.variableNote = ""
+            _variableNote.value = ""
         }
     }
 

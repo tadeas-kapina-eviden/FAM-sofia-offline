@@ -63,6 +63,8 @@ fun InventoryDetailView(
 
     val codebookSelectionViewDescriptionGetter by inventoryDetailViewModel.codebookSelectionViewDescriptionGetter.observeAsState { "" }
     val selectCodebook by inventoryDetailViewModel.selectCodebook.observeAsState { "" }
+    val deleteCodebook by inventoryDetailViewModel.deleteCodebook.observeAsState {}
+
     val exitModalShown by inventoryDetailViewModel.exitModalShown.observeAsState(false)
     val submitInventoryConfirmModalShown by inventoryDetailViewModel.submitInventoryConfirmModalShown.observeAsState(
         false
@@ -291,7 +293,8 @@ fun InventoryDetailView(
                 idGetter = codebookSelectionViewIdGetter,
                 descriptionGetter = codebookSelectionViewDescriptionGetter,
                 onSelect = selectCodebook,
-                onClose = { inventoryDetailViewModel.closeCodebookSelectionView() }
+                onClose = { inventoryDetailViewModel.closeCodebookSelectionView() },
+                onDelete = deleteCodebook
             )
         }
 

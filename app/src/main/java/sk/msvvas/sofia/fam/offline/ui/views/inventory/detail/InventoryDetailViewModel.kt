@@ -92,6 +92,9 @@ class InventoryDetailViewModel(
     private val _selectCodebook = MutableLiveData<(String) -> Unit> {}
     val selectCodebook: LiveData<(String) -> Unit> = _selectCodebook
 
+    private val _deleteCodebook = MutableLiveData {}
+    val deleteCodebook: LiveData<() -> Unit> = _deleteCodebook
+
     private val _codebookSelectionViewLastValue = MutableLiveData("")
     val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
 
@@ -248,6 +251,10 @@ class InventoryDetailViewModel(
             closeCodebookSelectionView()
             _localityFilter.value = it
         }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            _localityFilter.value = ""
+        }
     }
 
     fun showRoomCodebookSelectionView() {
@@ -261,6 +268,10 @@ class InventoryDetailViewModel(
             closeCodebookSelectionView()
             _roomFilter.value = it
         }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            _roomFilter.value = ""
+        }
     }
 
     fun showUserCodebookSelectionView() {
@@ -273,6 +284,10 @@ class InventoryDetailViewModel(
         _selectCodebook.value = {
             closeCodebookSelectionView()
             _userFilter.value = it
+        }
+        _deleteCodebook.value = {
+            closeCodebookSelectionView()
+            _userFilter.value = ""
         }
     }
 

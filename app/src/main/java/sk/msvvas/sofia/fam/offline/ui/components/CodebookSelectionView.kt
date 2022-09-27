@@ -35,7 +35,8 @@ import java.util.*
  * @param idGetter function to get value of id from codebook
  * @param descriptionGetter function to get value of description form codebook
  * @param onSelect function that is executed when one of codebook is selected or is clicked done button on keyboard
- * @param onClose function, that is executed when close or back buttons are clicked
+ * @param onClose function that is executed when close or back buttons are clicked
+ * @param onDelete function that is executed, when delete button is clicked
  */
 @Composable
 fun CodebookSelectionView(
@@ -44,7 +45,8 @@ fun CodebookSelectionView(
     idGetter: (Any) -> String,
     descriptionGetter: (Any) -> String,
     onSelect: (String) -> Any,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onDelete: () -> Unit
 ) {
     var filterValue by remember {
         mutableStateOf(lastFilterValue)
@@ -147,14 +149,24 @@ fun CodebookSelectionView(
                 }
             }
         }
-        StyledTextButton(
-            onClick = {
-                onSelect(filterValue)
-            },
-            text = "OK",
-            modifier = Modifier
-                .fillMaxWidth()
-        )
+        Row(modifier = Modifier.fillMaxWidth()) {
+            StyledTextButton(
+                onClick = {
+                    onDelete()
+                },
+                text = "Zmazať",
+                modifier = Modifier
+                    .weight(1f)
+            )
+            StyledTextButton(
+                onClick = {
+                    onSelect(filterValue)
+                },
+                text = "OK",
+                modifier = Modifier
+                    .weight(1f)
+            )
+        }
     }
     BackHandler {
         onClose()
@@ -229,7 +241,8 @@ fun CodebookSelectionPreview() {
                 (it as LocalityCodebookEntity).description
             },
             onSelect = {},
-            onClose = {}
+            onClose = {},
+            onDelete = {},
         )
     }
 }
