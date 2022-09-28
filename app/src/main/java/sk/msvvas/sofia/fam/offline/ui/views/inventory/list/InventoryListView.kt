@@ -68,8 +68,8 @@ fun InventoryListView(
         }
         if (isDownloadConfirmShown) {
             ConfirmModalWindow(
-                header = "Naozaj chceš stiahnuť Inventúru s id: $selectedInventoryId?",
-                body = "Po stiahnutí nebudeš mať možnosť pracovať s ostatnými inventúrami, až kým túto neodošleš.",
+                header = "Naozaj chceš synchronizovať Inventúru s id: $selectedInventoryId?",
+                body = "Po synchronizácii inventúry do mobilného zariadenia nie je možné pracovať s inou inventúrou až do jej odovzdania.",
                 confirmButtonText = "Áno",
                 confirmButtonAction = { inventoryListViewModel.onSelectInventoryConfirm() },
                 declineButtonText = "Nie",
