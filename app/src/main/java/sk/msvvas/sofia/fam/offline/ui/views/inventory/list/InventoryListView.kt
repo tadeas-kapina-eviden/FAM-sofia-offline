@@ -42,7 +42,7 @@ fun InventoryListView(
                 modifier = Modifier
                     .padding(15.dp)
                     .fillMaxWidth(),
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.primary
             )
