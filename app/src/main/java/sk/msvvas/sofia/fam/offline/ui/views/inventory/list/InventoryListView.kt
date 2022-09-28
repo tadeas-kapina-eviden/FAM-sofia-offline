@@ -37,7 +37,7 @@ fun InventoryListView(
                 .fillMaxWidth()
         ) {
             Text(
-                text = "Vyber Inventúru",
+                text = "Synchronizuj Inventúru",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(15.dp)
