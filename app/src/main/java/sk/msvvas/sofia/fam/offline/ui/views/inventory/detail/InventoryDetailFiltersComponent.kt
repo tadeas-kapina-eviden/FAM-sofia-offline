@@ -54,7 +54,7 @@ fun InventoryDetailFiltersComponent(
                 modifier = Modifier
                     .weight(2f)
                     .padding(15.dp),
-                textAlign = TextAlign.End,
+                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.End),
                 color = MaterialTheme.colors.primary
             )
             Column(

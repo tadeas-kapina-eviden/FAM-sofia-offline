@@ -91,6 +91,7 @@ fun BoxScope.ConfirmModalWindow(
                 text = body,
                 color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)
@@ -154,6 +155,7 @@ fun BoxScope.InformationModalWindow(
                 text = body,
                 color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)
@@ -205,6 +207,8 @@ fun BoxScope.InformationNonCloseableModalWindow(
             Text(
                 text = body,
                 color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)

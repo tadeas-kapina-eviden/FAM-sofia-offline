@@ -20,7 +20,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -148,9 +147,7 @@ private fun ErrorAlert(
                 textColor = MaterialTheme.colors.primary,
                 placeholderColor = MaterialTheme.colors.primaryVariant
             ),
-        textStyle = TextStyle(
-            textAlign = TextAlign.Center,
-        ),
+        textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp)
@@ -194,7 +191,12 @@ private fun InputField(
                 textColor = MaterialTheme.colors.primary,
                 placeholderColor = MaterialTheme.colors.primaryVariant,
             ),
-        label = { Text(text = label) },
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.body1
+            )
+        },
         visualTransformation = visualTransformation,
         modifier = modifier
             /*.border(
@@ -213,5 +215,6 @@ private fun InputField(
                 onDone()
             }),
         singleLine = true,
+        textStyle = MaterialTheme.typography.body1
     )
 }

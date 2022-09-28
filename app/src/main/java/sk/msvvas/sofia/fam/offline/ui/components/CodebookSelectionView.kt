@@ -115,7 +115,8 @@ fun CodebookSelectionView(
                 backgroundColor = MaterialTheme.colors.secondary,
                 focusedIndicatorColor = MaterialTheme.colors.primary,
                 unfocusedIndicatorColor = MaterialTheme.colors.primaryVariant
-            )
+            ),
+            textStyle = MaterialTheme.typography.body1
         )
         LazyColumn(
             modifier = Modifier

@@ -36,6 +36,9 @@ fun StyledTextButton(
     modifier: Modifier = Modifier
 ) {
     StyledButton(onClick = onClick, modifier = modifier) {
-        Text(text = text, textAlign = TextAlign.Center)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center)
+        )
     }
 }

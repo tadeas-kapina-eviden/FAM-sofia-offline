@@ -27,12 +27,10 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
 import sk.msvvas.sofia.fam.offline.ui.components.*
@@ -137,6 +135,7 @@ fun InventoryDetailView(
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent
                             ),
+                            textStyle = MaterialTheme.typography.body1
                         )
                         StyledTextButton(
                             onClick = { inventoryDetailViewModel.onFiltersShowClick() },
@@ -202,7 +201,8 @@ fun InventoryDetailView(
                                     + if (userFilter.isNotEmpty()) "Os. $userFilter" else "",
                             modifier = Modifier
                                 .padding(horizontal = 15.dp, vertical = 1.dp),
-                            color = MaterialTheme.colors.primary
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.body1
                         )
                     }
                 }
@@ -222,14 +222,16 @@ fun InventoryDetailView(
                             Text(
                                 text = "Názov",
                                 modifier = Modifier.weight(3f),
-                                color = MaterialTheme.colors.primary
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.body1
                             )
                             Text(
                                 text = "Status",
                                 modifier = Modifier
                                     .weight(2f)
                                     .padding(start = 5.dp),
-                                color = MaterialTheme.colors.primary
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.body1
                             )
                         }
                     }
@@ -368,16 +370,15 @@ private fun RowScope.StatusFilterButton(
             if (count >= 0) {
                 Text(
                     text = count.toString(),
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    style = MaterialTheme.typography.body1
                 )
             }
         }
         Text(
             text = text,
-            style = TextStyle(
-                fontSize = 12.sp
-            ),
-            maxLines = 1
+            maxLines = 1,
+            style = MaterialTheme.typography.body1
         )
     }
 }

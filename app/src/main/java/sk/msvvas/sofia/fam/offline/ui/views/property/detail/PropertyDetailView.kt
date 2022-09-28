@@ -76,7 +76,8 @@ fun PropertyDetailView(
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = MaterialTheme.colors.secondary,
                             textColor = MaterialTheme.colors.primary
-                        )
+                        ),
+                        textStyle = MaterialTheme.typography.body1
                     )
                     TextField(
                         value = property.textMainNumber,
@@ -88,7 +89,7 @@ fun PropertyDetailView(
                             backgroundColor = MaterialTheme.colors.secondary,
                             textColor = MaterialTheme.colors.primary
                         ),
-                        textStyle = LocalTextStyle.current
+                        textStyle = MaterialTheme.typography.body1
                             .copy(textAlign = TextAlign.End)
                     )
                     InputRowStyled(
@@ -166,7 +167,8 @@ fun PropertyDetailView(
                             Text(
                                 text = "Manuálny",
                                 modifier = Modifier.align(Alignment.CenterVertically),
-                                color = MaterialTheme.colors.primaryVariant
+                                color = MaterialTheme.colors.primaryVariant,
+                                style = MaterialTheme.typography.body1
                             )
                         }
                         Row(modifier = Modifier.weight(1f)) {
@@ -181,7 +183,9 @@ fun PropertyDetailView(
                             Text(
                                 text = "Nový",
                                 modifier = Modifier.align(Alignment.CenterVertically),
-                                color = MaterialTheme.colors.primaryVariant
+                                color = MaterialTheme.colors.primaryVariant,
+                                style = MaterialTheme.typography.body1
+
                             )
                         }
                     }

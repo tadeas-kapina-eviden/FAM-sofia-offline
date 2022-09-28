@@ -81,7 +81,7 @@ fun InputRow(
                 .weight(1f)
                 .drawWithLeftLine(width = 6f, color = MaterialTheme.colors.primary),
             colors = textFieldColors,
-            textStyle = LocalTextStyle.current
+            textStyle = MaterialTheme.typography.body1
                 .copy(textAlign = textFieldTextAlign),
         )
     }

@@ -35,19 +35,22 @@ fun InventoryDetailStatusView(
                 text = "Lokalita",
                 modifier = Modifier
                     .weight(1f),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1
             )
             Text(
                 text = "Miestnosť",
                 modifier = Modifier
                     .weight(1f),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1
             )
             Text(
                 text = "Spracované/celkom",
                 modifier = Modifier
                     .weight(1f),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1
             )
         }
         localityRoomPairs.forEach {
@@ -95,19 +98,22 @@ fun StatusRow(
                 text = localityRoomCountPair.locality,
                 modifier = Modifier
                     .weight(1f),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1
             )
             Text(
                 text = localityRoomCountPair.room,
                 modifier = Modifier
                     .weight(1f),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1
             )
             Text(
                 text = "$processed/$all",
                 modifier = Modifier
                     .weight(1f),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1
             )
         }
     }
