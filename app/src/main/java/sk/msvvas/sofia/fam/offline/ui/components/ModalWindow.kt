@@ -38,7 +38,7 @@ fun BoxScope.ModalWindow(
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .align(Alignment.Center)
-            .background(color = MaterialTheme.colors.surface, shape = RoundedCornerShape(12.dp))
+            .background(color = MaterialTheme.colors.secondary, shape = RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colors.primary,
@@ -106,6 +106,7 @@ fun BoxScope.ConfirmModalWindow(
                     onClick = confirmButtonAction,
                     text = confirmButtonText
                 )
+                Spacer(modifier = Modifier.weight(0.1f))
                 StyledTextButton(
                     modifier = Modifier.weight(1f),
                     onClick = declineButtonAction,
