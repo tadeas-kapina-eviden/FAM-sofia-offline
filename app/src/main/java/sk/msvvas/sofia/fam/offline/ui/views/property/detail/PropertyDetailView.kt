@@ -195,13 +195,16 @@ fun PropertyDetailView(
                         StyledTextButton(
                             onClick = { propertyDetailViewModel.rollback() },
                             modifier = Modifier.weight(1f),
-                            text = "Vráť na originál"
+                            text = "Vráť na originál",
+                            textModifier = Modifier.padding(vertical = 18.dp)
                         )
+                        Spacer(modifier = Modifier.weight(0.1f))
                     }
                     StyledTextButton(
                         onClick = { propertyDetailViewModel.submit() },
                         modifier = Modifier.weight(1f),
-                        text = "Potvrď"
+                        text = "Potvrď",
+                        textModifier = Modifier.padding(vertical = 18.dp)
                     )
                 }
             }
@@ -253,7 +256,7 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier
-            .padding(bottom = 2.dp),
+            .padding(bottom = 5.dp),
         ratio = 3f / 5f,
         textFieldTextAlign = TextAlign.End,
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,

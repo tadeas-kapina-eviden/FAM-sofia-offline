@@ -144,7 +144,7 @@ fun InventoryDetailView(
                                 .weight(1f),
                             text = "Zobraziť filtre",
                             textModifier = Modifier
-                                .padding(vertical = 15.dp)
+                                .padding(vertical = 8.dp)
                         )
                     }
                 }
@@ -250,7 +250,8 @@ fun InventoryDetailView(
             ) {
                 StyledTextButton(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(1f),
+                    textModifier = Modifier
                         .padding(vertical = 18.dp),
                     onClick = {
                         inventoryDetailViewModel.submitInventoryConfirmModalShow()
@@ -260,8 +261,9 @@ fun InventoryDetailView(
                 Spacer(modifier = Modifier.weight(0.1f))
                 StyledTextButton(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(18.dp),
+                        .weight(1f),
+                    textModifier = Modifier
+                        .padding(vertical = 18.dp),
                     onClick = {
                         inventoryDetailViewModel.onSelectProperty(-1)
                     },
