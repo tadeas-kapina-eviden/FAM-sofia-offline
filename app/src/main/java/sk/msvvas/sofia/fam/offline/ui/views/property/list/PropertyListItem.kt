@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,10 @@ fun PropertyListItem(
             .clickable {
                 onClick(property.id)
             }
+            .background(
+                color = MaterialTheme.colors.secondary,
+                shape = RoundedCornerShape(8.dp)
+            )
     ) {
         Column(
             modifier = Modifier

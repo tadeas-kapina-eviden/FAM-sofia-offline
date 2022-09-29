@@ -249,18 +249,23 @@ fun InventoryDetailView(
                 Modifier.fillMaxWidth()
             ) {
                 StyledTextButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 18.dp),
                     onClick = {
                         inventoryDetailViewModel.submitInventoryConfirmModalShow()
                     },
-                    text = "Odoslať inventúru"
+                    text = "Odoslať inventúru",
                 )
+                Spacer(modifier = Modifier.weight(0.1f))
                 StyledTextButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(18.dp),
                     onClick = {
                         inventoryDetailViewModel.onSelectProperty(-1)
                     },
-                    text = "+Nový"
+                    text = "+  Nový"
                 )
             }
         }
