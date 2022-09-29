@@ -89,7 +89,6 @@ fun InventoryDetailView(
         FocusRequester()
     }
 
-
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -296,10 +295,7 @@ fun InventoryDetailView(
             )
         }
         if (loadingData) {
-            InformationNonCloseableModalWindow(
-                header = "Načítavanie",
-                body = "Odosielajú sa dáta, prosím počkajte",
-            )
+            LoadingAnimationModalWindow(header = "Načítavanie")
         }
         if (exitModalShown) {
             ConfirmModalWindow(

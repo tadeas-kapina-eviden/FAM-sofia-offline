@@ -212,6 +212,37 @@ fun BoxScope.InformationNonCloseableModalWindow(
     )
 }
 
+@Composable
+fun BoxScope.LoadingAnimationModalWindow(
+    header: String
+) {
+    ModalWindow(
+        header = {
+            Text(
+                text = header,
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.h4.copy(textAlign = TextAlign.Center),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .drawWithBottomLine(color = MaterialTheme.colors.primary, width = 1f)
+                    .padding(10.dp),
+            )
+        },
+        body = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            ) {
+                Column(modifier = Modifier.align(Alignment.Center)) {
+                    LoadingAnimation()
+                }
+            }
+        }
+    )
+}
+
 /**
  * Default preview for Modal window
  */

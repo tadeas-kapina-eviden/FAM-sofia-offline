@@ -233,10 +233,7 @@ fun PropertyDetailView(
                 )
             }
         } else {
-            InformationNonCloseableModalWindow(
-                header = "Načítavanie",
-                body = "Dáta sa načítavajú, prosím počkajte."
-            )
+            LoadingAnimationModalWindow(header = "Načítavanie")
         }
     }
     BackHandler {

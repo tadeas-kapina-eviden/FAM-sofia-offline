@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.R
-import sk.msvvas.sofia.fam.offline.ui.components.InformationNonCloseableModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.LoadingAnimationModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 
 /**
@@ -116,10 +116,7 @@ fun LoginView(
             )
         }
         if (downloadingData) {
-            InformationNonCloseableModalWindow(
-                header = "Načítavanie",
-                body = "Sťahujú sa dáta, prosím počkajte",
-            )
+            LoadingAnimationModalWindow(header = "Načítavanie")
         }
     }
     DisposableEffect(Unit) {

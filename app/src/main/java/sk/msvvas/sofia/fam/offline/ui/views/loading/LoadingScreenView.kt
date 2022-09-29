@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
-import sk.msvvas.sofia.fam.offline.ui.components.InformationNonCloseableModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.LoadingAnimationModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
@@ -56,10 +56,7 @@ fun LoadingScreenView(
             contentScale = ContentScale.FillBounds
         )
         if (!loaded) {
-            InformationNonCloseableModalWindow(
-                header = "Načítavanie",
-                body = "Aplikácia sa načítava, prosím počkajte"
-            )
+            LoadingAnimationModalWindow(header = "Načítavanie")
         } else {
             if (propertyRepository.allData.value!!.isEmpty()) {
                 Column(
