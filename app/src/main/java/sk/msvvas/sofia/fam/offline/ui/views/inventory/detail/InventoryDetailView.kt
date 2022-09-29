@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
@@ -141,7 +142,9 @@ fun InventoryDetailView(
                             onClick = { inventoryDetailViewModel.onFiltersShowClick() },
                             modifier = Modifier
                                 .weight(1f),
-                            text = "Zobraziť filtre"
+                            text = "Zobraziť filtre",
+                            textModifier = Modifier
+                                .padding(vertical = 15.dp)
                         )
                     }
                 }
@@ -378,7 +381,8 @@ private fun RowScope.StatusFilterButton(
         Text(
             text = text,
             maxLines = 1,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

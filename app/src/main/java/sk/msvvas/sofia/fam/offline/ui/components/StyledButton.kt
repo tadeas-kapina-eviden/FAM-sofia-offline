@@ -33,12 +33,14 @@ fun StyledButton(
 fun StyledTextButton(
     onClick: () -> Unit,
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier
 ) {
     StyledButton(onClick = onClick, modifier = modifier) {
         Text(
             text = text,
-            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center)
+            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+            modifier = textModifier
         )
     }
 }

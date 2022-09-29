@@ -104,13 +104,15 @@ fun BoxScope.ConfirmModalWindow(
                 StyledTextButton(
                     modifier = Modifier.weight(1f),
                     onClick = confirmButtonAction,
-                    text = confirmButtonText
+                    text = confirmButtonText,
+                    textModifier = Modifier.padding(vertical = 15.dp)
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
                 StyledTextButton(
                     modifier = Modifier.weight(1f),
                     onClick = declineButtonAction,
-                    text = declineButtonText
+                    text = declineButtonText,
+                    textModifier = Modifier.padding(vertical = 15.dp)
                 )
             }
         })
@@ -164,7 +166,8 @@ fun BoxScope.InformationModalWindow(
                         .fillMaxWidth()
                         .padding(10.dp),
                     onClick = buttonAction,
-                    text = buttonText
+                    text = buttonText,
+                    textModifier = Modifier.padding(vertical = 15.dp)
                 )
             }
         })
