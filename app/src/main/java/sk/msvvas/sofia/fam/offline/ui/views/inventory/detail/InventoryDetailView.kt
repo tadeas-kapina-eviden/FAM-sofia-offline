@@ -31,7 +31,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
 import sk.msvvas.sofia.fam.offline.ui.components.*
@@ -153,7 +155,7 @@ fun InventoryDetailView(
                 item {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth(0.75f)
+                            .fillMaxWidth()
                     ) {
                         StatusFilterButton(
                             isSelected = (statusFilter == 'U'),
@@ -183,6 +185,16 @@ fun InventoryDetailView(
                             count = -1,
                             onClick = {
                                 inventoryDetailViewModel.statusFilterStatus()
+                            }
+                        )
+                        StatusFilterButton(
+                            isSelected = false,
+                            idSelected = R.drawable.sync,
+                            idUnselected = R.drawable.sync,
+                            text = "Synchronizovať",
+                            count = -1,
+                            onClick = {
+                                inventoryDetailViewModel.submitInventoryConfirmModalShow()
                             }
                         )
                     }
@@ -249,18 +261,7 @@ fun InventoryDetailView(
             ) {
                 StyledTextButton(
                     modifier = Modifier
-                        .weight(1f),
-                    textModifier = Modifier
-                        .padding(vertical = 18.dp),
-                    onClick = {
-                        inventoryDetailViewModel.submitInventoryConfirmModalShow()
-                    },
-                    text = "Odoslať inventúru",
-                )
-                Spacer(modifier = Modifier.weight(0.1f))
-                StyledTextButton(
-                    modifier = Modifier
-                        .weight(1f),
+                        .fillMaxWidth(),
                     textModifier = Modifier
                         .padding(vertical = 18.dp),
                     onClick = {
@@ -288,7 +289,7 @@ fun InventoryDetailView(
             ConfirmModalWindow(
                 header = "Vyžaduje sa prihlásenie!",
                 body = "Pre pokračovanie sa musíte prihlásiť.",
-                confirmButtonText = "Pokračovať",
+                confirmButtonText = "Prihlásiť",
                 confirmButtonAction = { inventoryDetailViewModel.toLogin() },
                 declineButtonText = "Zrušiť",
                 declineButtonAction = { inventoryDetailViewModel.requireLoginModalHide() }
@@ -360,32 +361,44 @@ private fun RowScope.StatusFilterButton(
     count: Int,
     onClick: () -> Unit
 ) {
-    Column(
-        Modifier
-            .clickable(enabled = true) {
-                onClick()
-            }
+    Box(
+        modifier = Modifier
             .weight(1f)
-            .padding(8.dp)
+            .padding(vertical = 8.dp)
+
     ) {
-        Box {
+        Column(
+            Modifier
+                .clickable(enabled = true) {
+                    onClick()
+                }
+                .padding(start = 8.dp, top = 8.dp, end = 16.dp)
+        ) {
             Image(
                 painter = painterResource(id = (if (isSelected) idSelected else idUnselected)),
                 contentDescription = ""
             )
-            if (count >= 0) {
-                Text(
-                    text = count.toString(),
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    style = MaterialTheme.typography.body1
-                )
-            }
+            Text(
+                text = text,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.body1.copy(
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
         }
-        Text(
-            text = text,
-            maxLines = 1,
-            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
-            modifier = Modifier.fillMaxWidth()
-        )
+        if (count >= 0) {
+            Text(
+                text = count.toString(),
+                modifier = Modifier.align(Alignment.TopEnd),
+                style = MaterialTheme.typography.body1.copy(
+                    textAlign = TextAlign.End,
+                    fontSize = 12.sp
+                )
+            )
+        }
     }
+
 }
