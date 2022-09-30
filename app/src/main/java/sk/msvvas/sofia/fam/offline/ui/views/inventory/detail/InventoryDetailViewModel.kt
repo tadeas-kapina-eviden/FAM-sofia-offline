@@ -337,15 +337,17 @@ class InventoryDetailViewModel(
         CoroutineScope(Dispatchers.Main).launch {
             _submitInventoryConfirmModalShown.value = false
             _loadingData.value = true
-            val responseStatus = Client.submitProcessedProperties(
-                inventoryRepository.allData.value!!.filter {
-                    it.id == propertyRepository.searchByInventoryIdResult.value!![0].inventoryId
-                }[0],
-                propertyRepository.searchByInventoryIdResult.value!!
-                    .filter {
-                        "SZN".contains(it.recordStatus)
-                    }
-            )
+            val toSendProperties = propertyRepository.searchByInventoryIdResult.value!!
+                .filter {
+                    "SZN".contains(it.recordStatus)
+                }
+            val responseStatus =
+                if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
+                    inventoryRepository.allData.value!!.filter {
+                        it.id == toSendProperties[0].inventoryId
+                    }[0],
+                    toSendProperties
+                ) else HttpStatusCode.Created
             if (responseStatus == HttpStatusCode.Created) {
                 propertyRepository.deleteAll()
                 navController.navigate(Routes.INVENTORY_LIST.value)
