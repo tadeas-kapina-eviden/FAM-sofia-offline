@@ -35,7 +35,8 @@ fun InventoryListItem(
                 onClick()
             }
             .background(
-                color = MaterialTheme.colors.secondary
+                color = MaterialTheme.colors.secondary,
+                shape = RoundedCornerShape(12.dp)
             )
     ) {
         Column(

@@ -6,9 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import sk.msvvas.sofia.fam.offline.data.application.daos.InventoryDao
 import sk.msvvas.sofia.fam.offline.data.application.daos.PropertyDao
+import sk.msvvas.sofia.fam.offline.data.application.daos.ServerUrlDao
 import sk.msvvas.sofia.fam.offline.data.application.daos.codebook.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.ServerUrlEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
 
 
@@ -24,7 +26,8 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
         RoomCodebookEntity::class,
         PlaceCodebookEntity::class,
         LocalityCodebookEntity::class,
-        NoteCodebookEntity::class
+        NoteCodebookEntity::class,
+        ServerUrlEntity::class,
     ],
     version = 1
 )
@@ -64,6 +67,11 @@ abstract class FamOfflineDatabase : RoomDatabase() {
      * @return database instance of note codebook DAO
      */
     abstract fun noteCodebookDao(): NoteCodebookDao
+
+    /**
+     * @return database instance of server url DAO
+     */
+    abstract fun serverUrlDao(): ServerUrlDao
 
     companion object {
         private var INSTANCE: FamOfflineDatabase? = null
