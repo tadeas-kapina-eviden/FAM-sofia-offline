@@ -9,16 +9,20 @@ import androidx.navigation.navArgument
 import sk.msvvas.sofia.fam.offline.data.application.database.FamOfflineDatabase
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.ServerUrlRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.*
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.list.InventoryListViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.loading.LoadingScreenView
+import sk.msvvas.sofia.fam.offline.ui.views.loading.LoadingScreenViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.login.LoginView
 import sk.msvvas.sofia.fam.offline.ui.views.login.LoginViewModel
 import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailView
 import sk.msvvas.sofia.fam.offline.ui.views.property.detail.PropertyDetailViewModel
+import sk.msvvas.sofia.fam.offline.ui.views.setup.SetUpUrlView
+import sk.msvvas.sofia.fam.offline.ui.views.setup.SetUpUrlViewModel
 
 
 /**
@@ -32,6 +36,7 @@ fun Navigation(
 ) {
     val inventoryRepository = InventoryRepository(database.inventoryDao())
     val propertyRepository = PropertyRepository(database.propertyDao())
+    val serverUrlRepository = ServerUrlRepository(database.serverUrlDao())
 
     val allCodebooksRepository = AllCodebooksRepository(
         localityCodebookRepository = LocalityCodebookRepository(database.localityCodebookDao()),
@@ -45,8 +50,11 @@ fun Navigation(
     NavHost(navController = navController, startDestination = Routes.LOADING_SCREEN.value) {
         composable(route = Routes.LOADING_SCREEN.value) {
             LoadingScreenView(
-                propertyRepository = propertyRepository,
-                navController = navController
+                LoadingScreenViewModel(
+                    propertyRepository = propertyRepository,
+                    serverUrlRepository = serverUrlRepository,
+                    navController = navController
+                ),
             )
         }
         composable(route = Routes.addOptionalParametersToRoute(
@@ -202,6 +210,14 @@ fun Navigation(
                     inventoryId = it.arguments?.getString("inventoryId")!!,
                     statusFilter = it.arguments?.getString("statusFilter")!![0],
                     isManual = it.arguments?.getBoolean("isManual")!!,
+                )
+            )
+        }
+        composable(route = Routes.SET_UP_URL.value){
+            SetUpUrlView(
+                SetUpUrlViewModel(
+                    serverUrlRepository = serverUrlRepository,
+                    navController = navController
                 )
             )
         }

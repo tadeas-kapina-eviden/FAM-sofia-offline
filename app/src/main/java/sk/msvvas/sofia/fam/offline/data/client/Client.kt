@@ -40,11 +40,6 @@ import sk.msvvas.sofia.fam.offline.data.transformator.codebook.*
  */
 object Client {
     /**
-     * Domain of back-end server
-     */
-    private const val HOST = "sofiafioritest.iedu.sk"
-
-    /**
      * URL protocol used in requests
      */
     private val PROTOCOL = URLProtocol.HTTPS
@@ -374,7 +369,7 @@ object Client {
         additionalParameters: HashMap<String, String>
     ) {
         builder.let {
-            it.host = HOST
+            it.host = ClientData.host
             it.protocol = PROTOCOL
             it.path(basePath, getPath)
             appendParameters(

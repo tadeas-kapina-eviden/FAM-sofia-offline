@@ -9,7 +9,8 @@ enum class Routes(val value: String) {
     LOGIN_VIEW("login_view"),
     INVENTORY_LIST("inventory_list"),
     INVENTORY_DETAIL("inventory_detail"),
-    PROPERTY_DETAIL("property_detail");
+    PROPERTY_DETAIL("property_detail"),
+    SET_UP_URL("set_up_url");
 
     /**
      * Function to add arguments when calling route

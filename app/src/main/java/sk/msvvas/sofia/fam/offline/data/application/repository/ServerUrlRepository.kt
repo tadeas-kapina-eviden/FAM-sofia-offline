@@ -13,6 +13,10 @@ class ServerUrlRepository(private val serverUrlDao: ServerUrlDao) {
 
     val loaded = MutableLiveData(false)
 
+    init {
+        get()
+    }
+
     fun save(url : String){
         coroutineScope.launch(Dispatchers.IO){
             serverUrlDao.save(ServerUrlEntity(url))
