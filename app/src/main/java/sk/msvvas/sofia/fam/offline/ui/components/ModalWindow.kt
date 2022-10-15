@@ -101,18 +101,16 @@ fun BoxScope.ConfirmModalWindow(
                     .fillMaxWidth()
                     .padding(10.dp),
             ) {
-                StyledTextButton(
+                StyledTextBackButton(
                     modifier = Modifier.weight(1f),
-                    onClick = confirmButtonAction,
-                    text = confirmButtonText,
-                    textModifier = Modifier.padding(vertical = 15.dp)
+                    onClick = declineButtonAction,
+                    text = declineButtonText,
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
                 StyledTextButton(
                     modifier = Modifier.weight(1f),
-                    onClick = declineButtonAction,
-                    text = declineButtonText,
-                    textModifier = Modifier.padding(vertical = 15.dp)
+                    onClick = confirmButtonAction,
+                    text = confirmButtonText
                 )
             }
         })
