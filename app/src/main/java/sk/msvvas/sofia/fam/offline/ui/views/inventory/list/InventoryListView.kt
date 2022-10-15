@@ -40,10 +40,9 @@ fun InventoryListView(
                 text = "Synchronizuj Inventúru",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(15.dp)
+                    .padding(5.dp)
                     .fillMaxWidth(),
                 style = MaterialTheme.typography.h4,
-                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.primary
             )
             LazyColumn(

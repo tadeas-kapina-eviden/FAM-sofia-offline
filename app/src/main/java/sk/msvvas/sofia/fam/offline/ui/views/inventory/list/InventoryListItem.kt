@@ -13,6 +13,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.ui.theme.FAMInventuraOfflineClientTheme
 import java.time.LocalDateTime
@@ -42,21 +43,14 @@ fun InventoryListItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(start = 10.dp)
         ) {
             Text(
-                text = inventory.id,
-                modifier = Modifier
-                    .padding(bottom = 5.dp),
-                style = MaterialTheme.typography.body2,
+                text = inventory.id + " - " + inventory.note,
+                style = MaterialTheme.typography.body2.copy(
+                    lineHeight = 1.sp
+                ),
                 color = MaterialTheme.colors.primary,
-            )
-            Text(
-                text = inventory.note,
-                modifier = Modifier
-                    .padding(bottom = 15.dp),
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.primary
             )
             Text(
                 text = buildAnnotatedString {
@@ -72,8 +66,6 @@ fun InventoryListItem(
                         )
                     )
                 },
-                modifier = Modifier
-                    .padding(bottom = 5.dp),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.primary
             )
@@ -84,8 +76,6 @@ fun InventoryListItem(
                     }
                     append(inventory.createdBy)
                 },
-                modifier = Modifier
-                    .padding(bottom = 5.dp),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.primary
             )
@@ -96,16 +86,16 @@ fun InventoryListItem(
                     }
                     append("${inventory.countProcessed}/${inventory.countAll}")
                 },
-                modifier = Modifier
-                    .padding(bottom = 5.dp),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.primary
             )
         }
     }
-    Spacer(modifier = Modifier
-        .fillMaxWidth()
-        .height(5.dp))
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(2.dp)
+    )
 }
 
 @Preview(showBackground = true)
