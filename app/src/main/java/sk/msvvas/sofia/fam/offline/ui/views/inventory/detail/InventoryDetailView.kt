@@ -384,7 +384,7 @@ private fun RowScope.StatusFilterButton(
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.body1.copy(
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp
+                    fontSize = 10.sp,
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -395,7 +395,7 @@ private fun RowScope.StatusFilterButton(
                 modifier = Modifier.align(Alignment.TopEnd),
                 style = MaterialTheme.typography.body1.copy(
                     textAlign = TextAlign.End,
-                    fontSize = 12.sp
+                    fontSize = 10.sp
                 )
             )
         }

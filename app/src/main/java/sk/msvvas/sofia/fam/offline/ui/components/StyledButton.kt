@@ -40,7 +40,7 @@ fun StyledTextButton(
     StyledButton(onClick = onClick, modifier = modifier) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h4.copy(textAlign = TextAlign.Center),
+            style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
             modifier = textModifier
         )
     }
@@ -79,7 +79,7 @@ fun StyledTextBackButton(
     StyledBackButton(onClick = onClick, modifier = modifier) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h4.copy(textAlign = TextAlign.Center),
+            style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
             modifier = textModifier
         )
     }

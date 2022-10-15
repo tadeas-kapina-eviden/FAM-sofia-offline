@@ -42,7 +42,7 @@ fun InventoryListView(
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth(),
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h5,
                 color = MaterialTheme.colors.primary
             )
             LazyColumn(
