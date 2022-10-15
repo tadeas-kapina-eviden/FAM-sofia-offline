@@ -255,12 +255,9 @@ private fun InputRowStyled(
         modifier = Modifier
             .padding(bottom = 5.dp),
         ratio = 3f / 5f,
-        textFieldTextAlign = TextAlign.End,
+        valueTextAlign = TextAlign.End,
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
-        textFieldColors = TextFieldDefaults.textFieldColors(
-            disabledTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
-            backgroundColor = MaterialTheme.colors.secondary
-        ),
+        valueTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         onClick = onClick,
         labelTextHorizontalPadding = 15.dp
     )

@@ -38,12 +38,8 @@ fun InputRow(
     ratio: Float,
     labelTextAlign: TextAlign = TextAlign.Start,
     labelTextColor: Color = MaterialTheme.colors.primary,
-    textFieldTextAlign: TextAlign = TextAlign.Start,
-    textFieldColors: TextFieldColors = TextFieldDefaults.textFieldColors(
-        disabledTextColor = MaterialTheme.colors.primary,
-        textColor = MaterialTheme.colors.primary,
-        backgroundColor = MaterialTheme.colors.secondary
-    ),
+    valueTextAlign: TextAlign = TextAlign.Start,
+    valueTextColor: Color = MaterialTheme.colors.primary,
     labelTextHorizontalPadding: Dp = 15.dp,
     onClick: () -> Unit
 ) {
@@ -73,16 +69,15 @@ fun InputRow(
             style = MaterialTheme.typography.body1,
             color = labelTextColor
         )
-        TextField(
-            value = value,
-            enabled = false,
-            onValueChange = {},
+        Text(
+            text = value,
             modifier = Modifier
                 .weight(1f)
-                .drawWithLeftLine(width = 6f, color = MaterialTheme.colors.primary),
-            colors = textFieldColors,
-            textStyle = MaterialTheme.typography.body1
-                .copy(textAlign = textFieldTextAlign),
+                .drawWithLeftLine(width = 6f, color = MaterialTheme.colors.primary)
+                .padding(horizontal = 15.dp),
+            color = valueTextColor,
+            style = MaterialTheme.typography.body1
+                .copy(textAlign = valueTextAlign),
         )
     }
 }
@@ -103,7 +98,7 @@ fun InputRowPreview() {
                     width = 1f,
                     color = MaterialTheme.colors.primary
                 ),
-            ratio = 2f / 5f,
+            ratio = 3f / 5f,
             labelTextAlign = TextAlign.End,
             labelTextHorizontalPadding = 15.dp,
             onClick = {}
