@@ -151,7 +151,7 @@ fun CodebookSelectionView(
             }
         }
         Row(modifier = Modifier.fillMaxWidth()) {
-            StyledTextButton(
+            StyledTextBackButton(
                 onClick = {
                     onDelete()
                 },
@@ -164,7 +164,7 @@ fun CodebookSelectionView(
                 onClick = {
                     onSelect(filterValue)
                 },
-                text = "OK",
+                text = "Potvrdiť",
                 modifier = Modifier
                     .weight(1f)
             )

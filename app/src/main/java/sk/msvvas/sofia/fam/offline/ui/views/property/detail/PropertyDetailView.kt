@@ -192,7 +192,7 @@ fun PropertyDetailView(
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
                     if ("SZN".contains(property.recordStatus)) {
-                        StyledTextButton(
+                        StyledTextBackButton(
                             onClick = { propertyDetailViewModel.rollback() },
                             modifier = Modifier.weight(1f),
                             text = "Vráť na originál",
