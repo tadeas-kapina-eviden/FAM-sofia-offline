@@ -79,7 +79,8 @@ fun InventoryDetailFiltersComponent(
         ) {
             StyledTextButton(
                 onClick = { inventoryDetailViewModel.runFilters() },
-                text = "Spustiť filtre"
+                text = "Vymaž filtre",
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -94,8 +95,7 @@ private fun InputRowStyled(
     InputRow(
         label = label,
         value = value,
-        modifier = Modifier
-            .padding(vertical = 5.dp),
+        modifier = Modifier.padding(1.dp),
         ratio = (2f / 3f),
         labelTextAlign = TextAlign.End,
         labelTextHorizontalPadding = 15.dp,

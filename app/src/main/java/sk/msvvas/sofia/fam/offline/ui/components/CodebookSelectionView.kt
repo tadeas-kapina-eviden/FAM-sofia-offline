@@ -135,14 +135,14 @@ fun CodebookSelectionView(
                     Text(
                         highlightSelectedText(filterValue, idGetter(item)),
                         modifier = Modifier
-                            .weight(2f),
+                            .weight(3f),
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.primary
                     )
                     Text(
                         highlightSelectedText(filterValue, descriptionGetter(item)),
                         modifier = Modifier
-                            .weight(5f),
+                            .weight(4f),
                         textAlign = TextAlign.End,
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.primary

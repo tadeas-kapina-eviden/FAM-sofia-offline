@@ -1,6 +1,7 @@
 package sk.msvvas.sofia.fam.offline.ui.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -40,7 +41,7 @@ fun StyledTextButton(
     StyledButton(onClick = onClick, modifier = modifier) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
             modifier = textModifier
         )
     }
@@ -62,7 +63,8 @@ fun StyledBackButton(
         ),
         modifier = modifier.border(
             width = 1.dp,
-            color = MaterialTheme.colors.primary
+            color = MaterialTheme.colors.primary,
+            shape = RoundedCornerShape(4f)
         )
     ) {
         content.invoke()
@@ -79,7 +81,7 @@ fun StyledTextBackButton(
     StyledBackButton(onClick = onClick, modifier = modifier) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
             modifier = textModifier
         )
     }

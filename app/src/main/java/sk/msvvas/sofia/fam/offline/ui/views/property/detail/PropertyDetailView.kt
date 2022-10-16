@@ -253,8 +253,8 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier
-            .padding(bottom = 5.dp),
-        ratio = 3f / 5f,
+            .padding(bottom = 1.dp),
+        ratio = 3f / 4f,
         valueTextAlign = TextAlign.End,
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         valueTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
