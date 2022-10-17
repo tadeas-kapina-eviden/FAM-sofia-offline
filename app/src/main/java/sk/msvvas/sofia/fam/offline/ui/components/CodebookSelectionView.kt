@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,6 +62,10 @@ fun CodebookSelectionView(
         })
     }
 
+    var focusRequester by remember {
+        mutableStateOf(FocusRequester())
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,7 +107,8 @@ fun CodebookSelectionView(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 5.dp, vertical = 5.dp),
+                .padding(horizontal = 5.dp, vertical = 5.dp)
+                .focusRequester(focusRequester),
             keyboardActions = KeyboardActions(
                 onDone = {
                     onSelect(filterValue)
@@ -170,6 +177,11 @@ fun CodebookSelectionView(
             )
         }
     }
+
+    LaunchedEffect(Unit){
+        focusRequester.requestFocus()
+    }
+
     BackHandler {
         onClose()
     }

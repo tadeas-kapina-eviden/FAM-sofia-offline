@@ -92,7 +92,7 @@ fun StatusRow(
                 .clickable {
                     onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
                 }
-                .padding(15.dp)
+                .padding(1.dp)
         ) {
             Text(
                 text = localityRoomCountPair.locality,
