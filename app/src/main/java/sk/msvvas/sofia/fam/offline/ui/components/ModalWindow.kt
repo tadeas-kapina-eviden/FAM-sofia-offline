@@ -165,7 +165,7 @@ fun BoxScope.InformationModalWindow(
                         .padding(10.dp),
                     onClick = buttonAction,
                     text = buttonText,
-                    textModifier = Modifier.padding(vertical = 15.dp)
+                    textModifier = Modifier.padding(vertical = 10.dp)
                 )
             }
         })

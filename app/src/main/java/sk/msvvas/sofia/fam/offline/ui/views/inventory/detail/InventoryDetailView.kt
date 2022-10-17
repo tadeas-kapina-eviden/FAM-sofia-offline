@@ -3,6 +3,7 @@ package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -93,19 +94,17 @@ fun InventoryDetailView(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxWidth(0.85f).align(Alignment.Center)
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth(0.85f)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 5.dp)
                     .weight(1f)
             ) {
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top = 15.dp)
                     ) {
                         TextField(
                             value = codeFilter,
@@ -258,13 +257,12 @@ fun InventoryDetailView(
                 }
             }
             Row(
-                Modifier.fillMaxWidth()
+                Modifier
+                    .padding(bottom = 15.dp)
             ) {
                 StyledTextButton(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    textModifier = Modifier
-                        .padding(vertical = 18.dp),
                     onClick = {
                         inventoryDetailViewModel.onSelectProperty(-1)
                     },

@@ -62,7 +62,7 @@ fun CodebookSelectionView(
         })
     }
 
-    var focusRequester by remember {
+    val focusRequester by remember {
         mutableStateOf(FocusRequester())
     }
 

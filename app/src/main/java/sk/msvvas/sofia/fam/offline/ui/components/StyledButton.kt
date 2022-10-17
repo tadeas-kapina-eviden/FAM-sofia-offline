@@ -1,6 +1,7 @@
 package sk.msvvas.sofia.fam.offline.ui.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -43,6 +44,7 @@ fun StyledTextButton(
             text = text,
             style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
             modifier = textModifier
+                .padding(2.dp)
         )
     }
 }

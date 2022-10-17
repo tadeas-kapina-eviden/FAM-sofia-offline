@@ -52,14 +52,14 @@ fun InventoryDetailFiltersComponent(
             Text(
                 text = "Sken bez detailu položky:",
                 modifier = Modifier
-                    .weight(3f)
+                    .weight(1f)
                     .padding(3.dp),
                 style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.End),
                 color = MaterialTheme.colors.primary
             )
             Column(
                 modifier = Modifier
-                    .weight(4f)
+                    .weight(1f)
                     .align(Alignment.CenterVertically)
             ) {
                 Checkbox(
@@ -68,7 +68,8 @@ fun InventoryDetailFiltersComponent(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     colors = CheckboxDefaults.colors(
                         checkedColor = MaterialTheme.colors.primary,
-                        uncheckedColor = MaterialTheme.colors.primary
+                        uncheckedColor = MaterialTheme.colors.primary,
+                        checkmarkColor = MaterialTheme.colors.secondary
                     )
                 )
             }
@@ -96,7 +97,7 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier.padding(vertical = 1.dp),
-        ratio = (3f / 4f),
+        ratio = (1f),
         labelTextAlign = TextAlign.End,
         labelTextHorizontalPadding = 15.dp,
         onClick = onClick
