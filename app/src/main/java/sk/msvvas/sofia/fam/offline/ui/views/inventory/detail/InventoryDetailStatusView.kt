@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -85,6 +86,7 @@ fun StatusRow(
             color = MaterialTheme.colors.primary,
             shape = RoundedCornerShape(8.dp)
         )
+        .background(color = MaterialTheme.colors.secondary, shape = RoundedCornerShape(8.dp))
     ) {
         Row(
             modifier = Modifier
@@ -92,7 +94,7 @@ fun StatusRow(
                 .clickable {
                     onSelect(localityRoomCountPair.locality, localityRoomCountPair.room)
                 }
-                .padding(1.dp)
+                .padding(top = 1.dp, bottom = 1.dp, start = 15.dp)
         ) {
             Text(
                 text = localityRoomCountPair.locality,

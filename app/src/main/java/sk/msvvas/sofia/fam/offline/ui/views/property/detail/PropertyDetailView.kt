@@ -2,7 +2,9 @@ package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -252,8 +254,16 @@ private fun InputRowStyled(
     InputRow(
         label = label,
         value = value,
-        modifier = Modifier
-            .padding(bottom = 1.dp),
+        modifier = if (enabled) {
+            Modifier
+                .padding(bottom = 1.dp)
+                .background(
+                    color = MaterialTheme.colors.secondary,
+                    shape = RoundedCornerShape(8.dp)
+                )
+        } else {
+            Modifier.padding(bottom = 1.dp)
+        },
         ratio = 3f / 4f,
         valueTextAlign = TextAlign.End,
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,

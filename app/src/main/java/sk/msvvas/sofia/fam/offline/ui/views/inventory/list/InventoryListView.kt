@@ -77,7 +77,7 @@ fun InventoryListView(
         if (exitModalShown) {
             ConfirmModalWindow(
                 header = "Opúšťate aplikáciu...",
-                body = "Naozaj chcete opustiť aplikáciue?",
+                body = "Naozaj chcete opustiť aplikáciu?",
                 confirmButtonText = "Áno",
                 confirmButtonAction = {
                     activity?.finish()

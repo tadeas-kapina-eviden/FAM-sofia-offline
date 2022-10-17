@@ -97,7 +97,8 @@ fun InventoryDetailView(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.85f)
+                    .align(Alignment.CenterHorizontally)
                     .padding(top = 5.dp)
                     .weight(1f)
             ) {
@@ -301,7 +302,7 @@ fun InventoryDetailView(
         if (exitModalShown) {
             ConfirmModalWindow(
                 header = "Opúšťate aplikáciu...",
-                body = "Naozaj chcete opustiť aplikáciue?",
+                body = "Naozaj chcete opustiť aplikáciu?",
                 confirmButtonText = "Áno",
                 confirmButtonAction = {
                     activity?.finish()

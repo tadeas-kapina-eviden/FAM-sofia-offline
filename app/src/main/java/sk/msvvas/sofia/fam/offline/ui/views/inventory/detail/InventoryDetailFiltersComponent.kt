@@ -30,7 +30,7 @@ fun InventoryDetailFiltersComponent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
+            .padding(vertical = 5.dp)
     ) {
         InputRowStyled(
             label = "Lokalita:",
@@ -95,7 +95,7 @@ private fun InputRowStyled(
     InputRow(
         label = label,
         value = value,
-        modifier = Modifier.padding(1.dp),
+        modifier = Modifier.padding(vertical = 1.dp),
         ratio = (3f / 4f),
         labelTextAlign = TextAlign.End,
         labelTextHorizontalPadding = 15.dp,
