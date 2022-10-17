@@ -52,13 +52,13 @@ fun PropertyListItem(
                 text = property.textMainNumber,
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.primary,
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp)
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
             Text(
                 text = property.propertyNumber + "/" + property.subNumber,
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.primaryVariant,
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp)
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
         Text(

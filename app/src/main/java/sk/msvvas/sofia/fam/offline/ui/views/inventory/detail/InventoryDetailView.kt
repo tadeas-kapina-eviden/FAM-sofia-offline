@@ -98,7 +98,7 @@ fun InventoryDetailView(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 5.dp)
+                    .padding(top = 5.dp)
                     .weight(1f)
             ) {
                 item {
@@ -143,7 +143,7 @@ fun InventoryDetailView(
                             onClick = { inventoryDetailViewModel.onFiltersShowClick() },
                             modifier = Modifier
                                 .weight(1f),
-                            text = "Zobraziť filtre",
+                            text = if (!isFiltersShow) "Zobraziť filtre" else "Skryť filtre",
                             textModifier = Modifier
                                 .padding(vertical = 8.dp)
                         )
@@ -210,9 +210,9 @@ fun InventoryDetailView(
                     ) {
                         Text(
                             text = "Inv. $inventoryId"
-                                    + if (localityFilter.isNotEmpty()) "Lok. $localityFilter" else ""
-                                    + if (roomFilter.isNotEmpty()) "Miest. $roomFilter" else ""
-                                    + if (userFilter.isNotEmpty()) "Os. $userFilter" else "",
+                                    + if (localityFilter.isNotEmpty()) ", Lok. $localityFilter" else ""
+                                    + if (roomFilter.isNotEmpty()) ", Miest. $roomFilter" else ""
+                                    + if (userFilter.isNotEmpty()) ", Os. $userFilter" else "",
                             modifier = Modifier
                                 .padding(horizontal = 15.dp, vertical = 1.dp),
                             color = MaterialTheme.colors.primary,

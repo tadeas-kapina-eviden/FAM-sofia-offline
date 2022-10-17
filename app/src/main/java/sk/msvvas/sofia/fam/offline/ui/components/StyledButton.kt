@@ -62,9 +62,9 @@ fun StyledBackButton(
             disabledContentColor = MaterialTheme.colors.primary
         ),
         modifier = modifier.border(
-            width = 1.dp,
+            width = 2.dp,
             color = MaterialTheme.colors.primary,
-            shape = RoundedCornerShape(4f)
+            shape = RoundedCornerShape(8f)
         )
     ) {
         content.invoke()

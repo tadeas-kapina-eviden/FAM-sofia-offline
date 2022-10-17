@@ -183,8 +183,10 @@ class InventoryDetailViewModel(
         _codeFilterRoom.value = null
     }
 
-    fun runFilters() {
-        filterOutValues()
+    fun deleteFilters() {
+        _localityFilter.value = ""
+        _roomFilter.value = ""
+        _userFilter.value = ""
     }
 
     fun filterOutValues() {

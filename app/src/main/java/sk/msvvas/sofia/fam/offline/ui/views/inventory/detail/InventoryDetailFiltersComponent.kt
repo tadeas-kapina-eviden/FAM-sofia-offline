@@ -30,7 +30,7 @@ fun InventoryDetailFiltersComponent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp)
+            .padding(5.dp)
     ) {
         InputRowStyled(
             label = "Lokalita:",
@@ -47,19 +47,20 @@ fun InventoryDetailFiltersComponent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp)
+                .padding(bottom = 5.dp)
         ) {
             Text(
                 text = "Sken bez detailu položky:",
                 modifier = Modifier
-                    .weight(2f)
-                    .padding(15.dp),
+                    .weight(3f)
+                    .padding(3.dp),
                 style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.End),
                 color = MaterialTheme.colors.primary
             )
             Column(
                 modifier = Modifier
-                    .weight(3f)
+                    .weight(4f)
+                    .align(Alignment.CenterVertically)
             ) {
                 Checkbox(
                     checked = scanWithoutDetail,
@@ -75,10 +76,9 @@ fun InventoryDetailFiltersComponent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp)
         ) {
             StyledTextButton(
-                onClick = { inventoryDetailViewModel.runFilters() },
+                onClick = { inventoryDetailViewModel.deleteFilters() },
                 text = "Vymaž filtre",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -96,7 +96,7 @@ private fun InputRowStyled(
         label = label,
         value = value,
         modifier = Modifier.padding(1.dp),
-        ratio = (2f / 3f),
+        ratio = (3f / 4f),
         labelTextAlign = TextAlign.End,
         labelTextHorizontalPadding = 15.dp,
         onClick = onClick
