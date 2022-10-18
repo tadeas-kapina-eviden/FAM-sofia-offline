@@ -46,7 +46,7 @@ fun PropertyListItem(
     ) {
         Column(
             modifier = Modifier
-                .weight(3f)
+                .weight(4f)
         ) {
             Text(
                 text = property.textMainNumber,
@@ -73,7 +73,7 @@ fun PropertyListItem(
                 }
             },
             modifier = Modifier
-                .weight(2f)
+                .weight(3f)
                 .padding(5.dp),
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.primaryVariant,

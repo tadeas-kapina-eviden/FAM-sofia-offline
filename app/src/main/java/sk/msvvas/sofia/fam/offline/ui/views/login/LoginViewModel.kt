@@ -26,13 +26,13 @@ class LoginViewModel(
     private val submitInventory: Boolean
 ) : ViewModel() {
 
-    private val _loginName = MutableLiveData("")
+    private val _loginName = MutableLiveData("v_developer")
     val loginName: LiveData<String> = _loginName
 
-    private val _password = MutableLiveData("")
+    private val _password = MutableLiveData("Vyvojar.123")
     val password: LiveData<String> = _password
 
-    private val _client = MutableLiveData("")
+    private val _client = MutableLiveData("110")
     val client: LiveData<String> = _client
 
     private val _lastError = MutableLiveData("")

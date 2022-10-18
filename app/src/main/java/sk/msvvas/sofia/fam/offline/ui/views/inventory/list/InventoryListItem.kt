@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -105,7 +106,7 @@ fun InventoryListItemPreview() {
         InventoryListItem(
             InventoryEntity(
                 id = "350",
-                note = "UCJ",
+                note = "UCJ nejaky fakt ze extremne dlhy popis na skusku",
                 createdAt = LocalDateTime.now()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                 createdBy = "110SEVCOVA",

@@ -41,13 +41,14 @@ fun InputRow(
     valueTextAlign: TextAlign = TextAlign.Start,
     valueTextColor: Color = MaterialTheme.colors.primary,
     labelTextHorizontalPadding: Dp = 15.dp,
+    backgroundColor: Color = MaterialTheme.colors.secondary,
     onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colors.secondary,
+                color = backgroundColor,
                 shape = RoundedCornerShape(8.dp)
             )
             .border(

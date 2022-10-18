@@ -44,7 +44,6 @@ fun StyledTextButton(
             text = text,
             style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
             modifier = textModifier
-                .padding(2.dp)
         )
     }
 }

@@ -29,8 +29,6 @@ fun InventoryDetailStatusView(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
-
         ) {
             Text(
                 text = "Lokalita",
@@ -125,16 +123,16 @@ fun countLocalityRoomPairs(properties: List<PropertyEntity>): List<LocalityRoomC
     val result = mutableListOf<LocalityRoomCountPair>()
     properties.forEach {
         val pair = LocalityRoomCountPair(
-            if (it.recordStatus == 'Z' || it.recordStatus == 'S') it.localityNew else it.locality,
-            if (it.recordStatus == 'Z' || it.recordStatus == 'S') it.roomNew else it.room,
+            if ("ZSN".contains(it.recordStatus)) it.localityNew else it.locality,
+            if ("ZSN".contains(it.recordStatus)) it.roomNew else it.room,
         )
         if (pair in result) {
             val toAdd = result[result.indexOf(pair)]
             toAdd.all++
-            toAdd.processed += if (it.recordStatus == 'Z' || it.recordStatus == 'S') 1 else 0
+            toAdd.processed += if ("ZSN".contains(it.recordStatus)) 1 else 0
         } else {
             pair.all = 1
-            pair.processed = if (it.recordStatus == 'Z' || it.recordStatus == 'S') 1 else 0
+            pair.processed = if ("ZSN".contains(it.recordStatus)) 1 else 0
             result.add(pair)
         }
     }

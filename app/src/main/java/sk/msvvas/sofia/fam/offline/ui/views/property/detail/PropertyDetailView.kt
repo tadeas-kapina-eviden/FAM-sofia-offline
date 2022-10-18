@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
@@ -269,6 +270,7 @@ private fun InputRowStyled(
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         valueTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         onClick = onClick,
+        backgroundColor = if(enabled) MaterialTheme.colors.secondary else Color.Transparent,
         labelTextHorizontalPadding = 15.dp
     )
 }

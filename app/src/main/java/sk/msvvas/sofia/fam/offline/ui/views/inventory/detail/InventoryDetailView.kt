@@ -94,7 +94,9 @@ fun InventoryDetailView(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxWidth(0.85f).align(Alignment.Center)
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .align(Alignment.Center)
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -326,9 +328,9 @@ fun InventoryDetailView(
                 lastFilterValue = codebookSelectionViewLastValue,
                 idGetter = codebookSelectionViewIdGetter,
                 descriptionGetter = codebookSelectionViewDescriptionGetter,
-                onSelect = selectCodebook,
-                onClose = { inventoryDetailViewModel.closeCodebookSelectionView() },
-                onDelete = deleteCodebook
+                onSelect = { selectCodebook(it); focusRequester.requestFocus() },
+                onClose = { inventoryDetailViewModel.closeCodebookSelectionView(); focusRequester.requestFocus() },
+                onDelete = { deleteCodebook(); focusRequester.requestFocus() }
             )
         }
 
@@ -347,7 +349,6 @@ fun InventoryDetailView(
     }
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        focusRequester.captureFocus()
     }
 }
 
