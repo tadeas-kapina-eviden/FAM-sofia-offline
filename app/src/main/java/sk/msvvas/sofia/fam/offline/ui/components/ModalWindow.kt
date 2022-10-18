@@ -212,7 +212,8 @@ fun BoxScope.InformationNonCloseableModalWindow(
 
 @Composable
 fun BoxScope.LoadingAnimationModalWindow(
-    header: String
+    header: String,
+    text: String
 ) {
     ModalWindow(
         header = {
@@ -231,12 +232,21 @@ fun BoxScope.LoadingAnimationModalWindow(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(50.dp)
+                    .drawWithBottomLine(width = 1f, color = MaterialTheme.colors.primary)
             ) {
-                Column(modifier = Modifier.align(Alignment.Center)) {
+                Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 10.dp)) {
                     LoadingAnimation()
                 }
             }
+        },
+        footer = {
+            Text(
+                text = text,
+                Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+            )
         }
     )
 }

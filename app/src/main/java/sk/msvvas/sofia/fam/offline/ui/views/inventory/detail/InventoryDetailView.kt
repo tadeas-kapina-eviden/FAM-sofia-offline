@@ -3,7 +3,6 @@ package sk.msvvas.sofia.fam.offline.ui.views.inventory.detail
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -86,7 +85,11 @@ fun InventoryDetailView(
         false
     )
 
+    val loadingState by inventoryDetailViewModel.loadingState.observeAsState("")
+
+
     val activity = (LocalContext.current as? Activity)
+
 
     val focusRequester = remember {
         FocusRequester()
@@ -139,8 +142,9 @@ fun InventoryDetailView(
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent
                             ),
-                            textStyle = MaterialTheme.typography.body1
-                        )
+                            textStyle = MaterialTheme.typography.body1,
+
+                            )
                         StyledTextButton(
                             onClick = { inventoryDetailViewModel.onFiltersShowClick() },
                             modifier = Modifier
@@ -297,7 +301,7 @@ fun InventoryDetailView(
             )
         }
         if (loadingData) {
-            LoadingAnimationModalWindow(header = "Načítavanie")
+            LoadingAnimationModalWindow(header = "Načítavanie", loadingState)
         }
         if (exitModalShown) {
             ConfirmModalWindow(

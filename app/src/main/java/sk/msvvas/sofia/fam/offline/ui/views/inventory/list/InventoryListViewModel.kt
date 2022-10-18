@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
@@ -32,6 +33,9 @@ class InventoryListViewModel(
     private val _downloadingData = MutableLiveData(false)
     val downloadingData: LiveData<Boolean> = _downloadingData
 
+    private val _loadingState = MutableLiveData("")
+    val loadingState: LiveData<String> = _loadingState
+
     private val _exitModalShown = MutableLiveData(false)
     val exitModalShown: LiveData<Boolean> = _exitModalShown
 
@@ -44,11 +48,17 @@ class InventoryListViewModel(
         CoroutineScope(Dispatchers.Main).launch {
             _downloadingData.value = true
             _isDownloadConfirmShown.value = false
+            _loadingState.value = "Sťahujú sa inventúry... "
             propertyRepository.saveAll(Client.getPropertiesByInventoryID(_selectedInventoryId.value!!))
+            _loadingState.value = "Sťahujú sa číselníky lokácií... "
             allCodebooksRepository.saveAllLocalities(Client.getLocalityCodebooks())
+            _loadingState.value = "Sťahujú sa číselníky miestností... "
             allCodebooksRepository.saveAllRooms(Client.getRoomCodebooks())
+            _loadingState.value = "Sťahujú sa číselníky pracovísk... "
             allCodebooksRepository.saveAllPlaces(Client.getPlaceCodebooks())
+            _loadingState.value = "Sťahujú sa číselníky používateľov... "
             allCodebooksRepository.saveAllUsers(Client.getUserCodebooks())
+            _loadingState.value = "Sťahujú sa číselníky fixných poznámok... "
             allCodebooksRepository.saveAllNotes(Client.getNoteCodebooks())
             navController.navigate(Routes.INVENTORY_DETAIL.withArgs(_selectedInventoryId.value!!))
         }

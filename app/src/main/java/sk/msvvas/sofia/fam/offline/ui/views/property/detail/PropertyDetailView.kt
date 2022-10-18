@@ -237,7 +237,7 @@ fun PropertyDetailView(
                 )
             }
         } else {
-            LoadingAnimationModalWindow(header = "Načítavanie")
+            LoadingAnimationModalWindow(header = "Načítavanie", "Načítava sa majetok...")
         }
     }
     BackHandler {

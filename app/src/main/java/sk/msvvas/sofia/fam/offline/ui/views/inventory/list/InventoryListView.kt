@@ -27,6 +27,7 @@ fun InventoryListView(
     val selectedInventoryId by inventoryListViewModel.selectedInventoryId.observeAsState("")
     val isDownloadConfirmShown by inventoryListViewModel.isDownloadConfirmShown.observeAsState(false)
     val downloadingData by inventoryListViewModel.downloadingData.observeAsState(false)
+    val loadingState by inventoryListViewModel.loadingState.observeAsState("")
     val exitModalShown by inventoryListViewModel.exitModalShown.observeAsState(false)
 
     val activity = (LocalContext.current as? Activity)
@@ -61,7 +62,7 @@ fun InventoryListView(
             }
         }
         if (downloadingData) {
-            LoadingAnimationModalWindow(header = "Načítavanie")
+            LoadingAnimationModalWindow(header = "Načítavanie", loadingState)
         }
         if (isDownloadConfirmShown) {
             ConfirmModalWindow(

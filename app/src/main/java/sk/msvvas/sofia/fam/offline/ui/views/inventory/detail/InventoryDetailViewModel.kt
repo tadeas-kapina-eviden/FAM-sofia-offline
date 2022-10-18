@@ -110,6 +110,10 @@ class InventoryDetailViewModel(
     private val _loadingData = MutableLiveData(false)
     val loadingData: LiveData<Boolean> = _loadingData
 
+    private val _loadingState = MutableLiveData("")
+    val loadingState: LiveData<String> = _loadingState
+
+
     init {
         if (!submitInventory) {
             propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
@@ -343,10 +347,12 @@ class InventoryDetailViewModel(
         CoroutineScope(Dispatchers.Main).launch {
             _submitInventoryConfirmModalShown.value = false
             _loadingData.value = true
+            _loadingState.value = "Spracúvajú sa dáta..."
             val toSendProperties = propertyRepository.searchByInventoryIdResult.value!!
                 .filter {
                     "SZN".contains(it.recordStatus)
                 }
+            _loadingState.value = "Odosielajú sa dáta..."
             val responseStatus =
                 if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
                     inventoryRepository.allData.value!!.filter {
@@ -354,7 +360,9 @@ class InventoryDetailViewModel(
                     }[0],
                     toSendProperties
                 ) else HttpStatusCode.Created
+            _loadingState.value = "Dáta boli odoslané..."
             if (responseStatus == HttpStatusCode.Created) {
+                _loadingState.value = "Resetuje sa lokálna databáza..."
                 propertyRepository.deleteAll()
                 navController.navigate(Routes.INVENTORY_LIST.value)
             } else {

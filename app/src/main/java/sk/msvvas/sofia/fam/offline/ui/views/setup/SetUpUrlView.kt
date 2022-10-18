@@ -99,7 +99,7 @@ fun SetUpUrlView(
             )
         }
         if (savingData) {
-            LoadingAnimationModalWindow(header = "Načítavanie")
+            LoadingAnimationModalWindow(header = "Načítavanie", "Ukladajú sa dáta...")
         }
     }
     DisposableEffect(Unit) {

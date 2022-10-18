@@ -49,7 +49,6 @@ fun InventoryListItem(
             Text(
                 text = inventory.id + " - " + inventory.note,
                 style = MaterialTheme.typography.body2.copy(
-                    lineHeight = 1.sp
                 ),
                 color = MaterialTheme.colors.primary,
             )

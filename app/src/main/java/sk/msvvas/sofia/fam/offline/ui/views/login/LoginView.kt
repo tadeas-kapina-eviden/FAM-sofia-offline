@@ -116,7 +116,7 @@ fun LoginView(
             )
         }
         if (downloadingData) {
-            LoadingAnimationModalWindow(header = "Načítavanie")
+            LoadingAnimationModalWindow(header = "Načítavanie", text = "Prihlasuje sa na server...")
         }
     }
     DisposableEffect(Unit) {
