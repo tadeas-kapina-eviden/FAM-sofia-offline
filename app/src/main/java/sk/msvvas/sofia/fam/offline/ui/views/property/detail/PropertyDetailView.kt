@@ -77,7 +77,7 @@ fun PropertyDetailView(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondary,
+                            backgroundColor = Color.Transparent,
                             textColor = MaterialTheme.colors.primary
                         ),
                         textStyle = MaterialTheme.typography.body1
@@ -89,125 +89,126 @@ fun PropertyDetailView(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.secondary,
+                            backgroundColor = Color.Transparent,
                             textColor = MaterialTheme.colors.primary
                         ),
                         textStyle = MaterialTheme.typography.body1
                             .copy(textAlign = TextAlign.End)
                     )
-                    InputRowStyled(
-                        label = "Sériové číslo",
-                        value = property.serialNumber,
-                        onClick = {}
-                    )
-                    InputRowStyled(
-                        label = "Invent. číslo",
-                        value = property.inventNumber,
-                        onClick = {}
-                    )
-                    InputRowStyled(
-                        label = "Závod",
-                        value = property.werks,
-                        onClick = {}
-                    )
-                    InputRowStyled(
-                        label = "Lokalita",
-                        value = locality,
-                        onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() },
-                        enabled = true
-                    )
-                    InputRowStyled(
-                        label = "Miestnosť",
-                        value = room,
-                        onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() },
-                        enabled = true
-                    )
-                    InputRowStyled(
-                        label = "z. Os.",
-                        value = user,
-                        onClick = { propertyDetailViewModel.showUserCodebookSelectionView() },
-                        enabled = true
-                    )
-                    InputRowStyled(
-                        label = "Stredisko",
-                        value = property.center,
-                        onClick = {}
-                    )
-                    InputRowStyled(
-                        label = "Pracovisko",
-                        value = place,
-                        onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() },
-                        enabled = true
-                    )
-                    InputRowStyled(
-                        label = "Poznámka",
-                        value = fixedNote,
-                        onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() },
-                        enabled = true
-                    )
-                    InputRowStyled(
-                        label = "Vlastná pozn.",
-                        value = variableNote,
-                        onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() },
-                        enabled = true
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                horizontal = 20.dp
-                            )
-                    ) {
-                        Row(modifier = Modifier.weight(1f)) {
-                            Checkbox(
-                                checked = propertyDetailViewModel.isManual,
-                                onCheckedChange = {},
-                                enabled = false,
-                                colors = CheckboxDefaults.colors(
-                                    disabledColor = MaterialTheme.colors.primaryVariant
+                    Column(modifier = Modifier.fillMaxWidth(0.85f).align(Alignment.CenterHorizontally)) {
+                        InputRowStyled(
+                            label = "Sériové číslo",
+                            value = property.serialNumber,
+                            onClick = {}
+                        )
+                        InputRowStyled(
+                            label = "Invent. číslo",
+                            value = property.inventNumber,
+                            onClick = {}
+                        )
+                        InputRowStyled(
+                            label = "Závod",
+                            value = property.werks,
+                            onClick = {}
+                        )
+                        InputRowStyled(
+                            label = "Lokalita",
+                            value = locality,
+                            onClick = { propertyDetailViewModel.showLocationCodebookSelectionView() },
+                            enabled = true
+                        )
+                        InputRowStyled(
+                            label = "Miestnosť",
+                            value = room,
+                            onClick = { propertyDetailViewModel.showRoomCodebookSelectionView() },
+                            enabled = true
+                        )
+                        InputRowStyled(
+                            label = "z. Os.",
+                            value = user,
+                            onClick = { propertyDetailViewModel.showUserCodebookSelectionView() },
+                            enabled = true
+                        )
+                        InputRowStyled(
+                            label = "Stredisko",
+                            value = property.center,
+                            onClick = {}
+                        )
+                        InputRowStyled(
+                            label = "Pracovisko",
+                            value = place,
+                            onClick = { propertyDetailViewModel.showPlaceCodebookSelectionView() },
+                            enabled = true
+                        )
+                        InputRowStyled(
+                            label = "Poznámka",
+                            value = fixedNote,
+                            onClick = { propertyDetailViewModel.showFixedNoteCodebookSelectionView() },
+                            enabled = true
+                        )
+                        InputRowStyled(
+                            label = "Vlastná pozn.",
+                            value = variableNote,
+                            onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() },
+                            enabled = true
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = 20.dp
                                 )
-                            )
-                            Text(
-                                text = "Manuálny",
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                color = MaterialTheme.colors.primaryVariant,
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
-                        Row(modifier = Modifier.weight(1f)) {
-                            Checkbox(
-                                checked = propertyDetailViewModel.isNew,
-                                onCheckedChange = {},
-                                enabled = false,
-                                colors = CheckboxDefaults.colors(
-                                    disabledColor = MaterialTheme.colors.primaryVariant
+                        ) {
+                            Row(modifier = Modifier.weight(1f)) {
+                                Checkbox(
+                                    checked = propertyDetailViewModel.isManual,
+                                    onCheckedChange = {},
+                                    enabled = false,
+                                    colors = CheckboxDefaults.colors(
+                                        disabledColor = MaterialTheme.colors.primaryVariant
+                                    )
                                 )
-                            )
-                            Text(
-                                text = "Nový",
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                color = MaterialTheme.colors.primaryVariant,
-                                style = MaterialTheme.typography.body1
+                                Text(
+                                    text = "Manuálny",
+                                    modifier = Modifier.align(Alignment.CenterVertically),
+                                    color = MaterialTheme.colors.primaryVariant,
+                                    style = MaterialTheme.typography.body1
+                                )
+                            }
+                            Row(modifier = Modifier.weight(1f)) {
+                                Checkbox(
+                                    checked = propertyDetailViewModel.isNew,
+                                    onCheckedChange = {},
+                                    enabled = false,
+                                    colors = CheckboxDefaults.colors(
+                                        disabledColor = MaterialTheme.colors.primaryVariant
+                                    )
+                                )
+                                Text(
+                                    text = "Nový",
+                                    modifier = Modifier.align(Alignment.CenterVertically),
+                                    color = MaterialTheme.colors.primaryVariant,
+                                    style = MaterialTheme.typography.body1
 
-                            )
+                                )
+                            }
                         }
                     }
                 }
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth(0.85f).padding(bottom = 15.dp).align(Alignment.CenterHorizontally)) {
                     if ("SZN".contains(property.recordStatus)) {
                         StyledTextBackButton(
                             onClick = { propertyDetailViewModel.rollback() },
                             modifier = Modifier.weight(1f),
                             text = "Vráť na originál",
-                            textModifier = Modifier.padding(vertical = 18.dp)
                         )
                         Spacer(modifier = Modifier.weight(0.1f))
                     }
                     StyledTextButton(
                         onClick = { propertyDetailViewModel.submit() },
                         modifier = Modifier.weight(1f),
+                        textModifier = Modifier.padding(vertical = 10.dp),
                         text = "Potvrď",
-                        textModifier = Modifier.padding(vertical = 18.dp)
                     )
                 }
             }
@@ -265,12 +266,12 @@ private fun InputRowStyled(
         } else {
             Modifier.padding(bottom = 1.dp)
         },
-        ratio = 3f / 4f,
+        ratio = 1f,
         valueTextAlign = TextAlign.End,
         labelTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         valueTextColor = if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
         onClick = onClick,
-        backgroundColor = if(enabled) MaterialTheme.colors.secondary else Color.Transparent,
+        backgroundColor = if (enabled) MaterialTheme.colors.secondary else Color.Transparent,
         labelTextHorizontalPadding = 15.dp
     )
 }

@@ -195,11 +195,14 @@ class InventoryDetailViewModel(
             _filteredProperties.value = emptyList()
         } else {
             _filteredProperties.value = _properties.value!!.filter {
-                (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
+                (_statusFilter.value == 'U' && "XC".contains(it.recordStatus)
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
                         && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
-                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
-                        && ((_statusFilter.value == 'U' && (it.recordStatus == 'X' || it.recordStatus == 'C'))
-                        || (_statusFilter.value == 'P' && (it.recordStatus == 'Z' || it.recordStatus == 'S' || it.recordStatus == 'N')))
+                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value))
+                        || ((_statusFilter.value == 'P' && "SZN".contains(it.recordStatus))
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value)
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value)
+                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value))
             }
         }
     }
@@ -316,9 +319,9 @@ class InventoryDetailViewModel(
         return if (_properties.value != null)
             _properties.value!!.count {
                 (it.recordStatus == 'S' || it.recordStatus == 'Z' || it.recordStatus == 'N') &&
-                        (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
-                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
+                        (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value)
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value)
+                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value)
 
             } else 0
     }

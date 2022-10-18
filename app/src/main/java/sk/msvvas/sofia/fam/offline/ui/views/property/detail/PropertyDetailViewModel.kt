@@ -163,8 +163,8 @@ class PropertyDetailViewModel(
         _codebookSelectionViewLastValue.value = _property.value?.workplaceNew
         _selectCodebook.value = {
             closeCodebookSelectionView()
-            _place.value = it
             property.value!!.workplaceNew = it
+            _place.value = it
         }
         _deleteCodebook.value = {
             closeCodebookSelectionView()
@@ -226,10 +226,16 @@ class PropertyDetailViewModel(
                 }
                 if (_locality.value == "")
                     _locality.value = it.localityNew
+                else
+                    it.localityNew = _locality.value!!
                 if (_room.value == "")
                     _room.value = it.roomNew
+                else
+                    it.roomNew = _room.value!!
                 if (_user.value == "")
                     _user.value = it.personalNumberNew
+                else
+                    it.personalNumberNew = _user.value!!
                 _place.value = it.workplaceNew
                 if (it.fixedNote != "") {
                     val note = allCodebooksRepository.allNotes.value!!.filter { note ->
@@ -292,7 +298,9 @@ class PropertyDetailViewModel(
                     propertyRepository.delete(property = it)
                 }
             }
-            navController.navigate(Routes.INVENTORY_DETAIL.withArgs(it.inventoryId))
+            navController.navigate(
+                Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "&room=" + roomFilter + "&user=" + userFilter + "&statusFilter=" + statusFilter
+            )
         }
     }
 
