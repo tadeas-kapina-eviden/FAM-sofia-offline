@@ -245,6 +245,7 @@ class PropertyDetailViewModel(
                 }
                 _variableNote.value = it.variableNote
             }
+            varsInitialized = true
         }
     }
 
