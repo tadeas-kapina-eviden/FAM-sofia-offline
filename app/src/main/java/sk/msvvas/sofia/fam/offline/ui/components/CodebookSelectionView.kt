@@ -2,10 +2,12 @@ package sk.msvvas.sofia.fam.offline.ui.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -70,18 +72,19 @@ fun CodebookSelectionView(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                color = MaterialTheme.colors.secondary,
+                color = MaterialTheme.colors.surface,
             )
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .padding(top = 15.dp, end = 15.dp, bottom = 5.dp)
-                .align(Alignment.End)
+                .padding(top = 25.dp, bottom = 5.dp)
+                .align(Alignment.Start)
+                .fillMaxWidth(1f)
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close button.",
-                modifier = Modifier.clickable { onClose() },
+                modifier = Modifier.clickable { onClose() }.align(Alignment.End),
                 tint = MaterialTheme.colors.primary
             )
         }
@@ -106,9 +109,11 @@ fun CodebookSelectionView(
                 }
             },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp, vertical = 5.dp)
-                .focusRequester(focusRequester),
+                .fillMaxWidth(0.85f)
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 5.dp)
+                .focusRequester(focusRequester)
+                .border(color = MaterialTheme.colors.primary, width = 1.dp, shape = RoundedCornerShape(8.dp)),
             keyboardActions = KeyboardActions(
                 onDone = {
                     onSelect(filterValue)
@@ -125,31 +130,38 @@ fun CodebookSelectionView(
             ),
             textStyle = MaterialTheme.typography.body1
         )
+        Spacer(
+            Modifier.fillMaxWidth().height(1.dp)
+        )
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.85f)
+                .align(Alignment.CenterHorizontally)
                 .weight(1f)
         ) {
             items(filteredCodebookData) { item ->
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 5.dp, horizontal = 15.dp)
+                        .padding(vertical = 1.dp)
                         .clickable(enabled = true) {
                             onSelect(idGetter(item))
-                        },
+                        }
+                        .background(color = MaterialTheme.colors.secondary)
+                        .border(color = MaterialTheme.colors.primary, width = 1.dp, shape = RoundedCornerShape(8.dp)),
                 ) {
                     Text(
                         highlightSelectedText(filterValue, idGetter(item)),
                         modifier = Modifier
-                            .weight(3f),
+                            .weight(3f)
+                            .padding(horizontal = 10.dp, vertical = 2.dp),
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.primary
                     )
                     Text(
                         highlightSelectedText(filterValue, descriptionGetter(item)),
                         modifier = Modifier
-                            .weight(4f),
+                            .weight(4f)
+                            .padding(horizontal = 10.dp, vertical = 2.dp),
                         textAlign = TextAlign.End,
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.primary
@@ -157,7 +169,7 @@ fun CodebookSelectionView(
                 }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(0.85f).align(Alignment.CenterHorizontally).padding(bottom = 15.dp)) {
             StyledTextBackButton(
                 onClick = {
                     onDelete()
@@ -178,7 +190,7 @@ fun CodebookSelectionView(
         }
     }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
