@@ -18,6 +18,7 @@ import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
  * @param navController NavController from application Navigation
  * @param inventoryIDParameter inventory id of downloaded inventory (empty if none)
  * @param inventoryRepository inventory repository for local database
+ * @param submitInventory tells if user is trying to login for submitting inventory, or not
  */
 class LoginViewModel(
     private val navController: NavController,
@@ -26,13 +27,13 @@ class LoginViewModel(
     private val submitInventory: Boolean
 ) : ViewModel() {
 
-    private val _loginName = MutableLiveData("v_developer")
+    private val _loginName = MutableLiveData("")
     val loginName: LiveData<String> = _loginName
 
-    private val _password = MutableLiveData("Vyvojar.123")
+    private val _password = MutableLiveData("")
     val password: LiveData<String> = _password
 
-    private val _client = MutableLiveData("110")
+    private val _client = MutableLiveData("")
     val client: LiveData<String> = _client
 
     private val _lastError = MutableLiveData("")

@@ -47,6 +47,11 @@ object PropertyTransformator {
         }
     }
 
+    /**
+     * Transform property entity to JSON model for submitting it to back-end
+     * @param propertyEntity property entity to be converted
+     * @return JSON model for request payload
+     */
     fun propertyEntityToPropertyModelJson(propertyEntity: PropertyEntity): PropertyModelJson {
         return PropertyModelJson(
             inventoryId = propertyEntity.inventoryId,

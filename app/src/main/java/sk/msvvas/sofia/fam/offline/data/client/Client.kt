@@ -274,6 +274,12 @@ object Client {
         return result
     }
 
+    /**
+     * Function for submitting inventory to back-end
+     * @param inventoryEntity inventory to submit to back-end
+     * @param properties properties to submit to back-end
+     * @return Http status code of response
+     */
     suspend fun submitProcessedProperties(
         inventoryEntity: InventoryEntity,
         properties: List<PropertyEntity>

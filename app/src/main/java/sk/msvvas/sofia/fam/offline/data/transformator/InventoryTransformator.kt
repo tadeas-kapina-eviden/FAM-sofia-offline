@@ -34,6 +34,12 @@ object InventoryTransformator {
         }
     }
 
+    /**
+     * Transform inventory entity with properties to JSON model for submitting to back-end
+     * @param inventoryEntity inventoryEntity to convert
+     * @param properties property list to convert
+     * @return JSON model for request payload
+     */
     fun inventoryEntityToInventoryModelJson(
         inventoryEntity: InventoryEntity,
         properties: List<PropertyEntity>
