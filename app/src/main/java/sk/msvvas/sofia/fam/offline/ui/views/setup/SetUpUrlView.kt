@@ -9,12 +9,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,18 +29,14 @@ import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 fun SetUpUrlView(
     setUpUrlViewModel: SetUpUrlViewModel
 ) {
-
     val url by setUpUrlViewModel.url.observeAsState("")
     val lastError by setUpUrlViewModel.lastError.observeAsState("")
     val savingData by setUpUrlViewModel.savingData.observeAsState(false)
+    val focusRequester by remember {
+        mutableStateOf(FocusRequester())
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "",
-            modifier = Modifier
-                .padding(20.dp),
-        )
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = "",
@@ -58,9 +53,18 @@ fun SetUpUrlView(
             if (lastError.isNotEmpty()) {
                 ErrorAlert(lastError = lastError)
             }
+            Text(
+                text = "Prosim zadajte endpoint na produktívne alebo testovacie prostredie podľa príručky",
+                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+            )
+
             OutlinedTextField(
                 value = url,
-                onValueChange = setUpUrlViewModel::onChangeUrl,
+                onValueChange = { setUpUrlViewModel.onChangeUrl(it) },
                 colors = TextFieldDefaults
                     .textFieldColors(
                         backgroundColor = MaterialTheme.colors.secondary,
@@ -74,7 +78,7 @@ fun SetUpUrlView(
                     )
                 },
                 modifier = Modifier
-                    .focusRequester(setUpUrlViewModel.focusRequester.value!!),
+                    .focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
                 ),
@@ -103,8 +107,8 @@ fun SetUpUrlView(
         }
     }
     DisposableEffect(Unit) {
-        setUpUrlViewModel.requestFocus()
-        onDispose { }
+        focusRequester.requestFocus()
+        onDispose {}
     }
 }
 

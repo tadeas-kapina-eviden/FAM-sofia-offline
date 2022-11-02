@@ -22,6 +22,10 @@ class LoadingScreenViewModel(
     private val _serverUrl = serverUrlRepository.url
     val serverUrl: LiveData<String?> = _serverUrl
 
+    fun loadUrl() {
+        serverUrlRepository.get()
+    }
+
     fun navigateToSetUpUrl() {
         navController.navigate(Routes.SET_UP_URL.value)
     }

@@ -13,12 +13,9 @@ class ServerUrlRepository(private val serverUrlDao: ServerUrlDao) {
 
     val loaded = MutableLiveData(false)
 
-    init {
-        get()
-    }
 
-    fun save(url : String){
-        coroutineScope.launch(Dispatchers.IO){
+    fun save(url: String) {
+        coroutineScope.launch(Dispatchers.IO) {
             serverUrlDao.save(ServerUrlEntity(url))
         }
     }
@@ -31,9 +28,9 @@ class ServerUrlRepository(private val serverUrlDao: ServerUrlDao) {
     fun get() {
         coroutineScope.launch(Dispatchers.Main) {
             url.value = asyncGet().await().let {
-                if (it.isEmpty()){
+                if (it.isEmpty()) {
                     return@let null
-                }else{
+                } else {
                     return@let it[0].url
                 }
             }

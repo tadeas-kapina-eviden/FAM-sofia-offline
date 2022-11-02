@@ -26,10 +26,6 @@ class RoomCodebookRepository(private val roomCodebookDao: RoomCodebookDao) {
      */
     val searchResult = MutableLiveData<RoomCodebookEntity>()
 
-    init {
-        getAll()
-    }
-
     /**
      * Save one item to room_codebook table
      * @param roomCodebook room codebook data

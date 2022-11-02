@@ -26,10 +26,6 @@ class LocalityCodebookRepository(private val localityCodebookDao: LocalityCodebo
      */
     val searchResult = MutableLiveData<LocalityCodebookEntity>()
 
-    init {
-        getAll()
-    }
-
     /**
      * Save one item to locality_codebook table
      * @param localityCodebook locality codebook data

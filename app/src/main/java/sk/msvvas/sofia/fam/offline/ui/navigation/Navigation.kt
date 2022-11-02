@@ -213,7 +213,7 @@ fun Navigation(
                 )
             )
         }
-        composable(route = Routes.SET_UP_URL.value){
+        composable(route = Routes.SET_UP_URL.value) {
             SetUpUrlView(
                 SetUpUrlViewModel(
                     serverUrlRepository = serverUrlRepository,

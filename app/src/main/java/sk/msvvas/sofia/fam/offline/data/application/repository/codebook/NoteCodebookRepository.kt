@@ -26,10 +26,6 @@ class NoteCodebookRepository(private val noteCodebookDao: NoteCodebookDao) {
      */
     val searchResult = MutableLiveData<NoteCodebookEntity>()
 
-    init {
-        getAll()
-    }
-
     /**
      * Save one item to note_codebook table
      * @param noteCodebook note codebook data

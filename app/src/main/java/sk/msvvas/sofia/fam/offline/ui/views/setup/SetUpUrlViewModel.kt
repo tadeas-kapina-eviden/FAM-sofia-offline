@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.ui.views.setup
 
-import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,9 +22,6 @@ class SetUpUrlViewModel(
     private val _savingData = MutableLiveData(false)
     val savingData: LiveData<Boolean> = _savingData
 
-    private val _focusRequester = MutableLiveData(FocusRequester())
-    val focusRequester: LiveData<FocusRequester> = _focusRequester
-
     fun navigateToLoginView() {
         navController.navigate(Routes.LOGIN_VIEW.value)
     }
@@ -33,19 +29,21 @@ class SetUpUrlViewModel(
     fun setUrl() {
         if (_url.value != null && _url.value!!.isNotEmpty()) {
             _savingData.value = true
-            serverUrlRepository.save(url = url.value!!)
-            ClientData.host = url.value!!
+            val url = url.value!!.let {
+                if (it.split("://").size >= 2)
+                    return@let it.split("://")[1].split("/")[0]
+                else
+                    return@let it.split("/")[0]
+            }
+            serverUrlRepository.save(url = url)
+            ClientData.host = url
             navigateToLoginView()
-        }else{
+        } else {
             _lastError.value = "Zadaj hodnotu Url"
         }
     }
 
     fun onChangeUrl(value: String) {
         _url.value = value
-    }
-
-    fun requestFocus(){
-        _focusRequester.value!!.requestFocus()
     }
 }

@@ -26,10 +26,6 @@ class PlaceCodebookRepository(private val placeCodebookDao: PlaceCodebookDao) {
      */
     val searchResult = MutableLiveData<PlaceCodebookEntity>()
 
-    init {
-        getAll()
-    }
-
     /**
      * Save one item to place_codebook table
      * @param placesCodebook place codebook data

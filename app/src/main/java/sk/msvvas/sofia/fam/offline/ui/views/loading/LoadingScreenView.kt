@@ -35,10 +35,15 @@ import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 fun LoadingScreenView(
     loadingScreenViewModel: LoadingScreenViewModel
 ) {
+
     val loadedUrl by loadingScreenViewModel.serverUrlLoaded.observeAsState(false)
     val serverUrl by loadingScreenViewModel.serverUrl.observeAsState(null)
     val loadedProperty by loadingScreenViewModel.propertiesLoaded.observeAsState(false)
     var exitModalShown by remember { mutableStateOf(false) }
+
+    var navigatedToServerUrlView by remember {
+        mutableStateOf(false)
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -53,105 +58,111 @@ fun LoadingScreenView(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-        if (!loadedUrl) {
-            LoadingAnimationModalWindow(header = "Načítavanie", "Načítava sa url servera...")
-        } else {
-            if (serverUrl == null) {
-                loadingScreenViewModel.navigateToSetUpUrl()
+        if (!navigatedToServerUrlView) {
+            if (!loadedUrl) {
+                LoadingAnimationModalWindow(header = "Načítavanie", "Načítava sa url servera...")
             } else {
-                ClientData.host = serverUrl!!
-                if (!loadedProperty) {
-                    LoadingAnimationModalWindow(header = "Načítavanie", text = "Načítava sa uložená inventúra...")
+                if (serverUrl == null) {
+                    loadingScreenViewModel.navigateToSetUpUrl()
+                    navigatedToServerUrlView = true
                 } else {
-                    if (!loadingScreenViewModel.isDownloadedInventory()) {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .background(
-                                    color = Color(0x66ffffff),
-                                    shape = RoundedCornerShape(10.dp)
-                                )
-                                .fillMaxWidth(0.7f),
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Text(
-                                text = "Žiadna inventúra nie je stiahnutá",
-                                modifier = Modifier
-                                    .padding(
-                                        top = 40.dp,
-                                        start = 30.dp,
-                                        end = 30.dp,
-                                        bottom = 20.dp
-                                    )
-                                    .fillMaxWidth(),
-                                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center)
-                            )
-                            StyledTextButton(
-                                onClick = {
-                                    loadingScreenViewModel.navigateToLoginView()
-                                },
-                                modifier = Modifier
-                                    .padding(
-                                        top = 0.dp,
-                                        start = 30.dp,
-                                        end = 30.dp,
-                                        bottom = 40.dp
-                                    )
-                                    .fillMaxWidth(),
-                                text = "Pokračovať na prihlásenia"
-                            )
-                        }
+                    ClientData.host = serverUrl!!
+                    if (!loadedProperty) {
+                        LoadingAnimationModalWindow(
+                            header = "Načítavanie",
+                            text = "Načítava sa uložená inventúra..."
+                        )
                     } else {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .background(
-                                    color = Color(0x66ffffff),
-                                    shape = RoundedCornerShape(10.dp)
+                        if (!loadingScreenViewModel.isDownloadedInventory()) {
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .background(
+                                        color = Color(0x66ffffff),
+                                        shape = RoundedCornerShape(10.dp)
+                                    )
+                                    .fillMaxWidth(0.7f),
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Text(
+                                    text = "Žiadna inventúra nie je stiahnutá",
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 40.dp,
+                                            start = 30.dp,
+                                            end = 30.dp,
+                                            bottom = 20.dp
+                                        )
+                                        .fillMaxWidth(),
+                                    style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center)
                                 )
-                                .fillMaxWidth(0.8f),
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Text(
-                                text = "Máte uloženú inventúru offline",
+                                StyledTextButton(
+                                    onClick = {
+                                        loadingScreenViewModel.navigateToLoginView()
+                                    },
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 0.dp,
+                                            start = 30.dp,
+                                            end = 30.dp,
+                                            bottom = 40.dp
+                                        )
+                                        .fillMaxWidth(),
+                                    text = "Pokračovať na prihlásenia"
+                                )
+                            }
+                        } else {
+                            Column(
                                 modifier = Modifier
-                                    .padding(
-                                        top = 40.dp,
-                                        start = 30.dp,
-                                        end = 30.dp,
-                                        bottom = 20.dp
+                                    .align(Alignment.Center)
+                                    .background(
+                                        color = Color(0x66ffffff),
+                                        shape = RoundedCornerShape(10.dp)
                                     )
-                                    .fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
-                            StyledTextButton(
-                                onClick = {
-                                    loadingScreenViewModel.navigateToLoginViewWithDownloadedInventory()
-                                },
-                                modifier = Modifier
-                                    .padding(
-                                        top = 0.dp,
-                                        start = 30.dp,
-                                        end = 30.dp,
-                                        bottom = 20.dp
-                                    )
-                                    .fillMaxWidth(),
-                                text = "Pokračovať na prihlásenie"
-                            )
-                            StyledTextButton(
-                                onClick = {
-                                    loadingScreenViewModel.navigateToInventoriesList()
-                                },
-                                modifier = Modifier
-                                    .padding(
-                                        top = 0.dp,
-                                        start = 30.dp,
-                                        end = 30.dp,
-                                        bottom = 40.dp
-                                    )
-                                    .fillMaxWidth(),
-                                text = "Pokračovať bez prihlásenia"
-                            )
+                                    .fillMaxWidth(0.8f),
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Text(
+                                    text = "Máte uloženú inventúru offline",
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 40.dp,
+                                            start = 30.dp,
+                                            end = 30.dp,
+                                            bottom = 20.dp
+                                        )
+                                        .fillMaxWidth(),
+                                    textAlign = TextAlign.Center
+                                )
+                                StyledTextButton(
+                                    onClick = {
+                                        loadingScreenViewModel.navigateToLoginViewWithDownloadedInventory()
+                                    },
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 0.dp,
+                                            start = 30.dp,
+                                            end = 30.dp,
+                                            bottom = 20.dp
+                                        )
+                                        .fillMaxWidth(),
+                                    text = "Pokračovať na prihlásenie"
+                                )
+                                StyledTextButton(
+                                    onClick = {
+                                        loadingScreenViewModel.navigateToInventoriesList()
+                                    },
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 0.dp,
+                                            start = 30.dp,
+                                            end = 30.dp,
+                                            bottom = 40.dp
+                                        )
+                                        .fillMaxWidth(),
+                                    text = "Pokračovať bez prihlásenia"
+                                )
+                            }
                         }
                     }
                 }
@@ -175,5 +186,9 @@ fun LoadingScreenView(
     }
     BackHandler {
         exitModalShown = true
+    }
+    DisposableEffect(Unit) {
+        loadingScreenViewModel.loadUrl()
+        onDispose { }
     }
 }
