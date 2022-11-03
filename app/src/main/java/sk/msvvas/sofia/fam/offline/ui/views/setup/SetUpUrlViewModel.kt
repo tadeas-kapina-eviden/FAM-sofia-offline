@@ -8,6 +8,9 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.ServerUrlReposito
 import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
+/**
+ *
+ */
 class SetUpUrlViewModel(
     private val serverUrlRepository: ServerUrlRepository,
     private val navController: NavController

@@ -6,6 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import sk.msvvas.sofia.fam.offline.data.application.entities.ServerUrlEntity
 
+/**
+ * Data access object for local save of server url
+ */
 @Dao
 interface ServerUrlDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
