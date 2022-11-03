@@ -81,6 +81,10 @@ fun PropertyListItem(
     }
 }
 
+
+/**
+ * Default preview for item
+ */
 @Preview(showBackground = true)
 @Composable
 fun PropertyListItemPreview() {

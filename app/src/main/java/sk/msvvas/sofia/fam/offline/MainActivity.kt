@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         val database = FamOfflineDatabase.getInstance(applicationContext)
 
         setContent {
-            FAMInventuraOfflineClientTheme{
+            FAMInventuraOfflineClientTheme {
                 Navigation(database = database)
             }
         }

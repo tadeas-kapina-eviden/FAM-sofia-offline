@@ -1,5 +1,8 @@
 package sk.msvvas.sofia.fam.offline.data.client.model.submit
 
+/**
+ * JSON property model for batch submitting inventory
+ */
 data class PropertyModelJson(
     var inventoryId: String,
     var inventNumber: String,

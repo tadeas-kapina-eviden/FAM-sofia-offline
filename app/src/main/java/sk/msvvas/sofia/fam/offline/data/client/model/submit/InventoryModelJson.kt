@@ -1,5 +1,8 @@
 package sk.msvvas.sofia.fam.offline.data.client.model.submit
 
+/**
+ * JSON inventory model for submitting inventory
+ */
 data class InventoryModelJson(
     val id: String,
     var createdAt: String,

@@ -25,6 +25,11 @@ import sk.msvvas.sofia.fam.offline.R
 import sk.msvvas.sofia.fam.offline.ui.components.LoadingAnimationModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
 
+
+/**
+ * View for set up server url
+ * @param setUpUrlViewModel view model for this view
+ */
 @Composable
 fun SetUpUrlView(
     setUpUrlViewModel: SetUpUrlViewModel
@@ -112,6 +117,10 @@ fun SetUpUrlView(
     }
 }
 
+/**
+ * Error alert component for showing errors in this view
+ * @param lastError text of last error shown
+ */
 @Composable
 private fun ErrorAlert(
     lastError: String

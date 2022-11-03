@@ -18,7 +18,10 @@ import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.ui.components.*
 
-
+/**
+ * View for showing and changing data of single property
+ * @param propertyDetailViewModel view model for this view
+ */
 @Composable
 fun PropertyDetailView(
     propertyDetailViewModel: PropertyDetailViewModel
@@ -95,7 +98,11 @@ fun PropertyDetailView(
                         textStyle = MaterialTheme.typography.body1
                             .copy(textAlign = TextAlign.End)
                     )
-                    Column(modifier = Modifier.fillMaxWidth(0.85f).align(Alignment.CenterHorizontally)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
                         InputRowStyled(
                             label = "Sériové číslo",
                             value = property.serialNumber,
@@ -149,7 +156,7 @@ fun PropertyDetailView(
                         InputRowStyled(
                             label = "Vlastná pozn.",
                             value = variableNote,
-                            onClick = { propertyDetailViewModel.showVariableNoteCodebookSelectionView() },
+                            onClick = { propertyDetailViewModel.showVariableNoteInputView() },
                             enabled = true
                         )
                         Row(
@@ -195,7 +202,12 @@ fun PropertyDetailView(
                         }
                     }
                 }
-                Row(modifier = Modifier.fillMaxWidth(0.85f).padding(bottom = 15.dp).align(Alignment.CenterHorizontally)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .padding(bottom = 15.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
                     if ("SZN".contains(property.recordStatus)) {
                         StyledTextBackButton(
                             onClick = { propertyDetailViewModel.rollback() },
@@ -246,6 +258,9 @@ fun PropertyDetailView(
 }
 
 
+/**
+ * Styled input row in property detail
+ */
 @Composable
 private fun InputRowStyled(
     label: String,

@@ -10,6 +10,19 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepositor
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
+/**
+ * View model for property detail view
+ * @param propertyRepository repository for working with property table
+ * @param allCodebooksRepository repository for working with all codebooks tables
+ * @param id id of property
+ * @param navController navigation controller of application
+ * @param localityFilter last locality filter from inventory detail view (used as new locality for property)
+ * @param roomFilter last room filter from inventory detail view (used as new room for property)
+ * @param userFilter last user filter from inventory detail view (used as new user for property)
+ * @param inventoryId inventory id of inventory in which is property
+ * @param statusFilter last status filter in inventory detail for going back to inventory detail
+ * @param isManual holds if property is scanned or manually selected from list
+ */
 class PropertyDetailViewModel(
     private val propertyRepository: PropertyRepository,
     private val allCodebooksRepository: AllCodebooksRepository,
@@ -22,10 +35,15 @@ class PropertyDetailViewModel(
     private val statusFilter: Char,
     val isManual: Boolean,
 ) : ViewModel() {
+
     private val _property: MutableLiveData<PropertyEntity>
     val property: LiveData<PropertyEntity>
+
     val isNew: Boolean
 
+    /**
+     * Loads property from database and checks if it is new.
+     */
     init {
         if (id > 0) {
             propertyRepository.findById(id)
@@ -45,6 +63,9 @@ class PropertyDetailViewModel(
         property = _property
     }
 
+    /**
+     * Tells if all required variables are properly initialized
+     */
     private var varsInitialized = false
 
     private val _locality = MutableLiveData(localityFilter)
@@ -93,10 +114,16 @@ class PropertyDetailViewModel(
     private val _errorText = MutableLiveData("")
     val errorText: LiveData<String> = _errorText
 
+    /**
+     * Close codebook selection view
+     */
     fun closeCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = false
     }
 
+    /**
+     * Show locality codebook selection view and init all parameters and functions for it
+     */
     fun showLocationCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allLocalities.value
@@ -116,6 +143,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Show room codebook selection view and init all parameters and functions for it
+     */
     fun showRoomCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allRooms.value
@@ -135,6 +165,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Show user codebook selection view and init all parameters and functions for it
+     */
     fun showUserCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allUsers.value
@@ -154,6 +187,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Show place codebook selection view and init all parameters and functions for it
+     */
     fun showPlaceCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allPlaces.value
@@ -173,6 +209,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Show fixed note codebook selection view and init all parameters and functions for it
+     */
     fun showFixedNoteCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = allCodebooksRepository.allNotes.value
@@ -195,7 +234,10 @@ class PropertyDetailViewModel(
         }
     }
 
-    fun showVariableNoteCodebookSelectionView() {
+    /**
+     * Show variable note input view and init all parameters and functions for it
+     */
+    fun showVariableNoteInputView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value = emptyList()
         _codebookSelectionViewIdGetter.value = { "" }
@@ -214,6 +256,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Init non-initialized variables after class initialization
+     */
     fun lateInitVarsData() {
         if (!varsInitialized) {
             _property.value!!.let {
@@ -249,6 +294,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Submit and save property
+     */
     fun submit() {
         _property.value!!.let {
             if (!isNew) {
@@ -283,6 +331,9 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Rollback property after - delete saved data
+     */
     fun rollback() {
         _property.value!!.let {
             if (it.recordStatus != 'N') {
@@ -305,11 +356,17 @@ class PropertyDetailViewModel(
         }
     }
 
+    /**
+     * Function for closing error alert
+     */
     fun closeErrorAlert() {
         _errorHeader.value = ""
         _errorText.value = ""
     }
 
+    /**
+     * Go back to inventory detail view
+     */
     fun goBack() {
         navController.navigate(
             Routes.INVENTORY_DETAIL.withArgs(inventoryId)

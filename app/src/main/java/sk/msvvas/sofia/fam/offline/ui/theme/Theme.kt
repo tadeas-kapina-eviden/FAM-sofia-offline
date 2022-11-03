@@ -30,6 +30,9 @@ onSurface = Color.Black,
 */
 )
 
+/**
+ * Basic styles in application
+ */
 @Composable
 fun FAMInventuraOfflineClientTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

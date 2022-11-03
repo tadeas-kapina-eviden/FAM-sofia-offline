@@ -9,13 +9,14 @@ import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
 
 /**
- *
+ * View model for set up url view
+ * @param serverUrlRepository repository for saving url to database
+ * @param navController application navigation controller
  */
 class SetUpUrlViewModel(
     private val serverUrlRepository: ServerUrlRepository,
     private val navController: NavController
 ) : ViewModel() {
-
     private val _url = MutableLiveData("")
     val url: LiveData<String> = _url
 
@@ -29,6 +30,11 @@ class SetUpUrlViewModel(
         navController.navigate(Routes.LOGIN_VIEW.value)
     }
 
+    /**
+     * Invokes after submitting url.
+     * Check if url input is not empty,
+     * save url to local database and  navigate to login view
+     */
     fun setUrl() {
         if (_url.value != null && _url.value!!.isNotEmpty()) {
             _savingData.value = true
@@ -46,6 +52,9 @@ class SetUpUrlViewModel(
         }
     }
 
+    /**
+     * Function invokes after value in text field changes
+     */
     fun onChangeUrl(value: String) {
         _url.value = value
     }
