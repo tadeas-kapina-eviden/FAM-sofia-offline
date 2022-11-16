@@ -128,6 +128,10 @@ class InventoryDetailViewModel(
 
     fun onCodeFilterChange(newCode: String) {
         _codeFilter.value = newCode
+        if (_codeFilter.value!!.last() == '\n'){
+            _codeFilter.value = _codeFilter.value!!.removeSuffix("\n")
+            runCodeFilter()
+        }
     }
 
     fun onScanWithoutDetailButtonClick() {

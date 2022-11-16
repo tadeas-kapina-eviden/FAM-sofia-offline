@@ -134,7 +134,7 @@ fun InventoryDetailView(
                             keyboardActions = KeyboardActions(
                                 onDone = {
                                     inventoryDetailViewModel.runCodeFilter()
-                                }
+                                },
                             ),
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = MaterialTheme.colors.secondary,
