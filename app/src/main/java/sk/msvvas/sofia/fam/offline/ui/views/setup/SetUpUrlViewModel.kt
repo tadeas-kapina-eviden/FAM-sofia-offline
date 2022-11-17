@@ -36,6 +36,7 @@ class SetUpUrlViewModel(
      * save url to local database and  navigate to login view
      */
     fun setUrl() {
+        _url.value = _url.value!!.trim()
         if (_url.value != null && _url.value!!.isNotEmpty()) {
             _savingData.value = true
             val url = url.value!!.let {
@@ -57,5 +58,9 @@ class SetUpUrlViewModel(
      */
     fun onChangeUrl(value: String) {
         _url.value = value
+        if (_url.value!!.last() == '\n'){
+            _url.value = _url.value!!.removeSuffix("\n")
+            setUrl()
+        }
     }
 }

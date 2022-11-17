@@ -140,8 +140,8 @@ class InventoryDetailViewModel(
 
     fun runCodeFilter() {
         if (_codeFilter.value!!.length == 20) {
-            val propertyNumber: String = _codeFilter.value!!.subSequence(4, 16).toString()
-            val subnumber: String = _codeFilter.value!!.subSequence(16, 20).toString()
+            val propertyNumber: String = _codeFilter.value!!.subSequence(4, 16).toString().toInt().toString()
+            val subnumber: String = _codeFilter.value!!.subSequence(16, 20).toString().toInt().toString()
 
             val selectedList = _properties.value!!.filter {
                 it.propertyNumber == propertyNumber && it.subnumber == subnumber
