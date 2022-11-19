@@ -73,6 +73,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun update(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.update(property)
+            getAll()
         }
     }
 
@@ -83,6 +84,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun delete(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.delete(property)
+            getAll()
         }
     }
 
@@ -92,6 +94,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun deleteAll() {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.deleteAll()
+            getAll()
         }
     }
 

@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -262,26 +263,30 @@ class PropertyDetailViewModel(
     fun lateInitVarsData() {
         if (!varsInitialized) {
             _property.value!!.let {
-                if ("XC".contains(it.recordStatus)) {
-                    it.localityNew = if (_locality.value == "") it.locality else _locality.value!!
-                    it.roomNew = if (_room.value == "") it.room else _room.value!!
-                    it.personalNumberNew =
-                        if (_user.value == "") it.personalNumber else _user.value!!
-                    it.workplaceNew = it.workplace
+
+                if (_locality.value == "") {
+                    if(it.localityNew != "")
+                        _locality.value = it.localityNew
+                    else
+                        _locality.value = it.locality
                 }
-                if (_locality.value == "")
-                    _locality.value = it.localityNew
-                else
-                    it.localityNew = _locality.value!!
-                if (_room.value == "")
-                    _room.value = it.roomNew
-                else
-                    it.roomNew = _room.value!!
-                if (_user.value == "")
-                    _user.value = it.personalNumberNew
-                else
-                    it.personalNumberNew = _user.value!!
+
+                if (_room.value == "") {
+                    if(it.roomNew != "")
+                        _room.value = it.roomNew
+                    else
+                        _room.value = it.room
+                }
+
+                if (_user.value == "") {
+                    if(it.personalNumberNew != "")
+                        _user.value = it.personalNumberNew
+                    else
+                        _user.value = it.personalNumber
+                }
+
                 _place.value = it.workplaceNew
+
                 if (it.fixedNote != "") {
                     val note = allCodebooksRepository.allNotes.value!!.filter { note ->
                         note.id == it.fixedNote
@@ -299,6 +304,10 @@ class PropertyDetailViewModel(
      */
     fun submit() {
         _property.value!!.let {
+            it.localityNew = _locality.value!!
+            it.roomNew = _room.value!!
+            it.personalNumberNew = _user.value!!
+            it.workplaceNew = _place.value!!
             if (!isNew) {
                 if (it.recordStatus != 'N') {
                     if (it.locality == it.localityNew
@@ -312,7 +321,6 @@ class PropertyDetailViewModel(
                     }
                 }
                 it.isManual = isManual
-                propertyRepository.update(property = it)
             } else {
                 if (it.variableNote.trim().isEmpty()) {
                     _errorHeader.value = "Vyplňte vlastnú poznámu"
@@ -329,6 +337,10 @@ class PropertyDetailViewModel(
                 Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "&room=" + roomFilter + "&user=" + userFilter + "&statusFilter=" + statusFilter
             )
         }
+        if(!isNew)
+            propertyRepository.update(_property.value!!)
+        else
+            propertyRepository.save(_property.value!!)
     }
 
     /**
@@ -369,11 +381,7 @@ class PropertyDetailViewModel(
      */
     fun goBack() {
         navController.navigate(
-            Routes.INVENTORY_DETAIL.withArgs(inventoryId)
-                    + "?locality=" + localityFilter
-                    + "&room=" + roomFilter
-                    + "&user=" + userFilter
-                    + "&statusFilter=" + statusFilter
+            Routes.INVENTORY_DETAIL.withArgs(_property.value!!.inventoryId) + "?locality=" + localityFilter + "&room=" + roomFilter + "&user=" + userFilter + "&statusFilter=" + statusFilter
         )
     }
 

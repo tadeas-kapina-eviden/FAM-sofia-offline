@@ -115,6 +115,7 @@ class InventoryDetailViewModel(
 
 
     init {
+        allCodebooksRepository.getAll()
         if (!submitInventory) {
             propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
         } else {
@@ -128,7 +129,7 @@ class InventoryDetailViewModel(
 
     fun onCodeFilterChange(newCode: String) {
         _codeFilter.value = newCode
-        if (_codeFilter.value!!.last() == '\n'){
+        if (_codeFilter.value!!.isNotEmpty() && _codeFilter.value!!.last() == '\n'){
             _codeFilter.value = _codeFilter.value!!.removeSuffix("\n")
             runCodeFilter()
         }
@@ -158,10 +159,18 @@ class InventoryDetailViewModel(
             } else {
                 if (_scanWithoutDetail.value!!) {
                     val propertyToUpdate = selectedList.first()
-                    propertyToUpdate.localityNew = _localityFilter.value!!
-                    propertyToUpdate.roomNew = _roomFilter.value!!
-                    propertyToUpdate.personalNumberNew = _userFilter.value!!
+                    propertyToUpdate.let {
+                        it.localityNew = _localityFilter.value!!
+                        it.roomNew = _roomFilter.value!!
+                        it.personalNumberNew = _userFilter.value!!
+                        if(it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew){
+                            it.recordStatus = 'S'
+                        }else{
+                            it.recordStatus = 'Z'
+                        }
+                    }
                     propertyRepository.update(property = propertyToUpdate)
+                    filterOutValues()
                 } else {
                     navController.navigate(
                         Routes.PROPERTY_DETAIL.withArgs(

@@ -44,6 +44,17 @@ class AllCodebooksRepository(
     val allNotes = noteCodebookRepository.allData
 
     /**
+     * Get all codebooks values
+     */
+    fun getAll(){
+        localityCodebookRepository.getAll()
+        roomCodebookRepository.getAll()
+        placeCodebookRepository.getAll()
+        noteCodebookRepository.getAll()
+        userCodebookRepository.getAll()
+    }
+
+    /**
      * Save one item to localityCodebook table
      * @param locality localityCodebook data
      */
