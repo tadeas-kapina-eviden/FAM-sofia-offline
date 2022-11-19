@@ -81,4 +81,7 @@ data class PropertyEntity(
 
     @ColumnInfo(name = "is_manual")
     var isManual: Boolean = false,
+
+    @ColumnInfo(name = "is_saved")
+    var isSaved :Boolean = false
 )

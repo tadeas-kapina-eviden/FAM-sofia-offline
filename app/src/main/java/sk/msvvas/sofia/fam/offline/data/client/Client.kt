@@ -269,7 +269,11 @@ object Client {
                 mapper.fromXML(
                     responseProcessed.bodyAsText()
                 ) as PropertyFeedXml
-            )
+            ).map{
+                it.also {
+                    it.isSaved = true
+                }
+            }
         )
         return result
     }

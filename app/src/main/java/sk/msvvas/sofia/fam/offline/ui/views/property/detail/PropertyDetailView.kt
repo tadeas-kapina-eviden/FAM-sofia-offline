@@ -208,7 +208,7 @@ fun PropertyDetailView(
                         .padding(bottom = 15.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
-                    if ("SZN".contains(property.recordStatus)) {
+                    if ("SZN".contains(property.recordStatus) && !property.isSaved) {
                         StyledTextBackButton(
                             onClick = { propertyDetailViewModel.rollback() },
                             modifier = Modifier.weight(1f),
