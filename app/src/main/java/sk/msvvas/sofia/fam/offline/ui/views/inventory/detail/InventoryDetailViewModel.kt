@@ -140,6 +140,9 @@ class InventoryDetailViewModel(
     }
 
     fun runCodeFilter() {
+        if(_codeFilter.value!!.isEmpty()){
+            return
+        }
         if (_codeFilter.value!!.length == 20) {
             val propertyNumber: String = _codeFilter.value!!.subSequence(4, 16).toString().toInt().toString()
             val subnumber: String = _codeFilter.value!!.subSequence(16, 20).toString().toInt().toString()
@@ -160,9 +163,9 @@ class InventoryDetailViewModel(
                 if (_scanWithoutDetail.value!!) {
                     val propertyToUpdate = selectedList.first()
                     propertyToUpdate.let {
-                        it.localityNew = _localityFilter.value!!
-                        it.roomNew = _roomFilter.value!!
-                        it.personalNumberNew = _userFilter.value!!
+                        it.localityNew = if(_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else it.locality
+                        it.roomNew = if(_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else it.room
+                        it.personalNumberNew = if(_userFilter.value!!.isNotEmpty()) _userFilter.value!! else it.personalNumber
                         if(it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew){
                             it.recordStatus = 'S'
                         }else{
