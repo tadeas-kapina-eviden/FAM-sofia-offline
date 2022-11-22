@@ -163,9 +163,9 @@ class InventoryDetailViewModel(
                 if (_scanWithoutDetail.value!!) {
                     val propertyToUpdate = selectedList.first()
                     propertyToUpdate.let {
-                        it.localityNew = if(_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else it.locality
-                        it.roomNew = if(_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else it.room
-                        it.personalNumberNew = if(_userFilter.value!!.isNotEmpty()) _userFilter.value!! else it.personalNumber
+                        it.localityNew = if(_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else if(it.localityNew.isNotEmpty()) it.localityNew else it.locality
+                        it.roomNew = if(_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else if(it.roomNew.isNotEmpty()) it.roomNew else it.room
+                        it.personalNumberNew = if(_userFilter.value!!.isNotEmpty()) _userFilter.value!! else if(it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
                         if(it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew){
                             it.recordStatus = 'S'
                         }else{
