@@ -330,7 +330,6 @@ class PropertyDetailViewModel(
                 } else {
                     it.textMainNumber = it.variableNote
                     it.isManual = isManual
-                    propertyRepository.save(property = it)
                 }
             }
             navController.navigate(
