@@ -158,7 +158,9 @@ fun Navigation(
                 "user",
                 "inventoryId",
                 "statusFilter",
-                "isManual"
+                "isManual",
+                "propertyNumber",
+                "subnumber"
             ),
             arguments = listOf(
                 navArgument("id") {
@@ -195,6 +197,16 @@ fun Navigation(
                     type = NavType.BoolType
                     defaultValue = false
                     nullable = false
+                },
+                navArgument("propertyNumber") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("subnumber") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
                 }
             )
         ) {
@@ -209,6 +221,8 @@ fun Navigation(
                     userFilter = it.arguments?.getString("user")!!,
                     inventoryId = it.arguments?.getString("inventoryId")!!,
                     statusFilter = it.arguments?.getString("statusFilter")!![0],
+                    propertyNumber = it.arguments?.getString("propertyNumber")!!,
+                    subnumber = it.arguments?.getString("subnumber")!!,
                     isManual = it.arguments?.getBoolean("isManual")!!,
                 )
             )

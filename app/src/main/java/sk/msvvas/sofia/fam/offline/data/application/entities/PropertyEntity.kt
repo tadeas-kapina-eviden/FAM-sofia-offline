@@ -83,5 +83,8 @@ data class PropertyEntity(
     var isManual: Boolean = false,
 
     @ColumnInfo(name = "is_saved")
-    var isSaved :Boolean = false
+    var isSaved: Boolean = false,
+
+    @ColumnInfo(name = "isNew")
+    var isNew: Boolean = false
 )

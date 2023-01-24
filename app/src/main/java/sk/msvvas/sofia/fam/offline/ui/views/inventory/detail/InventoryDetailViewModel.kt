@@ -18,6 +18,7 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodeb
 import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
+import java.util.Collections.max
 
 class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
@@ -129,7 +130,7 @@ class InventoryDetailViewModel(
 
     fun onCodeFilterChange(newCode: String) {
         _codeFilter.value = newCode
-        if (_codeFilter.value!!.isNotEmpty() && _codeFilter.value!!.last() == '\n'){
+        if (_codeFilter.value!!.isNotEmpty() && _codeFilter.value!!.last() == '\n') {
             _codeFilter.value = _codeFilter.value!!.removeSuffix("\n")
             runCodeFilter()
         }
@@ -140,35 +141,56 @@ class InventoryDetailViewModel(
     }
 
     fun runCodeFilter() {
-        if(_codeFilter.value!!.isEmpty()){
+        if (_codeFilter.value!!.isEmpty()) {
             return
         }
         if (_codeFilter.value!!.length == 20) {
-            val propertyNumber: String = _codeFilter.value!!.subSequence(4, 16).toString().toInt().toString()
-            val subnumber: String = _codeFilter.value!!.subSequence(16, 20).toString().toInt().toString()
+            var propertyNumber: String =
+                _codeFilter.value!!.subSequence(4, 16).toString().toLong().toString()
+            var subnumber: String =
+                _codeFilter.value!!.subSequence(16, 20).toString().toLong().toString()
 
             val selectedList = _properties.value!!.filter {
                 it.propertyNumber == propertyNumber && it.subnumber == subnumber
             }
             if (selectedList.isEmpty()) {
-                val newCount = _properties.value!!.filter {
-                    it.propertyNumber.trim() == "NOVY"
-                }.size + 1
+                propertyNumber = "000000000000".subSequence(0, 12 - propertyNumber.length)
+                    .toString() + propertyNumber
+                subnumber = "0000".subSequence(0, 4 - subnumber.length).toString() + subnumber
+                propertyRepository.save(
+                    PropertyEntity(
+                        propertyNumber = propertyNumber,
+                        subnumber = subnumber,
+                        inventoryId = _inventoryId.value!!,
+                        recordStatus = 'N',
+                        localityNew = _localityFilter.value!!,
+                        roomNew = _roomFilter.value!!,
+                        personalNumberNew = _userFilter.value!!,
+                        isNew = true
+                    )
+                )
+
+
                 navController.navigate(
                     Routes.PROPERTY_DETAIL.withArgs(
-                        (-newCount).toString(),
-                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + false.toString()
+                        "-1",
+                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + false.toString() + "&propertyNumber=" + propertyNumber + "&subnumber=" + subnumber
                 )
+
+
             } else {
                 if (_scanWithoutDetail.value!!) {
                     val propertyToUpdate = selectedList.first()
                     propertyToUpdate.let {
-                        it.localityNew = if(_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else if(it.localityNew.isNotEmpty()) it.localityNew else it.locality
-                        it.roomNew = if(_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else if(it.roomNew.isNotEmpty()) it.roomNew else it.room
-                        it.personalNumberNew = if(_userFilter.value!!.isNotEmpty()) _userFilter.value!! else if(it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
-                        if(it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew){
+                        it.localityNew =
+                            if (_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else if (it.localityNew.isNotEmpty()) it.localityNew else it.locality
+                        it.roomNew =
+                            if (_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else if (it.roomNew.isNotEmpty()) it.roomNew else it.room
+                        it.personalNumberNew =
+                            if (_userFilter.value!!.isNotEmpty()) _userFilter.value!! else if (it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
+                        if (it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew) {
                             it.recordStatus = 'S'
-                        }else{
+                        } else {
                             it.recordStatus = 'Z'
                         }
                     }
@@ -228,18 +250,35 @@ class InventoryDetailViewModel(
     }
 
     fun onSelectProperty(id: Long) {
-        val computedId: Long =
-            if (id < 0) {
-                -(_properties.value!!.filter {
-                    it.propertyNumber.trim() == "NOVY"
-                }.size + 1).toLong()
-            } else id
+        if (id < 0) {
+            val subnumber = (max(_properties.value!!.filter {
+                it.propertyNumber == "NOVY"
+            }.map { it.subnumber.toInt() }) + 1).toString()
 
-        navController.navigate(
-            Routes.PROPERTY_DETAIL.withArgs(
-                computedId.toString(),
-            ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString()
-        )
+            propertyRepository.save(
+                PropertyEntity(
+                    propertyNumber = "NOVY",
+                    subnumber = subnumber,
+                    inventoryId = _inventoryId.value!!,
+                    recordStatus = 'N',
+                    localityNew = _localityFilter.value!!,
+                    roomNew = _roomFilter.value!!,
+                    personalNumberNew = _userFilter.value!!,
+                    isNew = true
+                )
+            )
+            navController.navigate(
+                Routes.PROPERTY_DETAIL.withArgs(
+                    "-1",
+                ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString() + "&propertyNumber=" + "NOVY" + "&subnumber=" + subnumber
+            )
+        } else {
+            navController.navigate(
+                Routes.PROPERTY_DETAIL.withArgs(
+                    id.toString(),
+                ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString()
+            )
+        }
     }
 
     fun closeErrorAlert() {

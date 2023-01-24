@@ -74,7 +74,7 @@ fun PropertyDetailView(
                         .fillMaxWidth()
                 ) {
                     TextField(
-                        value = if (propertyDetailViewModel.isNew) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
+                        value = if (property.propertyNumber.isBlank()) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
                         onValueChange = {},
                         readOnly = true,
                         modifier = Modifier
@@ -184,7 +184,7 @@ fun PropertyDetailView(
                             }
                             Row(modifier = Modifier.weight(1f)) {
                                 Checkbox(
-                                    checked = propertyDetailViewModel.isNew,
+                                    checked = property.isNew,
                                     onCheckedChange = {},
                                     enabled = false,
                                     colors = CheckboxDefaults.colors(
@@ -253,7 +253,11 @@ fun PropertyDetailView(
         }
     }
     BackHandler {
-        propertyDetailViewModel.goBack()
+        if (propertyDetailViewModel.id < 0) {
+            propertyDetailViewModel.rollback()
+        } else {
+            propertyDetailViewModel.goBack()
+        }
     }
 }
 

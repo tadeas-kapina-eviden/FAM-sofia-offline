@@ -1,10 +1,10 @@
 package sk.msvvas.sofia.fam.offline.ui.views.property.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
@@ -34,35 +34,41 @@ class PropertyDetailViewModel(
     private val userFilter: String,
     private val inventoryId: String,
     private val statusFilter: Char,
+    propertyNumber: String = "",
+    subnumber: String = "",
     val isManual: Boolean,
 ) : ViewModel() {
 
-    private val _property: MutableLiveData<PropertyEntity>
+    private val _property: MutableLiveData<PropertyEntity> = MutableLiveData(null)
     val property: LiveData<PropertyEntity>
-
-    val isNew: Boolean
 
     /**
      * Loads property from database and checks if it is new.
      */
     init {
-        if (id > 0) {
-            propertyRepository.findById(id)
-            _property = propertyRepository.searchResult
-            isNew = false
-        } else {
-            _property = MutableLiveData(
-                PropertyEntity(
-                    propertyNumber = "NOVY",
-                    subnumber = (-id).toString(),
-                    inventoryId = inventoryId,
-                    recordStatus = 'N'
-                )
-            )
-            isNew = true
-        }
         property = _property
+        if (id < 0) {
+            CoroutineScope(Dispatchers.Main).launch(Dispatchers.Main) {
+                _property.value = loadPropertyAsync(propertyNumber, subnumber).await()!![0]
+            }
+        } else {
+            propertyRepository.findById(id)
+            _property.value = propertyRepository.searchResult.value
+        }
     }
+
+    private fun loadPropertyAsync(
+        propertyNumber: String,
+        subnumber: String
+    ): Deferred<List<PropertyEntity>?> =
+        CoroutineScope(Dispatchers.Main).async(Dispatchers.IO) {
+            var selectedList: List<PropertyEntity>
+            while (propertyRepository.allData.value!!.filter { it.propertyNumber == propertyNumber && it.subnumber == subnumber }
+                    .also { selectedList = it }.isEmpty()) {
+                Thread.sleep(100)
+            }
+            return@async selectedList
+        }
 
     /**
      * Tells if all required variables are properly initialized
@@ -265,21 +271,21 @@ class PropertyDetailViewModel(
             _property.value!!.let {
 
                 if (_locality.value == "") {
-                    if(it.localityNew != "")
+                    if (it.localityNew != "")
                         _locality.value = it.localityNew
                     else
                         _locality.value = it.locality
                 }
 
                 if (_room.value == "") {
-                    if(it.roomNew != "")
+                    if (it.roomNew != "")
                         _room.value = it.roomNew
                     else
                         _room.value = it.room
                 }
 
                 if (_user.value == "") {
-                    if(it.personalNumberNew != "")
+                    if (it.personalNumberNew != "")
                         _user.value = it.personalNumberNew
                     else
                         _user.value = it.personalNumber
@@ -308,7 +314,7 @@ class PropertyDetailViewModel(
             it.roomNew = _room.value!!
             it.personalNumberNew = _user.value!!
             it.workplaceNew = _place.value!!
-            if (!isNew) {
+            if (!_property.value!!.isNew) {
                 if (it.recordStatus != 'N') {
                     if (it.locality == it.localityNew
                         && it.room == it.roomNew
@@ -336,10 +342,7 @@ class PropertyDetailViewModel(
                 Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "&room=" + roomFilter + "&user=" + userFilter + "&statusFilter=" + statusFilter
             )
         }
-        if(!isNew)
-            propertyRepository.update(_property.value!!)
-        else
-            propertyRepository.save(_property.value!!)
+        propertyRepository.update(_property.value!!)
     }
 
     /**
@@ -347,7 +350,7 @@ class PropertyDetailViewModel(
      */
     fun rollback() {
         _property.value!!.let {
-            if (it.recordStatus != 'N') {
+            if (!it.isNew) {
                 it.localityNew = ""
                 it.roomNew = ""
                 it.personalNumberNew = ""
@@ -357,9 +360,7 @@ class PropertyDetailViewModel(
                 it.fixedNote = ""
                 propertyRepository.update(property = it)
             } else {
-                if (!isNew) {
-                    propertyRepository.delete(property = it)
-                }
+                propertyRepository.delete(property = it)
             }
             navController.navigate(
                 Routes.INVENTORY_DETAIL.withArgs(it.inventoryId) + "?locality=" + localityFilter + "&room=" + roomFilter + "&user=" + userFilter + "&statusFilter=" + statusFilter
