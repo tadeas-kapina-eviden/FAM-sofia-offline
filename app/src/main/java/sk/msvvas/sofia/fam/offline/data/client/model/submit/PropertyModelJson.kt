@@ -27,11 +27,12 @@ data class PropertyModelJson(
     var variableNote: String,
     var isManual: Boolean,
 ) {
+
     fun toJSON(): String {
         return "\t\t\t{\n" +
-                "\t\t\t\t\"Inven\":\"$inventoryId\",\n" +
-                "\t\t\t\t\"Invnr\":\"$inventNumber\",\n" +
-                "\t\t\t\t\"Sernr\":\"$serialNumber\",\n" +
+                "\t\t\t\t\"Inven\":\"${inventoryId.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Invnr\":\"${inventNumber.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Sernr\":\"${serialNumber.treatSpecialSymbols()}\",\n" +
                 "\t\t\t\t\"Zstattext\":\"${
                     when (recordStatus) {
                         'X' -> "Nespracovaný"
@@ -42,32 +43,37 @@ data class PropertyModelJson(
                         else -> "Nespracovaný"
                     }
                 }\",\n" +
-                "\t\t\t\t\"Mandt\":\"$client\",\n" +
+                "\t\t\t\t\"Mandt\":\"${client.treatSpecialSymbols()}\",\n" +
                 "\t\t\t\t\"Bukrs\":\"1000\",\n" +
-                "\t\t\t\t\"Anln1\":\"$propertyNumber\",\n" +
-                "\t\t\t\t\"Anln2\":\"$subnumber\",\n" +
-                "\t\t\t\t\"Txt50\":\"${textMainNumber.replace("\"", "\\\"")}\",\n" +
+                "\t\t\t\t\"Anln1\":\"${propertyNumber.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Anln2\":\"${subnumber.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Txt50\":\"${textMainNumber.treatSpecialSymbols()}\",\n" +
                 "\t\t\t\t\"Zstat\":\"$recordStatus\",\n" +
-                "\t\t\t\t\"Werks\":\"$werks\",\n" +
-                "\t\t\t\t\"Werksn\":\"$werks\",\n" +
-                "\t\t\t\t\"Stort\":\"$locality\",\n" +
-                "\t\t\t\t\"Stortn\":\"$localityNew\",\n" +
-                "\t\t\t\t\"Raumn\":\"$room\",\n" +
-                "\t\t\t\t\"Raumnn\":\"$roomNew\",\n" +
-                "\t\t\t\t\"Pernr\":\"$personalNumber\",\n" +
-                "\t\t\t\t\"Pernrn\":\"$personalNumberNew\",\n" +
-                "\t\t\t\t\"Kostl\":\"$center\",\n" +
-                "\t\t\t\t\"Kostln\":\"$centerNew\",\n" +
-                "\t\t\t\t\"Anlue\":\"$workplace\",\n" +
-                "\t\t\t\t\"Anluen\":\"$workplaceNew\",\n" +
+                "\t\t\t\t\"Werks\":\"${werks.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Werksn\":\"${werks.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Stort\":\"${locality.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Stortn\":\"${localityNew.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Raumn\":\"${room.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Raumnn\":\"${roomNew.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Pernr\":\"${personalNumber.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Pernrn\":\"${personalNumberNew.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Kostl\":\"${center.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Kostln\":\"${centerNew.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Anlue\":\"${workplace.treatSpecialSymbols()}\",\n" +
+                "\t\t\t\t\"Anluen\":\"${workplaceNew.treatSpecialSymbols()}\",\n" +
                 "\t\t\t\t\"Mengeo\":\"0.000\",\n" +
                 "\t\t\t\t\"Mengen\":\"0.000\",\n" +
                 "\t\t\t\t\"Xnote\":\"${if (fixedNote.isEmpty()) "" else fixedNote.first()}\",\n" +
-                "\t\t\t\t\"Fnote\":\"$variableNote\",\n" +
+                "\t\t\t\t\"Fnote\":\"${variableNote.treatSpecialSymbols()}\",\n" +
                 "\t\t\t\t\"Manua\":\"${
                     if (isManual) "Y"
                     else "N"
                 }\"\n" +
                 "\t\t\t}"
     }
+}
+
+private fun String.treatSpecialSymbols(): String {
+    return this.replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b")
+        .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
 }

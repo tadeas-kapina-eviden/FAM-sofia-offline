@@ -20,11 +20,11 @@ data class InventoryModelJson(
         propertiesEntriesStringBuilder.deleteCharAt(propertiesEntriesStringBuilder.lastIndex - 1)
         return "{\n" +
                 "\t\"d\": {\n" +
-                "\t\t\"Inven\":\"$id\",\n" +
-                "\t\t\"Ipozn\":\"$note\",\n" +
-                "\t\t\"Datin\":\"$createdAt\",\n" +
-                "\t\t\"Datinf\":\"$createdAtFormatted\",\n" +
-                "\t\t\"Xubname\":\"$createdBy\",\n" +
+                "\t\t\"Inven\":\"${id.treatSpecialSymbols()}\",\n" +
+                "\t\t\"Ipozn\":\"${note.treatSpecialSymbols()}\",\n" +
+                "\t\t\"Datin\":\"${createdAt.treatSpecialSymbols()}\",\n" +
+                "\t\t\"Datinf\":\"${createdAtFormatted.treatSpecialSymbols()}\",\n" +
+                "\t\t\"Xubname\":\"${createdBy.treatSpecialSymbols()}\",\n" +
                 "\t\t\"Text20\":\"todo\",\n" +
                 "\t\t\"GetInventoryItemsSet\":[\n" +
                 propertiesEntriesStringBuilder.toString() +
@@ -32,4 +32,9 @@ data class InventoryModelJson(
                 "\t}\n" +
                 "}\n"
     }
+    private fun String.treatSpecialSymbols(): String {
+        return this.replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b")
+            .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
+    }
 }
+
