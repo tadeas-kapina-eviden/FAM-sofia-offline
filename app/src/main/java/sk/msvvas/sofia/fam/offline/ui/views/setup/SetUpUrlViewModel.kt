@@ -58,7 +58,7 @@ class SetUpUrlViewModel(
      */
     fun onChangeUrl(value: String) {
         _url.value = value
-        if (_url.value!!.last() == '\n'){
+        if (_url.value!!.isNotEmpty() && _url.value!!.last() == '\n'){
             _url.value = _url.value!!.removeSuffix("\n")
             setUrl()
         }

@@ -33,6 +33,10 @@ class InventoryDetailViewModel(
     submitInventory: Boolean
 ) : ViewModel() {
 
+    companion object {
+        public const val BATCH_SIZE = 1000;
+    }
+
     private val _properties =
         propertyRepository.searchByInventoryIdResult
     val properties: LiveData<List<PropertyEntity>> =
@@ -407,27 +411,39 @@ class InventoryDetailViewModel(
                 .filter {
                     "SZN".contains(it.recordStatus)
                 }
-            _loadingState.value = "Odosielajú sa dáta..."
-            val responseStatus =
-                if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
-                    inventoryRepository.allData.value!!.filter {
-                        it.id == toSendProperties[0].inventoryId
-                    }[0],
-                    toSendProperties
-                ) else HttpStatusCode.Created
-            _loadingState.value = "Dáta boli odoslané..."
-            if (responseStatus == HttpStatusCode.Created) {
-                _loadingState.value = "Resetuje sa lokálna databáza..."
-                propertyRepository.deleteAll()
-                navController.navigate(Routes.INVENTORY_LIST.value)
-            } else {
-                _loadingData.value = false
-                _errorHeader.value = "Chyba!"
-                _errorText.value =
-                    "Nastala chyba - položby sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+
+            var batchesCount =
+                toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1;
+
+            for (i in 0 until batchesCount) {
+                _loadingState.value = "Odosiela sa ${i + 1}. dávka..."
+                val toSendBatch = properties.value!!.subList(
+                    i * BATCH_SIZE,
+                    if (BATCH_SIZE * (i + 1) <= toSendProperties.size) BATCH_SIZE * (i + 1) else toSendProperties.size
+                )
+
+                val responseStatus =
+                    if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
+                        inventoryRepository.allData.value!!.filter {
+                            it.id == toSendProperties[0].inventoryId
+                        }[0],
+                        toSendBatch
+                    ) else HttpStatusCode.Created
+                if (responseStatus != HttpStatusCode.Created) {
+                    _loadingData.value = false
+                    _errorHeader.value = "Chyba!"
+                    _errorText.value =
+                        "Nastala chyba - položby sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+                    return@launch
+                }
             }
+            _loadingState.value = "Dáta boli odoslané..."
+            _loadingState.value = "Resetuje sa lokálna databáza..."
+            propertyRepository.deleteAll()
+            navController.navigate(Routes.INVENTORY_LIST.value)
         }
     }
+
 
     fun requireLoginModalShow() {
         _requireLoginModalShown.value = true
