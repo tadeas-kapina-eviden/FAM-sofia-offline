@@ -74,7 +74,7 @@ fun PropertyDetailView(
                         .fillMaxWidth()
                 ) {
                     TextField(
-                        value = if (property.propertyNumber.isBlank()) "Nová položka" else "Podrobnosti: " + property.propertyNumber + "/" + property.subnumber,
+                        value = if (property.propertyNumber.isBlank()) "Nová položka" else "Podrobnosti: " + property.propertyNumber.toLong().toString() + "/" + property.subnumber.toLong().toString(),
                         onValueChange = {},
                         readOnly = true,
                         modifier = Modifier
