@@ -417,7 +417,7 @@ class InventoryDetailViewModel(
 
             for (i in 0 until batchesCount) {
                 _loadingState.value = "Odosiela sa ${i + 1}. dávka..."
-                val toSendBatch = properties.value!!.subList(
+                val toSendBatch = toSendProperties.subList(
                     i * BATCH_SIZE,
                     if (BATCH_SIZE * (i + 1) <= toSendProperties.size) BATCH_SIZE * (i + 1) else toSendProperties.size
                 )
