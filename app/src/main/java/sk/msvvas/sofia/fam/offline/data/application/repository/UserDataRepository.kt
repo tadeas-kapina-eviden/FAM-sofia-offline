@@ -18,6 +18,13 @@ class UserDataRepository(private val userDataDao: UserDataDao) {
      */
     val allData = MutableLiveData<List<UserDataEntity>>()
 
+    val isLoaded = MutableLiveData(false);
+
+
+    init {
+        getAll()
+    }
+
     /**
      * Save one item to user_data table
      * @param userDataEntity user data
@@ -37,6 +44,7 @@ class UserDataRepository(private val userDataDao: UserDataDao) {
     fun getAll() {
         coroutineScope.launch(Dispatchers.Main) {
             allData.value = asyncGetAll().await()
+            isLoaded.value = true
         }
     }
 

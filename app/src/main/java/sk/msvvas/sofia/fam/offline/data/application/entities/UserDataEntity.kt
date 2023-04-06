@@ -11,8 +11,8 @@ data class UserDataEntity(
     val id: Int,
 
     @ColumnInfo(name = "login")
-    val login: String,
+    var login: String,
 
     @ColumnInfo(name = "client")
-    val client: String
+    var client: String
 )

@@ -10,6 +10,7 @@ import sk.msvvas.sofia.fam.offline.data.application.database.FamOfflineDatabase
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.ServerUrlRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.UserDataRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.*
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailView
 import sk.msvvas.sofia.fam.offline.ui.views.inventory.detail.InventoryDetailViewModel
@@ -37,6 +38,7 @@ fun Navigation(
     val inventoryRepository = InventoryRepository(database.inventoryDao())
     val propertyRepository = PropertyRepository(database.propertyDao())
     val serverUrlRepository = ServerUrlRepository(database.serverUrlDao())
+    val userDataRepository = UserDataRepository(database.userDataDao())
 
     val allCodebooksRepository = AllCodebooksRepository(
         localityCodebookRepository = LocalityCodebookRepository(database.localityCodebookDao()),
@@ -79,6 +81,7 @@ fun Navigation(
                     navController,
                     inventoryIDParameter = it.arguments?.getString("id")!!,
                     inventoryRepository = inventoryRepository,
+                    userDataRepository = userDataRepository,
                     submitInventory = it.arguments?.getString("submit")!! == "1"
                 )
             )

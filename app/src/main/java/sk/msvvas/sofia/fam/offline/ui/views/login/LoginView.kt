@@ -48,6 +48,7 @@ fun LoginView(
     val clientFocusRequester by loginViewModel.clientFocusRequester.observeAsState()
 
     val downloadingData by loginViewModel.downloadingData.observeAsState(false)
+    val isLoaded by loginViewModel.isLoaded.observeAsState(false)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -114,6 +115,11 @@ fun LoginView(
                     .fillMaxWidth(),
                 text = "Prihlásiť sa"
             )
+        }
+        if(!isLoaded){
+            LoadingAnimationModalWindow(header = "Načítavanie", text = "")
+        }else{
+            loginViewModel.setSavedUserData();
         }
         if (downloadingData) {
             LoadingAnimationModalWindow(header = "Načítavanie", text = "Prihlasuje sa na server...")

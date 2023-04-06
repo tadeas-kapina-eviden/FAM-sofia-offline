@@ -1,5 +1,6 @@
 package sk.msvvas.sofia.fam.offline.ui.views.login
 
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +9,9 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import sk.msvvas.sofia.fam.offline.data.application.entities.UserDataEntity
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
+import sk.msvvas.sofia.fam.offline.data.application.repository.UserDataRepository
 import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
@@ -18,12 +21,14 @@ import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
  * @param navController NavController from application Navigation
  * @param inventoryIDParameter inventory id of downloaded inventory (empty if none)
  * @param inventoryRepository inventory repository for local database
+ * @param userDataRepository repository for saving user login data
  * @param submitInventory tells if user is trying to login for submitting inventory, or not
  */
 class LoginViewModel(
     private val navController: NavController,
     private val inventoryIDParameter: String,
     private val inventoryRepository: InventoryRepository,
+    private val userDataRepository: UserDataRepository,
     private val submitInventory: Boolean
 ) : ViewModel() {
 
@@ -53,6 +58,9 @@ class LoginViewModel(
      */
     private val _downloadingData = MutableLiveData(false)
     val downloadingData: LiveData<Boolean> = _downloadingData
+
+    val isLoaded: LiveData<Boolean> = userDataRepository.isLoaded
+
 
     /**
      * Function executed when loginName text field was changed
@@ -112,6 +120,7 @@ class LoginViewModel(
                             clientId = _client.value!!
                         )
                     if (response) {
+                        saveUserData()
 
                         ClientData.client = _client.value!!
                         ClientData.username = _loginName.value!!
@@ -154,5 +163,34 @@ class LoginViewModel(
 
     fun requestClientFocus() {
         _clientFocusRequester.value!!.requestFocus()
+    }
+
+    fun setSavedUserData() {
+        val userDataList = userDataRepository.allData.value
+        val userData: UserDataEntity
+        if (userDataList != null && userDataList.isNotEmpty()) {
+            userData = userDataList[0]
+        } else {
+            return
+        }
+        if (userData.login != null) {
+            _loginName.value = userData.login
+        }
+        if (userData.client != null) {
+            _client.value = userData.client
+        }
+    }
+
+    fun saveUserData(){
+        val userDataList = userDataRepository.allData.value
+        val userData: UserDataEntity
+        if (userDataList != null && userDataList.isNotEmpty()) {
+            userData = userDataList[0]
+            userData.login = loginName.value!!
+            userData.client = client.value!!
+        } else {
+            userData = UserDataEntity(1, loginName.value!!, client.value!!)
+        }
+        userDataRepository.save(userData)
     }
 }
