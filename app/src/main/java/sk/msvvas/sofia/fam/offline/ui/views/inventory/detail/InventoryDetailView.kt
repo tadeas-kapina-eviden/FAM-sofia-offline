@@ -55,6 +55,8 @@ fun InventoryDetailView(
     val codeFilterLocality by inventoryDetailViewModel.codeFilterLocality.observeAsState()
     val codeFilterRoom by inventoryDetailViewModel.codeFilterRoom.observeAsState()
     val statusFilter by inventoryDetailViewModel.statusFilter.observeAsState('U')
+    val processedCount by inventoryDetailViewModel.processedCount.observeAsState(0)
+    val unprocessedCount by inventoryDetailViewModel.unprocessedCount.observeAsState(0)
 
     val isCodebookSelectionViewShown by inventoryDetailViewModel.isCodebookSelectionViewShown.observeAsState(
         false
@@ -168,7 +170,7 @@ fun InventoryDetailView(
                             idSelected = R.drawable.unprocessed_selected,
                             idUnselected = R.drawable.unprocessed_unselected,
                             text = "Nespracované",
-                            count = inventoryDetailViewModel.countUnprocessed(),
+                            count = unprocessedCount,
                             onClick = {
                                 inventoryDetailViewModel.statusFilterUnprocessed()
                             }
@@ -178,7 +180,7 @@ fun InventoryDetailView(
                             idSelected = R.drawable.processed_selected,
                             idUnselected = R.drawable.processed_unselected,
                             text = "Spracované",
-                            count = inventoryDetailViewModel.countProcessed(),
+                            count = processedCount,
                             onClick = {
                                 inventoryDetailViewModel.statusFilterProcessed()
                             }

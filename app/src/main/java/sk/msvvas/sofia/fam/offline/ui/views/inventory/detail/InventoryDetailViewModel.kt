@@ -118,6 +118,12 @@ class InventoryDetailViewModel(
     private val _loadingState = MutableLiveData("")
     val loadingState: LiveData<String> = _loadingState
 
+    private val _unprocessedCount = MutableLiveData(0)
+    val unprocessedCount: LiveData<Int> = _unprocessedCount
+
+    private val _processedCount = MutableLiveData(0)
+    val processedCount: LiveData<Int> = _processedCount
+
 
     init {
         allCodebooksRepository.getAll()
@@ -251,6 +257,8 @@ class InventoryDetailViewModel(
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value))
             }
         }
+        countUnprocessed()
+        countProcessed()
     }
 
     fun onSelectProperty(id: Long) {
@@ -366,8 +374,8 @@ class InventoryDetailViewModel(
         filterOutValues()
     }
 
-    fun countUnprocessed(): Int {
-        return if (_properties.value != null)
+    fun countUnprocessed() {
+        _unprocessedCount.value = if (_properties.value != null)
             _properties.value!!.count {
                 (it.recordStatus == 'C' || it.recordStatus == 'X') &&
                         (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
@@ -378,8 +386,8 @@ class InventoryDetailViewModel(
 
     }
 
-    fun countProcessed(): Int {
-        return if (_properties.value != null)
+    fun countProcessed() {
+        _processedCount.value = if (_properties.value != null)
             _properties.value!!.count {
                 (it.recordStatus == 'S' || it.recordStatus == 'Z' || it.recordStatus == 'N') &&
                         (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value)
