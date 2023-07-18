@@ -263,10 +263,15 @@ class InventoryDetailViewModel(
 
     fun onSelectProperty(id: Long) {
         if (id < 0) {
-            val subnumber = (max(_properties.value!!.filter {
+            val subnumber: String
+            val newProperties = _properties.value!!.filter {
                 it.propertyNumber == "NOVY"
-            }.map { it.subnumber.toInt() }) + 1).toString()
-
+            }
+            if (newProperties.isEmpty()) {
+                subnumber = "1"
+            } else {
+                subnumber = (max(newProperties.map { it.subnumber.toInt() }) + 1).toString()
+            }
             propertyRepository.save(
                 PropertyEntity(
                     propertyNumber = "NOVY",
