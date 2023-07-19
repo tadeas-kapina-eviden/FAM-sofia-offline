@@ -1,6 +1,5 @@
 package sk.msvvas.sofia.fam.offline.ui.views.login
 
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -52,6 +51,8 @@ class LoginViewModel(
 
     private val _clientFocusRequester = MutableLiveData(FocusRequester())
     val clientFocusRequester: LiveData<FocusRequester> = _clientFocusRequester
+
+    private val _savedUserDataLoaded = MutableLiveData(false)
 
     /**
      * Variable hold
@@ -166,22 +167,25 @@ class LoginViewModel(
     }
 
     fun setSavedUserData() {
-        val userDataList = userDataRepository.allData.value
-        val userData: UserDataEntity
-        if (userDataList != null && userDataList.isNotEmpty()) {
-            userData = userDataList[0]
-        } else {
-            return
-        }
-        if (userData.login != null) {
-            _loginName.value = userData.login
-        }
-        if (userData.client != null) {
-            _client.value = userData.client
+        if (!_savedUserDataLoaded.value!!) {
+            val userDataList = userDataRepository.allData.value
+            val userData: UserDataEntity
+            if (userDataList != null && userDataList.isNotEmpty()) {
+                userData = userDataList[0]
+            } else {
+                return
+            }
+            if (userData.login != null) {
+                _loginName.value = userData.login
+            }
+            if (userData.client != null) {
+                _client.value = userData.client
+            }
+            _savedUserDataLoaded.value = true
         }
     }
 
-    fun saveUserData(){
+    fun saveUserData() {
         val userDataList = userDataRepository.allData.value
         val userData: UserDataEntity
         if (userDataList != null && userDataList.isNotEmpty()) {
