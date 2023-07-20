@@ -66,8 +66,8 @@ data class PropertyModelJson(
                 "\t\t\t\t\"Xnote\":\"${if (fixedNote.isEmpty()) "" else fixedNote.first()}\",\n" +
                 "\t\t\t\t\"Fnote\":\"${variableNote.treatSpecialSymbols()}\",\n" +
                 "\t\t\t\t\"Manua\":\"${
-                    if (isManual) "Y"
-                    else "N"
+                    if (isManual) "X"
+                    else ""
                 }\"\n" +
                 "\t\t\t}"
     }
