@@ -124,6 +124,9 @@ class InventoryDetailViewModel(
     private val _processedCount = MutableLiveData(0)
     val processedCount: LiveData<Int> = _processedCount
 
+    private val _locationNotSelectedModalShown = MutableLiveData(false)
+    val locationNotSelectedModalShown: LiveData<Boolean> = _locationNotSelectedModalShown
+
 
     init {
         allCodebooksRepository.getAll()
@@ -262,6 +265,10 @@ class InventoryDetailViewModel(
     }
 
     fun onSelectProperty(id: Long) {
+        if (roomFilter.value == null || roomFilter.value!!.isEmpty() || localityFilter.value == null || localityFilter.value!!.isEmpty()) {
+            showLocationNotSelectedModalWindow()
+            return
+        }
         if (id < 0) {
             val subnumber: String
             val newProperties = _properties.value!!.filter {
@@ -296,6 +303,11 @@ class InventoryDetailViewModel(
                 ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString()
             )
         }
+    }
+
+    private fun showLocationNotSelectedModalWindow() {
+        _errorHeader.value = "Nie je zadaná miestnosť"
+        _errorText.value = "Nie je možné spracovať položku, kým nie je zvolaná miestnosť"
     }
 
     fun closeErrorAlert() {
