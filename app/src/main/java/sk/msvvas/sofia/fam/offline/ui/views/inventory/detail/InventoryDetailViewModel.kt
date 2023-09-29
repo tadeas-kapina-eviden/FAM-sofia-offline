@@ -158,6 +158,10 @@ class InventoryDetailViewModel(
             return
         }
         if (_codeFilter.value!!.length == 20) {
+            if(_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()){
+                showLocationNotSelectedModalWindow();
+                return;
+            }
             var propertyNumber: String =
                 _codeFilter.value!!.subSequence(4, 16).toString().toLong().toString()
             var subnumber: String =
@@ -251,12 +255,12 @@ class InventoryDetailViewModel(
         } else {
             _filteredProperties.value = _properties.value!!.filter {
                 (_statusFilter.value == 'U' && "XC".contains(it.recordStatus)
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value || (_localityFilter.value == "ziadna" && it.locality.isEmpty()))
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value || (_roomFilter.value == "ziadna" && it.room.isEmpty()))
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value))
                         || ((_statusFilter.value == 'P' && "SZN".contains(it.recordStatus))
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value)
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value)
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value || (_localityFilter.value == "ziadna" && it.localityNew.isEmpty()))
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value || (_roomFilter.value == "ziadna" && it.roomNew.isEmpty()))
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value))
             }
         }
@@ -336,7 +340,9 @@ class InventoryDetailViewModel(
 
     fun showLocationCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
-        _codebookSelectionViewData.value = allCodebooksRepository.allLocalities.value
+        _codebookSelectionViewData.value = allCodebooksRepository.allLocalities.value?.plus(
+            LocalityCodebookEntity("ziadna", "Žiadna lokalita")
+        )
         _codebookSelectionViewIdGetter.value = { (it as LocalityCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as LocalityCodebookEntity).description }
@@ -353,7 +359,8 @@ class InventoryDetailViewModel(
 
     fun showRoomCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
-        _codebookSelectionViewData.value = allCodebooksRepository.allRooms.value
+        _codebookSelectionViewData.value =
+            allCodebooksRepository.allRooms.value?.plus(RoomCodebookEntity("ziadna", "ziadna","Žiadna miestnosť"));
         _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
@@ -394,9 +401,9 @@ class InventoryDetailViewModel(
     fun countUnprocessed() {
         _unprocessedCount.value = if (_properties.value != null)
             _properties.value!!.count {
-                (it.recordStatus == 'C' || it.recordStatus == 'X') &&
-                        (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value)
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value)
+                (it.recordStatus == 'C' || it.recordStatus == 'X')
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value || (_localityFilter.value == "ziadna" && it.locality.isEmpty()))
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value || (_roomFilter.value == "ziadna" && it.room.isEmpty()))
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
 
             } else 0
@@ -406,9 +413,9 @@ class InventoryDetailViewModel(
     fun countProcessed() {
         _processedCount.value = if (_properties.value != null)
             _properties.value!!.count {
-                (it.recordStatus == 'S' || it.recordStatus == 'Z' || it.recordStatus == 'N') &&
-                        (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value)
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value)
+                (it.recordStatus == 'S' || it.recordStatus == 'Z' || it.recordStatus == 'N')
+                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value || (_localityFilter.value == "ziadna" && it.localityNew.isEmpty()))
+                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value || (_roomFilter.value == "ziadna" && it.roomNew.isEmpty()))
                         && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value)
 
             } else 0
