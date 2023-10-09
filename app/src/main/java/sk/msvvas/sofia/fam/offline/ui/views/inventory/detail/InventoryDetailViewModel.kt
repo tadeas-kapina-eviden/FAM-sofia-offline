@@ -160,6 +160,7 @@ class InventoryDetailViewModel(
         if (_codeFilter.value!!.length == 20) {
             if(_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()){
                 showLocationNotSelectedModalWindow();
+                _codeFilter.value = ""
                 return;
             }
             var propertyNumber: String =
