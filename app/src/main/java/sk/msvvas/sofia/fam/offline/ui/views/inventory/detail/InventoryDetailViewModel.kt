@@ -158,7 +158,7 @@ class InventoryDetailViewModel(
             return
         }
         if (_codeFilter.value!!.length == 20) {
-            if(_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()){
+            if (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()) {
                 showLocationNotSelectedModalWindow();
                 _codeFilter.value = ""
                 return;
@@ -361,7 +361,13 @@ class InventoryDetailViewModel(
     fun showRoomCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value =
-            allCodebooksRepository.allRooms.value?.plus(RoomCodebookEntity("ziadna", "ziadna","Žiadna miestnosť"));
+            allCodebooksRepository.allRooms.value?.plus(
+                RoomCodebookEntity(
+                    "ziadna",
+                    "ziadna",
+                    "Žiadna miestnosť"
+                )
+            );
         _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
@@ -394,8 +400,8 @@ class InventoryDetailViewModel(
     }
 
     fun onLocalityRoomStatusSelect(locality: String, room: String) {
-        _codeFilterLocality.value = locality
-        _codeFilterRoom.value = room
+        _codeFilterLocality.value = if (locality.isBlank()) "ziadna" else locality
+        _codeFilterRoom.value = if (room.isBlank()) "ziadna" else room
         filterOutValues()
     }
 
