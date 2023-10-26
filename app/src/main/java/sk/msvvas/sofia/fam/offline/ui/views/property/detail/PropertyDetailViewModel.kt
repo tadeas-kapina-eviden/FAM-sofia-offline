@@ -55,6 +55,14 @@ class PropertyDetailViewModel(
             propertyRepository.findById(id)
             _property.value = propertyRepository.searchResult.value
         }
+        if (_property.value != null) {
+            if (_property.value!!.localityNew == "ziadna") {
+                _property.value!!.localityNew = ""
+            }
+            if (_property.value!!.roomNew == "ziadna") {
+                _property.value!!.roomNew = ""
+            }
+        }
     }
 
     private fun loadPropertyAsync(
@@ -75,10 +83,11 @@ class PropertyDetailViewModel(
      */
     private var varsInitialized = false
 
-    private val _locality = MutableLiveData(localityFilter)
+    // TODO:
+    private val _locality = MutableLiveData(if (localityFilter != "ziadna") localityFilter else "")
     val locality: LiveData<String> = _locality
 
-    private val _room = MutableLiveData(roomFilter)
+    private val _room = MutableLiveData(if (roomFilter != "ziadna") roomFilter else "")
     val room: LiveData<String> = _room
 
     private val _user = MutableLiveData(userFilter)
@@ -155,7 +164,9 @@ class PropertyDetailViewModel(
      */
     fun showRoomCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
-        _codebookSelectionViewData.value = allCodebooksRepository.allRooms.value
+        _codebookSelectionViewData.value = allCodebooksRepository.allRooms.value!!.filter {
+            if (locality.value == null || locality.value!!.isBlank()) true else it.localityId == locality.value!!
+        }
         _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }

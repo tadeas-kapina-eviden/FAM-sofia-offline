@@ -361,7 +361,9 @@ class InventoryDetailViewModel(
     fun showRoomCodebookSelectionView() {
         _isCodebookSelectionViewShown.value = true
         _codebookSelectionViewData.value =
-            allCodebooksRepository.allRooms.value?.plus(
+            allCodebooksRepository.allRooms.value?.filter {
+                if (localityFilter.value == null || localityFilter.value!!.isBlank()) true else it.localityId == localityFilter.value!!
+            }!!.plus(
                 RoomCodebookEntity(
                     "ziadna",
                     "ziadna",
