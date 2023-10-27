@@ -290,8 +290,8 @@ class InventoryDetailViewModel(
                     subnumber = subnumber,
                     inventoryId = _inventoryId.value!!,
                     recordStatus = 'N',
-                    localityNew = _localityFilter.value!!,
-                    roomNew = _roomFilter.value!!,
+                    localityNew = if(_localityFilter.value!! != "ziadna") _localityFilter.value!! else "",
+                    roomNew = if(_roomFilter.value!! != "ziadna") _roomFilter.value!! else "",
                     personalNumberNew = _userFilter.value!!,
                     isNew = true
                 )

@@ -62,6 +62,12 @@ class PropertyDetailViewModel(
             if (_property.value!!.roomNew == "ziadna") {
                 _property.value!!.roomNew = ""
             }
+            if (_property.value!!.locality == "ziadna") {
+                _property.value!!.locality = ""
+            }
+            if (_property.value!!.room == "ziadna") {
+                _property.value!!.room = ""
+            }
         }
     }
 
