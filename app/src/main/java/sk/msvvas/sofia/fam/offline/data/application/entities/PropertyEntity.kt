@@ -2,6 +2,7 @@ package sk.msvvas.sofia.fam.offline.data.application.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 
@@ -9,7 +10,13 @@ import androidx.room.PrimaryKey
  * Entity for properties table in local database
  */
 @Entity(
-    tableName = "properties"
+    tableName = "properties",
+    indices = [
+        Index(value = ["id"], unique = true),
+        Index(value = ["inventoryId"], unique = false),
+        Index(value = ["recordStatus"], unique = false),
+        Index(value = ["propertyNumber", "subnumber"], unique = true),
+    ]
 )
 data class PropertyEntity(
     @PrimaryKey(autoGenerate = true)

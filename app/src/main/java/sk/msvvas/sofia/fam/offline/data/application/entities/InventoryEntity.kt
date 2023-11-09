@@ -2,12 +2,18 @@ package sk.msvvas.sofia.fam.offline.data.application.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Entity for inventories table in local database
  */
-@Entity(tableName = "inventories")
+@Entity(
+    tableName = "inventories",
+    indices = [
+        Index(value = ["id"], unique = true)
+    ]
+)
 data class InventoryEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
