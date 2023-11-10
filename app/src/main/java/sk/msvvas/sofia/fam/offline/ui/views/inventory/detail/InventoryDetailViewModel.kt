@@ -13,6 +13,7 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.UserCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.model.LocalityRoomCountPair
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
@@ -35,14 +36,14 @@ class InventoryDetailViewModel(
 ) : ViewModel() {
 
     companion object {
-         const val BATCH_SIZE = 1000
+        const val BATCH_SIZE = 1000
     }
-
-    private val _properties = MutableLiveData(listOf<PropertyEntity>())
-    val properties: LiveData<List<PropertyEntity>> = _properties
 
     private val _filteredProperties = MutableLiveData(listOf<PropertyEntity>())
     val filteredProperties: LiveData<List<PropertyEntity>> = _filteredProperties
+
+    private val _localityRoomPairsCount = MutableLiveData(listOf<LocalityRoomCountPair>())
+    val localityRoomPairsCount: LiveData<List<LocalityRoomCountPair>> = _localityRoomPairsCount
 
     private val _isFiltersShown = MutableLiveData(false)
     val isFiltersShown: LiveData<Boolean> = _isFiltersShown
@@ -130,11 +131,7 @@ class InventoryDetailViewModel(
     init {
         allCodebooksRepository.getAll()
         if (!submitInventory) {
-            CoroutineScope(Dispatchers.Main).launch {
-                _properties.value = withContext(Dispatchers.IO) {
-                    propertyRepository.findByInventoryId(_inventoryId.value!!)
-                }
-            }
+            filterOutValues()
         } else {
             submitInventory()
         }
@@ -161,68 +158,70 @@ class InventoryDetailViewModel(
             return
         }
         if (_codeFilter.value!!.length == 20) {
-            if (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()) {
-                showLocationNotSelectedModalWindow()
-                _codeFilter.value = ""
-                return
-            }
-            var propertyNumber: String =
-                _codeFilter.value!!.subSequence(4, 16).toString().toLong().toString()
-            var subnumber: String =
-                _codeFilter.value!!.subSequence(16, 20).toString().toLong().toString()
+            CoroutineScope(Dispatchers.Main).launch {
+                if (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()) {
+                    showLocationNotSelectedModalWindow()
+                    _codeFilter.value = ""
+                    return@launch
+                }
+                var propertyNumber: String =
+                    _codeFilter.value!!.subSequence(4, 16).toString().toLong().toString()
+                var subnumber: String =
+                    _codeFilter.value!!.subSequence(16, 20).toString().toLong().toString()
 
-            val selectedList = _properties.value!!.filter {
-                it.propertyNumber == propertyNumber && it.subnumber == subnumber
-            }
-            if (selectedList.isEmpty()) {
-                propertyNumber = "000000000000".subSequence(0, 12 - propertyNumber.length)
-                    .toString() + propertyNumber
-                subnumber = "0000".subSequence(0, 4 - subnumber.length).toString() + subnumber
-                propertyRepository.save(
-                    PropertyEntity(
-                        propertyNumber = propertyNumber,
-                        subnumber = subnumber,
-                        inventoryId = _inventoryId.value!!,
-                        recordStatus = 'N',
-                        localityNew = _localityFilter.value!!,
-                        roomNew = _roomFilter.value!!,
-                        personalNumberNew = _userFilter.value!!,
-                        isNew = true
+                val selected = withContext(Dispatchers.IO) {
+                    propertyRepository.getByIdentifiers(
+                        propertyNumber,
+                        subnumber
                     )
-                )
+                }
+                if (selected == null) {
+                    propertyNumber = "000000000000".subSequence(0, 12 - propertyNumber.length)
+                        .toString() + propertyNumber
+                    subnumber = "0000".subSequence(0, 4 - subnumber.length).toString() + subnumber
+                    propertyRepository.save(
+                        PropertyEntity(
+                            propertyNumber = propertyNumber,
+                            subnumber = subnumber,
+                            inventoryId = _inventoryId.value!!,
+                            recordStatus = 'N',
+                            localityNew = _localityFilter.value!!,
+                            roomNew = _roomFilter.value!!,
+                            personalNumberNew = _userFilter.value!!,
+                            isNew = true
+                        )
+                    )
 
 
-                navController.navigate(
-                    Routes.PROPERTY_DETAIL.withArgs(
-                        "-1",
-                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + false.toString() + "&propertyNumber=" + propertyNumber + "&subnumber=" + subnumber
-                )
-
-
-            } else {
-                if (_scanWithoutDetail.value!!) {
-                    val propertyToUpdate = selectedList.first()
-                    propertyToUpdate.let {
-                        it.localityNew =
-                            if (_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else if (it.localityNew.isNotEmpty()) it.localityNew else it.locality
-                        it.roomNew =
-                            if (_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else if (it.roomNew.isNotEmpty()) it.roomNew else it.room
-                        it.personalNumberNew =
-                            if (_userFilter.value!!.isNotEmpty()) _userFilter.value!! else if (it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
-                        if (it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew) {
-                            it.recordStatus = 'S'
-                        } else {
-                            it.recordStatus = 'Z'
-                        }
-                    }
-                    propertyRepository.update(property = propertyToUpdate)
-                    filterOutValues()
-                } else {
                     navController.navigate(
                         Routes.PROPERTY_DETAIL.withArgs(
-                            selectedList.first().id.toString()
-                        ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&statusFilter=" + _statusFilter.value!! + "&isManual=" + false.toString()
+                            "-1",
+                        ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + false.toString() + "&propertyNumber=" + propertyNumber + "&subnumber=" + subnumber
                     )
+                } else {
+                    if (_scanWithoutDetail.value!!) {
+                        selected.let {
+                            it.localityNew =
+                                if (_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else if (it.localityNew.isNotEmpty()) it.localityNew else it.locality
+                            it.roomNew =
+                                if (_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else if (it.roomNew.isNotEmpty()) it.roomNew else it.room
+                            it.personalNumberNew =
+                                if (_userFilter.value!!.isNotEmpty()) _userFilter.value!! else if (it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
+                            if (it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew) {
+                                it.recordStatus = 'S'
+                            } else {
+                                it.recordStatus = 'Z'
+                            }
+                        }
+                        propertyRepository.update(property = selected)
+                        filterOutValues()
+                    } else {
+                        navController.navigate(
+                            Routes.PROPERTY_DETAIL.withArgs(
+                                selected.id.toString()
+                            ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&statusFilter=" + _statusFilter.value!! + "&isManual=" + false.toString()
+                        )
+                    }
                 }
             }
         } else if (_codeFilter.value!!.length == 22) {
@@ -254,72 +253,63 @@ class InventoryDetailViewModel(
     }
 
     fun filterOutValues() {
-        if (_properties.value == null || _properties.value!!.isEmpty()) {
-            _filteredProperties.value = emptyList()
-        } else {
-            CoroutineScope(Dispatchers.Main).launch {
-                if (statusFilter.value == 'P') {
-                    _filteredProperties.value = withContext(Dispatchers.IO) {
-                        propertyRepository.findProcessedBySearchCriteria(
-                            localityFilter.value,
-                            roomFilter.value,
-                            userFilter.value
-                        )
-                    }
+        CoroutineScope(Dispatchers.Main).launch {
+            if (statusFilter.value == 'P') {
+                _filteredProperties.value = withContext(Dispatchers.IO) {
+                    propertyRepository.findProcessedBySearchCriteria(
+                        localityFilter.value,
+                        roomFilter.value,
+                        userFilter.value
+                    )
                 }
-                if (statusFilter.value == 'U') {
-                    _filteredProperties.value = withContext(Dispatchers.IO) {
-                        propertyRepository.findUnprocessedBySearchCriteria(
-                            localityFilter.value,
-                            roomFilter.value,
-                            userFilter.value
-                        )
-                    }
+            }
+            if (statusFilter.value == 'U') {
+                _filteredProperties.value = withContext(Dispatchers.IO) {
+                    propertyRepository.findUnprocessedBySearchCriteria(
+                        localityFilter.value,
+                        roomFilter.value,
+                        userFilter.value
+                    )
                 }
             }
         }
+
         countUnprocessed()
         countProcessed()
     }
 
     fun onSelectProperty(id: Long) {
-        if (roomFilter.value == null || roomFilter.value!!.isEmpty() || localityFilter.value == null || localityFilter.value!!.isEmpty()) {
-            showLocationNotSelectedModalWindow()
-            return
-        }
-        if (id < 0) {
-            val subnumber: String
-            val newProperties = _properties.value!!.filter {
-                it.propertyNumber == "NOVY"
+        CoroutineScope(Dispatchers.Main).launch {
+            if (roomFilter.value == null || roomFilter.value!!.isEmpty() || localityFilter.value == null || localityFilter.value!!.isEmpty()) {
+                showLocationNotSelectedModalWindow()
+                return@launch
             }
-            subnumber = if (newProperties.isEmpty()) {
-                "1"
-            } else {
-                (max(newProperties.map { it.subnumber.toInt() }) + 1).toString()
-            }
-            propertyRepository.save(
-                PropertyEntity(
-                    propertyNumber = "NOVY",
-                    subnumber = subnumber,
-                    inventoryId = _inventoryId.value!!,
-                    recordStatus = 'N',
-                    localityNew = if (_localityFilter.value!! != "ziadna") _localityFilter.value!! else "",
-                    roomNew = if (_roomFilter.value!! != "ziadna") _roomFilter.value!! else "",
-                    personalNumberNew = _userFilter.value!!,
-                    isNew = true
+            if (id < 0) {
+                val subnumber = withContext(Dispatchers.IO) { propertyRepository.countNEW() + 1 }
+                propertyRepository.save(
+                    PropertyEntity(
+                        propertyNumber = "NOVY",
+                        subnumber = subnumber.toString(),
+                        inventoryId = _inventoryId.value!!,
+                        recordStatus = 'N',
+                        localityNew = if (_localityFilter.value!! != "ziadna") _localityFilter.value!! else "",
+                        roomNew = if (_roomFilter.value!! != "ziadna") _roomFilter.value!! else "",
+                        personalNumberNew = _userFilter.value!!,
+                        isNew = true
+                    )
                 )
-            )
-            navController.navigate(
-                Routes.PROPERTY_DETAIL.withArgs(
-                    "-1",
-                ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString() + "&propertyNumber=" + "NOVY" + "&subnumber=" + subnumber
-            )
-        } else {
-            navController.navigate(
-                Routes.PROPERTY_DETAIL.withArgs(
-                    id.toString(),
-                ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString()
-            )
+                navController.navigate(
+                    Routes.PROPERTY_DETAIL.withArgs(
+                        "-1",
+                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString() + "&propertyNumber=" + "NOVY" + "&subnumber=" + subnumber
+                )
+            } else {
+                navController.navigate(
+                    Routes.PROPERTY_DETAIL.withArgs(
+                        id.toString(),
+                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString()
+                )
+            }
         }
     }
 
@@ -345,7 +335,7 @@ class InventoryDetailViewModel(
 
     fun statusFilterStatus() {
         _statusFilter.value = 'S'
-        filterOutValues()
+        countLocalityRoomPairs()
     }
 
     fun closeCodebookSelectionView() {
@@ -511,5 +501,29 @@ class InventoryDetailViewModel(
 
     fun toLogin() {
         navController.navigate(Routes.LOGIN_VIEW.value + "?id=${inventoryId.value}&submit=1")
+    }
+
+    fun countLocalityRoomPairs() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = mutableListOf<LocalityRoomCountPair>()
+            withContext(Dispatchers.IO) {
+                propertyRepository.findLocalityRoomPairs().forEach {
+                    val pair = LocalityRoomCountPair(
+                        it.locality,
+                        it.room
+                    )
+                    if (pair in result) {
+                        val toAdd = result[result.indexOf(pair)]
+                        toAdd.all++
+                        toAdd.processed += if (it.processed) 1 else 0
+                    } else {
+                        pair.all = 1
+                        pair.processed = if (it.processed) 1 else 0
+                        result.add(pair)
+                    }
+                }
+            }
+            _localityRoomPairsCount.value = result
+        }
     }
 }

@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sk.msvvas.sofia.fam.offline.data.application.daos.PropertyDao
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.model.LocalityRoomPair
 
 /**
  * Repository for high-level interactions with database table property
@@ -103,6 +104,17 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         )
     }
 
+    suspend fun countNEW(): Int {
+        return propertyDao.countNEW().toInt()
+    }
+
+
+    suspend fun getByIdentifiers(
+        propertyNumber: String,
+        subNumber: String
+    ): PropertyEntity? {
+        return propertyDao.getByIdentifiers(propertyNumber, subNumber)
+    }
 
     /**
      * Find multiple items in property table identified by inventoryId
@@ -128,5 +140,9 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
 
     suspend fun getCountUnProcessed(): Int {
         return propertyDao.getCountUnProccesed()
+    }
+
+    suspend fun findLocalityRoomPairs(): List<LocalityRoomPair> {
+        return propertyDao.findLocalityRoomPairs()
     }
 }

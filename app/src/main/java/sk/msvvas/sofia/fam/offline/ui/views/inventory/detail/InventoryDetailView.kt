@@ -57,6 +57,9 @@ fun InventoryDetailView(
     val statusFilter by inventoryDetailViewModel.statusFilter.observeAsState('U')
     val processedCount by inventoryDetailViewModel.processedCount.observeAsState(0)
     val unprocessedCount by inventoryDetailViewModel.unprocessedCount.observeAsState(0)
+    val localityRoomPairs by inventoryDetailViewModel.localityRoomPairsCount.observeAsState(
+        emptyList()
+    )
 
     val isCodebookSelectionViewShown by inventoryDetailViewModel.isCodebookSelectionViewShown.observeAsState(
         false
@@ -229,7 +232,44 @@ fun InventoryDetailView(
                     }
                 }
                 if (statusFilter == 'S') {
-                    item { InventoryDetailStatusView(inventoryDetailViewModel = inventoryDetailViewModel) }
+                    item {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Lokalita",
+                                modifier = Modifier
+                                    .weight(1f),
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = "Miestnosť",
+                                modifier = Modifier
+                                    .weight(1f),
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = "Spracované/celkom",
+                                modifier = Modifier
+                                    .weight(1f),
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
+                    }
+                    items(localityRoomPairs) { item ->
+                        StatusRow(
+                            localityRoomCountPair = item,
+                            onSelect = { loc, room ->
+                                inventoryDetailViewModel.onLocalityRoomStatusSelect(
+                                    loc,
+                                    room
+                                )
+                            })
+                    }
                 } else {
                     item {
                         Row(
@@ -270,6 +310,7 @@ fun InventoryDetailView(
                     }
                 }
             }
+
             Row(
                 Modifier
                     .padding(bottom = 15.dp)

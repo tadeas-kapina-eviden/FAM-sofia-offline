@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.application.daos.InventoryDao
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 
 /**
  * Repository for high-level interactions with database table inventory
@@ -61,6 +62,7 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
             inventoryDao.deleteAll()
         }
     }
+
 
     /**
      * Get one item from inventory table identified by id

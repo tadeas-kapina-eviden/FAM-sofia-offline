@@ -3,6 +3,7 @@ package sk.msvvas.sofia.fam.offline.data.application.daos
 import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
+import sk.msvvas.sofia.fam.offline.data.application.model.LocalityRoomPair
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
 
 /**
@@ -113,13 +114,21 @@ interface PropertyDao {
     suspend fun getPreviewById(id: Long): PropertyPreviewModel
 
     @Query(
+        "select * from properties where property_number = :propertyNumber and subnumber = :subNumber limit 1"
+    )
+    suspend fun getByIdentifiers(
+        propertyNumber: String,
+        subNumber: String
+    ): PropertyEntity?
+
+    @Query(
         "select * FROM properties where " +
                 "  (record_status = 78 or record_status = 83 or record_status = 90) " +
                 "  and (:locality is null or :locality = '' or locality = :locality) " +
                 "  and (:room is null or :room = '' or room = :room) " +
                 "  and (:user is null or :user = '' or personal_number = :user) "
     )
-    fun findProcessedBySearchCriteria(
+    suspend fun findProcessedBySearchCriteria(
         locality: String?,
         room: String?,
         user: String?
@@ -132,9 +141,34 @@ interface PropertyDao {
                 "  and (:room is null or :room = '' or room_new = :room) " +
                 "  and (:user is null or :user = '' or personal_number_new = :user) "
     )
-    fun findUnprocessedBySearchCriteria(
+    suspend fun findUnprocessedBySearchCriteria(
         locality: String?,
         room: String?,
         user: String?
     ): List<PropertyEntity>
+
+
+    @Query(
+        "select " +
+                " case " +
+                "        when (record_status = 88 or record_status = 67) then 'false' " +
+                "        when (record_status = 78 or record_status = 83 or record_status = 90) then 'true' " +
+                "    end as processed, " +
+                " case " +
+                "        when (record_status = 88 or record_status = 67) then locality " +
+                "        when (record_status = 78 or record_status = 83 or record_status = 90) then locality_new " +
+                "    end as locality, " +
+                " case " +
+                "        when (record_status = 88 or record_status = 67) then room " +
+                "        when (record_status = 78 or record_status = 83 or record_status = 90) then room_new " +
+                "    end as room " +
+                " from properties "
+    )
+    suspend fun findLocalityRoomPairs(): List<LocalityRoomPair>
+
+    @Query(
+        "select subnumber from properties " +
+                "where property_number = 'NOVY' order by subnumber desc limit 1"
+    )
+    suspend fun countNEW() : String
 }
