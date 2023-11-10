@@ -35,7 +35,7 @@ class InventoryDetailViewModel(
 ) : ViewModel() {
 
     companion object {
-        public const val BATCH_SIZE = 1000;
+         const val BATCH_SIZE = 1000
     }
 
     private val _properties = MutableLiveData(listOf<PropertyEntity>())
@@ -162,9 +162,9 @@ class InventoryDetailViewModel(
         }
         if (_codeFilter.value!!.length == 20) {
             if (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()) {
-                showLocationNotSelectedModalWindow();
+                showLocationNotSelectedModalWindow()
                 _codeFilter.value = ""
-                return;
+                return
             }
             var propertyNumber: String =
                 _codeFilter.value!!.subSequence(4, 16).toString().toLong().toString()
@@ -258,17 +258,24 @@ class InventoryDetailViewModel(
             _filteredProperties.value = emptyList()
         } else {
             CoroutineScope(Dispatchers.Main).launch {
-                _filteredProperties.value = withContext(Dispatchers.IO) {
-                    propertyRepository.getAll()
+                if (statusFilter.value == 'P') {
+                    _filteredProperties.value = withContext(Dispatchers.IO) {
+                        propertyRepository.findProcessedBySearchCriteria(
+                            localityFilter.value,
+                            roomFilter.value,
+                            userFilter.value
+                        )
+                    }
                 }
-                /*_filteredProperties.value = withContext(Dispatchers.IO) {
-                    propertyRepository.findBySearchCriteria(
-                        _statusFilter.value!!,
-                        _localityFilter.value,
-                        _roomFilter.value,
-                        _userFilter.value
-                    )
-                }*/
+                if (statusFilter.value == 'U') {
+                    _filteredProperties.value = withContext(Dispatchers.IO) {
+                        propertyRepository.findUnprocessedBySearchCriteria(
+                            localityFilter.value,
+                            roomFilter.value,
+                            userFilter.value
+                        )
+                    }
+                }
             }
         }
         countUnprocessed()
@@ -285,10 +292,10 @@ class InventoryDetailViewModel(
             val newProperties = _properties.value!!.filter {
                 it.propertyNumber == "NOVY"
             }
-            if (newProperties.isEmpty()) {
-                subnumber = "1"
+            subnumber = if (newProperties.isEmpty()) {
+                "1"
             } else {
-                subnumber = (max(newProperties.map { it.subnumber.toInt() }) + 1).toString()
+                (max(newProperties.map { it.subnumber.toInt() }) + 1).toString()
             }
             propertyRepository.save(
                 PropertyEntity(
@@ -375,7 +382,7 @@ class InventoryDetailViewModel(
                     "ziadna",
                     "Žiadna miestnosť"
                 )
-            );
+            )
         _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
@@ -408,12 +415,12 @@ class InventoryDetailViewModel(
     }
 
     fun onLocalityRoomStatusSelect(locality: String, room: String) {
-        _codeFilterLocality.value = if (locality.isBlank()) "ziadna" else locality
-        _codeFilterRoom.value = if (room.isBlank()) "ziadna" else room
+        _codeFilterLocality.value = locality.ifBlank { "ziadna" }
+        _codeFilterRoom.value = room.ifBlank { "ziadna" }
         filterOutValues()
     }
 
-    fun countUnprocessed() {
+    private fun countUnprocessed() {
         CoroutineScope(Dispatchers.Main).launch {
             _unprocessedCount.value = withContext(Dispatchers.IO) {
                 propertyRepository.getCountUnProcessed()
@@ -421,9 +428,9 @@ class InventoryDetailViewModel(
         }
     }
 
-    fun countProcessed() {
+    private fun countProcessed() {
         CoroutineScope(Dispatchers.Main).launch {
-            _unprocessedCount.value = withContext(Dispatchers.IO) {
+            _processedCount.value = withContext(Dispatchers.IO) {
                 propertyRepository.getCountProcessed()
             }
         }
@@ -453,8 +460,8 @@ class InventoryDetailViewModel(
                         "SZN".contains(it.recordStatus)
                     }
 
-            var batchesCount =
-                toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1;
+            val batchesCount =
+                toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1
 
             for (i in 0 until batchesCount) {
                 _loadingState.value = "Odosiela sa ${i + 1}. dávka..."

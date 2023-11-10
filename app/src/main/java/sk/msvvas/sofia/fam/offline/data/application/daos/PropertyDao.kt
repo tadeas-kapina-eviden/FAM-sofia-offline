@@ -95,24 +95,46 @@ interface PropertyDao {
     @Query(
         "SELECT COUNT(record_status) AS row_count  " +
                 "FROM properties " +
-                "WHERE record_status like '%' || :values || '%'"
+                "WHERE record_status = 78 or record_status = 83 or record_status = 90"
     )
-    suspend fun getCountProccesed(
-        values : String
-    ): Int
+    suspend fun getCountProccesed(): Int
 
     @Query(
         "SELECT COUNT(record_status) AS row_count  " +
                 "FROM properties " +
-                "where record_status like '%' || :values || '%'"
+                "where record_status = 88 or record_status = 67"
     )
-    suspend fun getCountUnProccesed(
-        values: String
-    ): Int
+    suspend fun getCountUnProccesed(): Int
 
     @Query(
         "select id, text_main_number, property_number, subnumber, record_status from properties " +
                 "where id = :id"
     )
     suspend fun getPreviewById(id: Long): PropertyPreviewModel
+
+    @Query(
+        "select * FROM properties where " +
+                "  (record_status = 78 or record_status = 83 or record_status = 90) " +
+                "  and (:locality is null or :locality = '' or locality = :locality) " +
+                "  and (:room is null or :room = '' or room = :room) " +
+                "  and (:user is null or :user = '' or personal_number = :user) "
+    )
+    fun findProcessedBySearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): List<PropertyEntity>
+
+    @Query(
+        "select * FROM properties where " +
+                "  (record_status = 88 or record_status = 67) " +
+                "  and (:locality is null or :locality = '' or locality_new= :locality) " +
+                "  and (:room is null or :room = '' or room_new = :room) " +
+                "  and (:user is null or :user = '' or personal_number_new = :user) "
+    )
+    fun findUnprocessedBySearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): List<PropertyEntity>
 }

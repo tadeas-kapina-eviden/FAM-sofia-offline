@@ -76,36 +76,31 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     /**
      * Find properties from table by search criteria
      * */
-    suspend fun findBySearchCriteria(
-        recordStaus: Char,
+    suspend fun findProcessedBySearchCriteria(
         locality: String?,
         room: String?,
         user: String?
     ): List<PropertyEntity> {
-        if ("PSZN".contains(recordStaus)) {
-            return propertyDao.findBySearchCriteria(
-                recordStaus,
-                null,
-                null,
-                null,
-                locality,
-                room,
-                user
-            )
-        } else if ("UXC".contains(recordStaus)) {
-            return propertyDao.findBySearchCriteria(
-                recordStaus,
-                locality,
-                room,
-                user,
-                null,
-                null,
-                null
-            )
-        } else {
-            // TODO: dokončit
-            return ArrayList()
-        }
+        return propertyDao.findProcessedBySearchCriteria(
+            locality,
+            room,
+            user
+        )
+    }
+
+    /**
+     * Find properties from table by search criteria
+     * */
+    suspend fun findUnprocessedBySearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): List<PropertyEntity> {
+        return propertyDao.findUnprocessedBySearchCriteria(
+            locality,
+            room,
+            user
+        )
     }
 
 
@@ -128,10 +123,10 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     }
 
     suspend fun getCountProcessed(): Int {
-        return propertyDao.getCountProccesed("NSZ")
+        return propertyDao.getCountProccesed()
     }
 
     suspend fun getCountUnProcessed(): Int {
-        return propertyDao.getCountUnProccesed("XCU")
+        return propertyDao.getCountUnProccesed()
     }
 }
