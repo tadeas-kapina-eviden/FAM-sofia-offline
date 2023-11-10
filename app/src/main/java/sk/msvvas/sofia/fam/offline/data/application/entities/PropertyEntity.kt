@@ -13,9 +13,9 @@ import androidx.room.PrimaryKey
     tableName = "properties",
     indices = [
         Index(value = ["id"], unique = true),
-        Index(value = ["inventoryId"], unique = false),
-        Index(value = ["recordStatus"], unique = false),
-        Index(value = ["propertyNumber", "subnumber"], unique = true),
+        Index(value = ["inventory_id"], unique = false),
+        Index(value = ["record_status"], unique = false),
+        Index(value = ["property_number", "subnumber"], unique = true),
     ]
 )
 data class PropertyEntity(

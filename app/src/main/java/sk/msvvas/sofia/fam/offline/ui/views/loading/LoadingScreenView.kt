@@ -38,8 +38,9 @@ fun LoadingScreenView(
 
     val loadedUrl by loadingScreenViewModel.serverUrlLoaded.observeAsState(false)
     val serverUrl by loadingScreenViewModel.serverUrl.observeAsState(null)
-    val loadedProperty by loadingScreenViewModel.propertiesLoaded.observeAsState(false)
+    val inventoryIdFromProperty by loadingScreenViewModel.inventoryIdFromProperty.observeAsState(null)
     var exitModalShown by remember { mutableStateOf(false) }
+
 
     var navigatedToServerUrlView by remember {
         mutableStateOf(false)
@@ -67,13 +68,13 @@ fun LoadingScreenView(
                     navigatedToServerUrlView = true
                 } else {
                     ClientData.host = serverUrl!!
-                    if (!loadedProperty) {
+                    if (inventoryIdFromProperty == "") {
                         LoadingAnimationModalWindow(
                             header = "Načítavanie",
                             text = "Načítava sa uložená inventúra..."
                         )
                     } else {
-                        if (!loadingScreenViewModel.isDownloadedInventory()) {
+                        if (inventoryIdFromProperty == null) {
                             Column(
                                 modifier = Modifier
                                     .align(Alignment.Center)
@@ -108,7 +109,7 @@ fun LoadingScreenView(
                                             bottom = 40.dp
                                         )
                                         .fillMaxWidth(),
-                                    text = "Pokračovať na prihlásenia"
+                                    text = "Pokračovať na prihlásenie"
                                 )
                             }
                         } else {
@@ -166,6 +167,7 @@ fun LoadingScreenView(
                         }
                     }
                 }
+
             }
         }
         val activity = (LocalContext.current as? Activity)

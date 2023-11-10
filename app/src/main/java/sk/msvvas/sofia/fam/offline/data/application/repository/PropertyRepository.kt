@@ -1,7 +1,8 @@
 package sk.msvvas.sofia.fam.offline.data.application.repository
 
-import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import sk.msvvas.sofia.fam.offline.data.application.daos.PropertyDao
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 
@@ -14,44 +15,12 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     /**
-     * All data from property table
-     * Get by getAll function
-     * @see getAll
-     */
-    val allData = MutableLiveData<List<PropertyEntity>>()
-
-    /**
-     * Last searched item from property table
-     * Get by findById function
-     * @see findById
-     */
-    val searchResult = MutableLiveData<PropertyEntity>()
-
-    /**
-     * Last items searched by inventory id from property table
-     * Get by findByInventoryId function
-     * @see findByInventoryId
-     */
-    val searchByInventoryIdResult = MutableLiveData<List<PropertyEntity>>()
-
-    /**
-     * Tells id allData property is already loaded
-     * @see allData
-     */
-    val loaded = MutableLiveData(false)
-
-    init {
-        getAll()
-    }
-
-    /**
      * Save one item to property table
      * @param property property data
      */
     fun save(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.save(property)
-            getAll()
         }
     }
 
@@ -62,7 +31,6 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun saveAll(properties: List<PropertyEntity>) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.saveAll(properties)
-            getAll()
         }
     }
 
@@ -73,7 +41,6 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun update(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.update(property)
-            getAll()
         }
     }
 
@@ -84,7 +51,6 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun delete(property: PropertyEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.delete(property)
-            getAll()
         }
     }
 
@@ -94,59 +60,78 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     fun deleteAll() {
         coroutineScope.launch(Dispatchers.IO) {
             propertyDao.deleteAll()
-            getAll()
         }
     }
 
     /**
      * Find one item in property table identified by id
      * Result is save to searchResult
-     * @see searchResult
      * @param id id of item we want to get
      */
-    fun findById(id: Long) {
-        coroutineScope.launch(Dispatchers.Main) {
-            searchResult.value = asyncFindById(id).await()
+    suspend fun findById(id: Long): PropertyEntity {
+        return propertyDao.findById(id)[0]
+    }
+
+
+    /**
+     * Find properties from table by search criteria
+     * */
+    suspend fun findBySearchCriteria(
+        recordStaus: Char,
+        locality: String?,
+        room: String?,
+        user: String?
+    ): List<PropertyEntity> {
+        if ("PSZN".contains(recordStaus)) {
+            return propertyDao.findBySearchCriteria(
+                recordStaus,
+                null,
+                null,
+                null,
+                locality,
+                room,
+                user
+            )
+        } else if ("UXC".contains(recordStaus)) {
+            return propertyDao.findBySearchCriteria(
+                recordStaus,
+                locality,
+                room,
+                user,
+                null,
+                null,
+                null
+            )
+        } else {
+            // TODO: dokončit
+            return ArrayList()
         }
     }
 
-    private fun asyncFindById(id: Long): Deferred<PropertyEntity?> =
-        coroutineScope.async(Dispatchers.IO) {
-            val resultList = propertyDao.findById(id)
-            return@async if (resultList.isEmpty()) null else resultList[0]
-        }
 
     /**
      * Find multiple items in property table identified by inventoryId
-     * Result is saved to searchByInventoryIdResult
-     * @param inventoryId id of inventory from which we want to get properties
-     * @see searchByInventoryIdResult
      */
-    fun findByInventoryId(inventoryId: String) {
-        coroutineScope.launch(Dispatchers.Main) {
-            searchByInventoryIdResult.value = asyncFindByInventoryId(inventoryId).await()
-        }
+    suspend fun findByInventoryId(inventoryId: String): List<PropertyEntity> {
+        return propertyDao.findByInventoryId(inventoryId)
     }
-
-    private fun asyncFindByInventoryId(id: String): Deferred<List<PropertyEntity>> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async propertyDao.findByInventoryId(id)
-        }
 
     /**
      * Get all data from property table
-     * Data are save to allData
-     * @see allData
      */
-    fun getAll() {
-        coroutineScope.launch(Dispatchers.Main) {
-            allData.value = asyncGetAll().await()
-            loaded.value = true
-        }
+    suspend fun getAll(): List<PropertyEntity> {
+        return propertyDao.getAll()
     }
 
-    private fun asyncGetAll(): Deferred<List<PropertyEntity>?> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async propertyDao.getAll()
-        }
+    suspend fun getInventoryId(): String {
+        return propertyDao.getInventoryId()
+    }
+
+    suspend fun getCountProcessed(): Int {
+        return propertyDao.getCountProccesed("NSZ")
+    }
+
+    suspend fun getCountUnProcessed(): Int {
+        return propertyDao.getCountUnProccesed("XCU")
+    }
 }

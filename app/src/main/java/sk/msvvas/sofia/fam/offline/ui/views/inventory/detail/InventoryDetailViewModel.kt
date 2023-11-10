@@ -8,6 +8,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
@@ -37,10 +38,8 @@ class InventoryDetailViewModel(
         public const val BATCH_SIZE = 1000;
     }
 
-    private val _properties =
-        propertyRepository.searchByInventoryIdResult
-    val properties: LiveData<List<PropertyEntity>> =
-        propertyRepository.searchByInventoryIdResult
+    private val _properties = MutableLiveData(listOf<PropertyEntity>())
+    val properties: LiveData<List<PropertyEntity>> = _properties
 
     private val _filteredProperties = MutableLiveData(listOf<PropertyEntity>())
     val filteredProperties: LiveData<List<PropertyEntity>> = _filteredProperties
@@ -131,7 +130,11 @@ class InventoryDetailViewModel(
     init {
         allCodebooksRepository.getAll()
         if (!submitInventory) {
-            propertyRepository.findByInventoryId(inventoryId = inventoryIdParameter)
+            CoroutineScope(Dispatchers.Main).launch {
+                _properties.value = withContext(Dispatchers.IO) {
+                    propertyRepository.findByInventoryId(_inventoryId.value!!)
+                }
+            }
         } else {
             submitInventory()
         }
@@ -254,15 +257,18 @@ class InventoryDetailViewModel(
         if (_properties.value == null || _properties.value!!.isEmpty()) {
             _filteredProperties.value = emptyList()
         } else {
-            _filteredProperties.value = _properties.value!!.filter {
-                (_statusFilter.value == 'U' && "XC".contains(it.recordStatus)
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value || (_localityFilter.value == "ziadna" && it.locality.isEmpty()))
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value || (_roomFilter.value == "ziadna" && it.room.isEmpty()))
-                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value))
-                        || ((_statusFilter.value == 'P' && "SZN".contains(it.recordStatus))
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value || (_localityFilter.value == "ziadna" && it.localityNew.isEmpty()))
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value || (_roomFilter.value == "ziadna" && it.roomNew.isEmpty()))
-                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value))
+            CoroutineScope(Dispatchers.Main).launch {
+                _filteredProperties.value = withContext(Dispatchers.IO) {
+                    propertyRepository.getAll()
+                }
+                /*_filteredProperties.value = withContext(Dispatchers.IO) {
+                    propertyRepository.findBySearchCriteria(
+                        _statusFilter.value!!,
+                        _localityFilter.value,
+                        _roomFilter.value,
+                        _userFilter.value
+                    )
+                }*/
             }
         }
         countUnprocessed()
@@ -290,8 +296,8 @@ class InventoryDetailViewModel(
                     subnumber = subnumber,
                     inventoryId = _inventoryId.value!!,
                     recordStatus = 'N',
-                    localityNew = if(_localityFilter.value!! != "ziadna") _localityFilter.value!! else "",
-                    roomNew = if(_roomFilter.value!! != "ziadna") _roomFilter.value!! else "",
+                    localityNew = if (_localityFilter.value!! != "ziadna") _localityFilter.value!! else "",
+                    roomNew = if (_roomFilter.value!! != "ziadna") _roomFilter.value!! else "",
                     personalNumberNew = _userFilter.value!!,
                     isNew = true
                 )
@@ -408,26 +414,19 @@ class InventoryDetailViewModel(
     }
 
     fun countUnprocessed() {
-        _unprocessedCount.value = if (_properties.value != null)
-            _properties.value!!.count {
-                (it.recordStatus == 'C' || it.recordStatus == 'X')
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.locality == _localityFilter.value || (_localityFilter.value == "ziadna" && it.locality.isEmpty()))
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.room == _roomFilter.value || (_roomFilter.value == "ziadna" && it.room.isEmpty()))
-                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumber == _userFilter.value)
-
-            } else 0
-
+        CoroutineScope(Dispatchers.Main).launch {
+            _unprocessedCount.value = withContext(Dispatchers.IO) {
+                propertyRepository.getCountUnProcessed()
+            }
+        }
     }
 
     fun countProcessed() {
-        _processedCount.value = if (_properties.value != null)
-            _properties.value!!.count {
-                (it.recordStatus == 'S' || it.recordStatus == 'Z' || it.recordStatus == 'N')
-                        && (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || it.localityNew == _localityFilter.value || (_localityFilter.value == "ziadna" && it.localityNew.isEmpty()))
-                        && (_roomFilter.value == null || _roomFilter.value!!.isEmpty() || it.roomNew == _roomFilter.value || (_roomFilter.value == "ziadna" && it.roomNew.isEmpty()))
-                        && (_userFilter.value == null || _userFilter.value!!.isEmpty() || it.personalNumberNew == _userFilter.value)
-
-            } else 0
+        CoroutineScope(Dispatchers.Main).launch {
+            _unprocessedCount.value = withContext(Dispatchers.IO) {
+                propertyRepository.getCountProcessed()
+            }
+        }
     }
 
     fun showExitModalWindow() {
@@ -448,10 +447,11 @@ class InventoryDetailViewModel(
             _submitInventoryConfirmModalShown.value = false
             _loadingData.value = true
             _loadingState.value = "Spracúvajú sa dáta..."
-            val toSendProperties = propertyRepository.searchByInventoryIdResult.value!!
-                .filter {
-                    "SZN".contains(it.recordStatus)
-                }
+            val toSendProperties =
+                withContext(Dispatchers.IO) { propertyRepository.findByInventoryId(_inventoryId.value!!) }
+                    .filter {
+                        "SZN".contains(it.recordStatus)
+                    }
 
             var batchesCount =
                 toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1;

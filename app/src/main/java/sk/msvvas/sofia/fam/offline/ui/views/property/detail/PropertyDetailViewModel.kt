@@ -48,12 +48,15 @@ class PropertyDetailViewModel(
     init {
         property = _property
         if (id < 0) {
-            CoroutineScope(Dispatchers.Main).launch(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 _property.value = loadPropertyAsync(propertyNumber, subnumber).await()!![0]
             }
         } else {
-            propertyRepository.findById(id)
-            _property.value = propertyRepository.searchResult.value
+            CoroutineScope(Dispatchers.Main).launch {
+                _property.value = withContext(Dispatchers.IO) {
+                    propertyRepository.findById(id)
+                }
+            }
         }
         if (_property.value != null) {
             if (_property.value!!.localityNew == "ziadna") {
@@ -77,8 +80,10 @@ class PropertyDetailViewModel(
     ): Deferred<List<PropertyEntity>?> =
         CoroutineScope(Dispatchers.Main).async(Dispatchers.IO) {
             var selectedList: List<PropertyEntity>
-            while (propertyRepository.allData.value!!.filter { it.propertyNumber == propertyNumber && it.subnumber == subnumber }
-                    .also { selectedList = it }.isEmpty()) {
+            while (propertyRepository.getAll()
+                    .filter { it.propertyNumber == propertyNumber && it.subnumber == subnumber }
+                    .also { selectedList = it }.isEmpty()
+            ) {
                 Thread.sleep(100)
             }
             return@async selectedList
@@ -89,7 +94,6 @@ class PropertyDetailViewModel(
      */
     private var varsInitialized = false
 
-    // TODO:
     private val _locality = MutableLiveData(if (localityFilter != "ziadna") localityFilter else "")
     val locality: LiveData<String> = _locality
 

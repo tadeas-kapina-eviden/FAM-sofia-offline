@@ -3,6 +3,7 @@ package sk.msvvas.sofia.fam.offline.data.application.repository.codebook
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.application.daos.codebook.UserCodebookDao
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.UserCodebookEntity
 
 /**
@@ -13,27 +14,12 @@ class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     /**
-     * All data from user_codebook table
-     * Get by getAll function
-     * @see getAll
-     */
-    val allData = MutableLiveData<List<UserCodebookEntity>>()
-
-    /**
-     * Last searched item from user_codebook table
-     * Get by findById function
-     * @see findById
-     */
-    val searchResult = MutableLiveData<UserCodebookEntity>()
-
-    /**
      * Save one item to user_codebook table
      * @param userCodebook user codebook data
      */
     fun save(userCodebook: UserCodebookEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             userCodebookDao.save(userCodebook)
-            getAll()
         }
     }
 
@@ -44,40 +30,22 @@ class UserCodebookRepository(private val userCodebookDao: UserCodebookDao) {
     fun saveAll(userCodebooks: List<UserCodebookEntity>) {
         coroutineScope.launch(Dispatchers.IO) {
             userCodebookDao.saveAll(userCodebooks)
-            getAll()
         }
     }
 
     /**
-     * Find one item in user_codebook table identified by id
-     * Result is saved to searchResult
-     * @see searchResult
-     * @param id room codebook id
+     * Find one item in locality_codebook table identified by id
+     * @param id locality codebook id
      */
-    fun findById(id: String) {
-        coroutineScope.launch(Dispatchers.Main) {
-            searchResult.value = asyncFind(id).await()
-        }
+    suspend fun findById(id: String): UserCodebookEntity {
+        return userCodebookDao.findById(id)[0];
     }
 
-    private fun asyncFind(id: String): Deferred<UserCodebookEntity?> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async userCodebookDao.findById(id)[0]
-        }
 
     /**
-     * Get all data from user_codebook table
-     * Data are save to allData
-     * @see allData
+     * Get all data from locality_codebook table
      */
-    fun getAll() {
-        coroutineScope.launch(Dispatchers.Main) {
-            allData.value = asyncGetAll().await()
-        }
+    suspend fun getAll(): List<UserCodebookEntity> {
+        return userCodebookDao.getAll()
     }
-
-    private fun asyncGetAll(): Deferred<List<UserCodebookEntity>?> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async userCodebookDao.getAll()
-        }
 }

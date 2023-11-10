@@ -9,10 +9,7 @@ import androidx.room.PrimaryKey
  * Entity for server url saved in local databse
  */
 @Entity(
-    tableName = "server_url",
-    indices = [
-        Index(value = ["id"], unique = true)
-    ]
+    tableName = "server_url"
 )
 data class ServerUrlEntity(
     @PrimaryKey(autoGenerate = false)

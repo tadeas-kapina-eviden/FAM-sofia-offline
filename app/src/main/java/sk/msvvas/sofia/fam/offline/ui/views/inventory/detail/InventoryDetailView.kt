@@ -257,10 +257,16 @@ fun InventoryDetailView(
                             )
                         }
                     }
-                    items(PropertyTransformator.propertyEntityListToPropertyPreviewList(properties)) { item ->
-                        PropertyListItem(
-                            property = item,
-                            onClick = { id -> inventoryDetailViewModel.onSelectProperty(id) })
+                    if (properties != null) {
+                        items(
+                            PropertyTransformator.propertyEntityListToPropertyPreviewList(
+                                properties
+                            )
+                        ) { item ->
+                            PropertyListItem(
+                                property = item,
+                                onClick = { id -> inventoryDetailViewModel.onSelectProperty(id) })
+                        }
                     }
                 }
             }

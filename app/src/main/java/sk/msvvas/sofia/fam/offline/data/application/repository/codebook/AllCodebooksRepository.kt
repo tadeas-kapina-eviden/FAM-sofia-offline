@@ -1,5 +1,10 @@
 package sk.msvvas.sofia.fam.offline.data.application.repository.codebook
 
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
 
 /**
@@ -21,37 +26,39 @@ class AllCodebooksRepository(
     /**
      * All items from localityCodebook table
      */
-    val allLocalities = localityCodebookRepository.allData
+    val allLocalities = MutableLiveData<List<LocalityCodebookEntity>>()
 
     /**
      * All items from roomCodebook table
      */
-    val allRooms = roomCodebookRepository.allData
+    val allRooms = MutableLiveData<List<RoomCodebookEntity>>()
 
     /**
      * All items from userCodebook table
      */
-    val allUsers = userCodebookRepository.allData
+    val allUsers = MutableLiveData<List<UserCodebookEntity>>()
 
     /**
      * All items from placeCodebook table
      */
-    val allPlaces = placeCodebookRepository.allData
+    val allPlaces = MutableLiveData<List<PlaceCodebookEntity>>()
 
     /**
      * All items from noteCodebook table
      */
-    val allNotes = noteCodebookRepository.allData
+    val allNotes = MutableLiveData<List<NoteCodebookEntity>>()
 
     /**
      * Get all codebooks values
      */
-    fun getAll(){
-        localityCodebookRepository.getAll()
-        roomCodebookRepository.getAll()
-        placeCodebookRepository.getAll()
-        noteCodebookRepository.getAll()
-        userCodebookRepository.getAll()
+    fun getAll() {
+        CoroutineScope(Dispatchers.Main).launch {
+            allLocalities.value = withContext(Dispatchers.IO) { localityCodebookRepository.getAll() }
+            allRooms.value = withContext(Dispatchers.IO) { roomCodebookRepository.getAll() }
+            allPlaces.value = withContext(Dispatchers.IO) { placeCodebookRepository.getAll() }
+            allNotes.value = withContext(Dispatchers.IO) { noteCodebookRepository.getAll() }
+            allUsers.value = withContext(Dispatchers.IO) { userCodebookRepository.getAll() }
+        }
     }
 
     /**
