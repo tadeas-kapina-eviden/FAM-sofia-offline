@@ -63,8 +63,8 @@ interface PropertyDao {
     @Query(
         "select * FROM properties where " +
                 "  (record_status = :recordStatus " +
-                "  or (:recordStatus = 'P' and (record_status = 'N' or record_status = 'Z' or record_status = 'S')) " +
-                "  or (:recordStatus = 'U' and (record_status = 'X' or record_status = 'C'))) " +
+                "  or (:recordStatus = 80 and (record_status = 78 or record_status = 90 or record_status = 83)) " +
+                "  or (:recordStatus = 85 and (record_status = 88 or record_status = 67))) " +
                 "  and (:locality is null or locality = :locality) " +
                 "  and (:locality_new is null or locality_new = :locality_new) " +
                 "  and (:room is null or room = :room) " +
@@ -108,6 +108,32 @@ interface PropertyDao {
     suspend fun getCountUnProccesed(): Int
 
     @Query(
+        "select  count(*) FROM properties where " +
+                "  (record_status = 78 or record_status = 83 or record_status = 90) " +
+                "  and (:locality is null or :locality = '' or locality_new = :locality or (:locality = 'ziadna' and locality_new = '')) " +
+                "  and (:room is null or :room = '' or room_new = :room or (:room = 'ziadna' and room_new = '')) " +
+                "  and (:user is null or :user = '' or personal_number_new = :user) "
+    )
+    suspend fun getCountProcessedSearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): Int
+
+    @Query(
+        "select count(*) FROM properties where " +
+                "  (record_status = 88 or record_status = 67) " +
+                "  and (:locality is null or :locality = '' or locality = :locality or (:locality = 'ziadna' and locality = '')) " +
+                "  and (:room is null or :room = '' or room = :room or (:room = 'ziadna' and room = '')) " +
+                "  and (:user is null or :user = '' or personal_number = :user) "
+    )
+    suspend fun getCountUnProcessedSearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): Int
+
+    @Query(
         "select id, text_main_number, property_number, subnumber, record_status from properties " +
                 "where id = :id"
     )
@@ -122,11 +148,11 @@ interface PropertyDao {
     ): PropertyEntity?
 
     @Query(
-        "select * FROM properties where " +
+        "select  * FROM properties where " +
                 "  (record_status = 78 or record_status = 83 or record_status = 90) " +
-                "  and (:locality is null or :locality = '' or locality = :locality) " +
-                "  and (:room is null or :room = '' or room = :room) " +
-                "  and (:user is null or :user = '' or personal_number = :user) "
+                "  and (:locality is null or :locality = '' or locality_new = :locality or (:locality = 'ziadna' and locality_new = '')) " +
+                "  and (:room is null or :room = '' or room_new = :room or (:room = 'ziadna' and room_new = '')) " +
+                "  and (:user is null or :user = '' or personal_number_new = :user) "
     )
     suspend fun findProcessedBySearchCriteria(
         locality: String?,
@@ -137,9 +163,9 @@ interface PropertyDao {
     @Query(
         "select * FROM properties where " +
                 "  (record_status = 88 or record_status = 67) " +
-                "  and (:locality is null or :locality = '' or locality_new= :locality) " +
-                "  and (:room is null or :room = '' or room_new = :room) " +
-                "  and (:user is null or :user = '' or personal_number_new = :user) "
+                "  and (:locality is null or :locality = '' or locality = :locality or (:locality = 'ziadna' and locality = '')) " +
+                "  and (:room is null or :room = '' or room = :room or (:room = 'ziadna' and room = '')) " +
+                "  and (:user is null or :user = '' or personal_number = :user) "
     )
     suspend fun findUnprocessedBySearchCriteria(
         locality: String?,
@@ -170,5 +196,5 @@ interface PropertyDao {
         "select subnumber from properties " +
                 "where property_number = 'NOVY' order by subnumber desc limit 1"
     )
-    suspend fun countNEW() : String
+    suspend fun countNEW(): String
 }

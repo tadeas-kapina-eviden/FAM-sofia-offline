@@ -7,8 +7,8 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
-import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.repository.InventoryRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
@@ -21,7 +21,7 @@ class InventoryListViewModel(
     private val allCodebooksRepository: AllCodebooksRepository,
     private val navController: NavController
 ) : ViewModel() {
-    private val _inventories: LiveData<List<InventoryEntity>> = inventoryRepository.allData
+    private val _inventories = MutableLiveData<List<InventoryEntity>>()
     val inventories: LiveData<List<InventoryEntity>> = _inventories
 
     private val _selectedInventoryId = MutableLiveData("")
@@ -38,6 +38,14 @@ class InventoryListViewModel(
 
     private val _exitModalShown = MutableLiveData(false)
     val exitModalShown: LiveData<Boolean> = _exitModalShown
+
+    init {
+        CoroutineScope(Dispatchers.Main).launch {
+            _inventories.value = withContext(Dispatchers.IO) {
+                inventoryRepository.getAll()
+            }
+        }
+    }
 
     fun onSelectInventory(inventoryId: String) {
         _selectedInventoryId.value = inventoryId

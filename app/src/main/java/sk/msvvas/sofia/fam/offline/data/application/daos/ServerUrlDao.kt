@@ -14,6 +14,6 @@ interface ServerUrlDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(url: ServerUrlEntity)
 
-    @Query("SELECT * from server_url")
-    suspend fun load(): List<ServerUrlEntity>
+    @Query("SELECT * from server_url limit 1")
+    suspend fun load(): ServerUrlEntity?
 }

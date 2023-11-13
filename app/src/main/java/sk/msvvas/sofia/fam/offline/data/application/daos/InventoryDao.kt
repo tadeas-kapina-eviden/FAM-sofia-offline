@@ -36,13 +36,13 @@ interface InventoryDao {
      * Get all items from inventory table
      */
     @Query("SELECT * FROM inventories")
-    fun getAll(): List<InventoryEntity>
+    suspend fun getAll(): List<InventoryEntity>
 
     /**
      * Get one item from inventory table identified by id
      * @param id id of inventory we want to get
      * @return list of inventories with id equal as parameter (should have only one item)
      */
-    @Query("SELECT * FROM inventories WHERE id = :id")
-    suspend fun findById(id: String): List<InventoryEntity>
+    @Query("SELECT * FROM inventories WHERE id = :id limit 1")
+    suspend fun findById(id: String): InventoryEntity
 }

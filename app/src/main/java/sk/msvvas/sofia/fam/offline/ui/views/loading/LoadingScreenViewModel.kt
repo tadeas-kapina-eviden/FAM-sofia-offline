@@ -18,10 +18,8 @@ class LoadingScreenViewModel(
     private val navController: NavController
 ) : ViewModel() {
 
-    private val _serverUrlLoaded = serverUrlRepository.loaded
-    val serverUrlLoaded: LiveData<Boolean> = _serverUrlLoaded
 
-    private val _serverUrl = serverUrlRepository.url
+    private val _serverUrl = MutableLiveData<String?>(null)
     val serverUrl: LiveData<String?> = _serverUrl
 
     private val _inventoryId = MutableLiveData<String>("")
@@ -30,22 +28,23 @@ class LoadingScreenViewModel(
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
-            _inventoryId.value = propertyRepository.getInventoryId()
+            _inventoryId.value = withContext(Dispatchers.IO) {
+                 propertyRepository.getInventoryId()
+            }
+            _serverUrl.value =
+                withContext(Dispatchers.IO) { if (serverUrlRepository.get() == null) "" else serverUrlRepository.get()!!.url }
         }
     }
 
-    fun loadUrl() {
-        serverUrlRepository.get()
-    }
 
     fun navigateToSetUpUrl() {
         navController.navigate(Routes.SET_UP_URL.value)
     }
 
     fun navigateToLoginViewWithDownloadedInventory() {
-            navController.navigate(
-                Routes.LOGIN_VIEW.value + "?id=" + _inventoryId.value
-            )
+        navController.navigate(
+            Routes.LOGIN_VIEW.value + "?id=" + _inventoryId.value
+        )
     }
 
     fun navigateToLoginView() {
@@ -53,11 +52,11 @@ class LoadingScreenViewModel(
     }
 
     fun navigateToInventoriesList() {
-            navController.navigate(
-                Routes.INVENTORY_DETAIL.withArgs(
-                    _inventoryId.value!!
-                )
+        navController.navigate(
+            Routes.INVENTORY_DETAIL.withArgs(
+                _inventoryId.value!!
             )
+        )
 
     }
 

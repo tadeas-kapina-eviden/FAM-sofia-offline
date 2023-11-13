@@ -20,7 +20,6 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodeb
 import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.data.client.ClientData
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
-import java.util.Collections.max
 
 class InventoryDetailViewModel(
     private val propertyRepository: PropertyRepository,
@@ -123,9 +122,6 @@ class InventoryDetailViewModel(
 
     private val _processedCount = MutableLiveData(0)
     val processedCount: LiveData<Int> = _processedCount
-
-    private val _locationNotSelectedModalShown = MutableLiveData(false)
-    val locationNotSelectedModalShown: LiveData<Boolean> = _locationNotSelectedModalShown
 
 
     init {
@@ -413,7 +409,11 @@ class InventoryDetailViewModel(
     private fun countUnprocessed() {
         CoroutineScope(Dispatchers.Main).launch {
             _unprocessedCount.value = withContext(Dispatchers.IO) {
-                propertyRepository.getCountUnProcessed()
+                propertyRepository.getCountUnProcessedSearchCriteria(
+                    localityFilter.value,
+                    roomFilter.value,
+                    userFilter.value
+                )
             }
         }
     }
@@ -421,7 +421,11 @@ class InventoryDetailViewModel(
     private fun countProcessed() {
         CoroutineScope(Dispatchers.Main).launch {
             _processedCount.value = withContext(Dispatchers.IO) {
-                propertyRepository.getCountProcessed()
+                propertyRepository.getCountProcessedSearchCriteria(
+                    localityFilter.value,
+                    roomFilter.value,
+                    userFilter.value
+                )
             }
         }
     }
@@ -445,11 +449,13 @@ class InventoryDetailViewModel(
             _loadingData.value = true
             _loadingState.value = "Spracúvajú sa dáta..."
             val toSendProperties =
-                withContext(Dispatchers.IO) { propertyRepository.findByInventoryId(_inventoryId.value!!) }
-                    .filter {
-                        "SZN".contains(it.recordStatus)
-                    }
-
+                withContext(Dispatchers.IO) {
+                    propertyRepository.findProcessedBySearchCriteria(
+                        null,
+                        null,
+                        null
+                    )
+                }
             val batchesCount =
                 toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1
 
@@ -462,9 +468,7 @@ class InventoryDetailViewModel(
 
                 val responseStatus =
                     if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
-                        inventoryRepository.allData.value!!.filter {
-                            it.id == toSendProperties[0].inventoryId
-                        }[0],
+                        withContext(Dispatchers.IO) { inventoryRepository.findById(toSendBatch[0].inventoryId) },
                         toSendBatch
                     ) else HttpStatusCode.Created
                 if (responseStatus != HttpStatusCode.Created) {

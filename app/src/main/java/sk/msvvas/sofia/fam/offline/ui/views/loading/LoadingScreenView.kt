@@ -28,15 +28,12 @@ import sk.msvvas.sofia.fam.offline.ui.components.StyledTextButton
  * Application intro view
  * Show loading screen until property repository is loaded,
  * Then show a screen for choose next steps
- * @param propertyRepository property repository of local database
- * @param navController nav controller from application Navigation
  */
 @Composable
 fun LoadingScreenView(
     loadingScreenViewModel: LoadingScreenViewModel
 ) {
 
-    val loadedUrl by loadingScreenViewModel.serverUrlLoaded.observeAsState(false)
     val serverUrl by loadingScreenViewModel.serverUrl.observeAsState(null)
     val inventoryIdFromProperty by loadingScreenViewModel.inventoryIdFromProperty.observeAsState(null)
     var exitModalShown by remember { mutableStateOf(false) }
@@ -60,10 +57,10 @@ fun LoadingScreenView(
             contentScale = ContentScale.FillBounds
         )
         if (!navigatedToServerUrlView) {
-            if (!loadedUrl) {
+            if (serverUrl == null) {
                 LoadingAnimationModalWindow(header = "Načítavanie", "Načítava sa url servera...")
             } else {
-                if (serverUrl == null) {
+                if (serverUrl == "") {
                     loadingScreenViewModel.navigateToSetUpUrl()
                     navigatedToServerUrlView = true
                 } else {
@@ -188,9 +185,5 @@ fun LoadingScreenView(
     }
     BackHandler {
         exitModalShown = true
-    }
-    DisposableEffect(Unit) {
-        loadingScreenViewModel.loadUrl()
-        onDispose { }
     }
 }

@@ -142,6 +142,37 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         return propertyDao.getCountUnProccesed()
     }
 
+    /**
+     * Find properties from table by search criteria
+     * */
+    suspend fun getCountProcessedSearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): Int {
+        return propertyDao.getCountProcessedSearchCriteria(
+            locality,
+            room,
+            user
+        )
+    }
+
+    /**
+     * Find properties from table by search criteria
+     * */
+    suspend fun getCountUnProcessedSearchCriteria(
+        locality: String?,
+        room: String?,
+        user: String?
+    ): Int {
+        return propertyDao.getCountUnProcessedSearchCriteria(
+            locality,
+            room,
+            user
+        )
+    }
+
+
     suspend fun findLocalityRoomPairs(): List<LocalityRoomPair> {
         return propertyDao.findLocalityRoomPairs()
     }
