@@ -29,6 +29,7 @@ fun InventoryListView(
     val downloadingData by inventoryListViewModel.downloadingData.observeAsState(false)
     val loadingState by inventoryListViewModel.loadingState.observeAsState("")
     val exitModalShown by inventoryListViewModel.exitModalShown.observeAsState(false)
+    val loadingsInventories by inventoryListViewModel.loadingsInventories.observeAsState(false)
 
     val activity = (LocalContext.current as? Activity)
 
@@ -61,7 +62,7 @@ fun InventoryListView(
                 }
             }
         }
-        if (downloadingData) {
+        if (downloadingData || loadingsInventories) {
             LoadingAnimationModalWindow(header = "Načítavanie", loadingState)
         }
         if (isDownloadConfirmShown) {

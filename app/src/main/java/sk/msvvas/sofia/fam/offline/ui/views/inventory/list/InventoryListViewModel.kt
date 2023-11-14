@@ -39,11 +39,15 @@ class InventoryListViewModel(
     private val _exitModalShown = MutableLiveData(false)
     val exitModalShown: LiveData<Boolean> = _exitModalShown
 
+    private val _loadingsInventories = MutableLiveData(true)
+    val loadingsInventories: LiveData<Boolean> = _loadingsInventories
+
     init {
         CoroutineScope(Dispatchers.Main).launch {
             _inventories.value = withContext(Dispatchers.IO) {
                 inventoryRepository.getAll()
             }
+            _loadingsInventories.value = false
         }
     }
 

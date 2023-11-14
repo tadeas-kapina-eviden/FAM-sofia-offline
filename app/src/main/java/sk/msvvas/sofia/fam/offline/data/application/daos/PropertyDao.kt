@@ -57,8 +57,8 @@ interface PropertyDao {
      * @param id id of property we want to get
      * @return list of properties with id equal as parameter (should have only one item)
      */
-    @Query("SELECT * FROM properties WHERE id = :id")
-    suspend fun findById(id: Long): List<PropertyEntity>
+    @Query("SELECT * FROM properties WHERE id = :id limit 1")
+    suspend fun findById(id: Long): PropertyEntity?
 
     @Query(
         "select * FROM properties where " +
@@ -177,8 +177,8 @@ interface PropertyDao {
     @Query(
         "select " +
                 " case " +
-                "        when (record_status = 88 or record_status = 67) then 'false' " +
-                "        when (record_status = 78 or record_status = 83 or record_status = 90) then 'true' " +
+                "        when (record_status = 88 or record_status = 67) then 0 " +
+                "        when (record_status = 78 or record_status = 83 or record_status = 90) then 1 " +
                 "    end as processed, " +
                 " case " +
                 "        when (record_status = 88 or record_status = 67) then locality " +

@@ -69,8 +69,8 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
      * Result is save to searchResult
      * @param id id of item we want to get
      */
-    suspend fun findById(id: Long): PropertyEntity {
-        return propertyDao.findById(id)[0]
+    suspend fun findById(id: Long): PropertyEntity? {
+        return propertyDao.findById(id)
     }
 
 
