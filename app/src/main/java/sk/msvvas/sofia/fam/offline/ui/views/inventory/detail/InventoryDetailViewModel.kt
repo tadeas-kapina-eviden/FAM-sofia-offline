@@ -154,6 +154,7 @@ class InventoryDetailViewModel(
             return
         }
         if (_codeFilter.value!!.length == 20) {
+            val propertyId = _codeFilter.value!!
             CoroutineScope(Dispatchers.Main).launch {
                 if (_localityFilter.value == null || _localityFilter.value!!.isEmpty() || _roomFilter.value == null || _roomFilter.value!!.isEmpty()) {
                     showLocationNotSelectedModalWindow()
@@ -161,9 +162,9 @@ class InventoryDetailViewModel(
                     return@launch
                 }
                 var propertyNumber: String =
-                    _codeFilter.value!!.subSequence(4, 16).toString().toLong().toString()
+                    propertyId.subSequence(4, 16).toString().toLong().toString()
                 var subnumber: String =
-                    _codeFilter.value!!.subSequence(16, 20).toString().toLong().toString()
+                    propertyId.subSequence(16, 20).toString().toLong().toString()
 
                 val selected = withContext(Dispatchers.IO) {
                     propertyRepository.getByIdentifiers(
