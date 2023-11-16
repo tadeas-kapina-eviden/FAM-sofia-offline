@@ -196,5 +196,5 @@ interface PropertyDao {
         "select subnumber from properties " +
                 "where property_number = 'NOVY' order by subnumber desc limit 1"
     )
-    suspend fun countNEW(): String
+    suspend fun countNEW(): String?
 }

@@ -269,6 +269,9 @@ class InventoryDetailViewModel(
                     )
                 }
             }
+            if(statusFilter.value == 'S'){
+                countLocalityRoomPairs()
+            }
         }
 
         countUnprocessed()

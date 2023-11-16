@@ -105,7 +105,11 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
     }
 
     suspend fun countNEW(): Int {
-        return propertyDao.countNEW().toInt()
+        val count : String? = propertyDao.countNEW()
+        return if(count?.toIntOrNull() != null)
+            count.toInt()
+        else
+            0
     }
 
 
