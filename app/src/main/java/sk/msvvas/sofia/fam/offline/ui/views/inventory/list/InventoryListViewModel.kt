@@ -21,6 +21,7 @@ class InventoryListViewModel(
     private val allCodebooksRepository: AllCodebooksRepository,
     private val navController: NavController
 ) : ViewModel() {
+
     private val _inventories = MutableLiveData<List<InventoryEntity>>()
     val inventories: LiveData<List<InventoryEntity>> = _inventories
 
@@ -44,9 +45,13 @@ class InventoryListViewModel(
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
-            _inventories.value = withContext(Dispatchers.IO) {
-                inventoryRepository.getAll()
-            }
+            inventoryRepository.deleteAll()
+
+
+            _inventories.value = Client.getInventories()
+
+            inventoryRepository.saveAll(_inventories.value!!)
+
             _loadingsInventories.value = false
         }
     }

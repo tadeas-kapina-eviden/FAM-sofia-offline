@@ -350,9 +350,9 @@ class PropertyDetailViewModel(
                 it.isManual = isManual
             } else {
                 if (it.variableNote.trim().isEmpty()) {
-                    _errorHeader.value = "Vyplňte vlastnú poznámu"
+                    _errorHeader.value = "Vyplňte vlastnú poznámku"
                     _errorText.value =
-                        "Pri neidentifikovanom majetku je nutné vyplniť Vlastnú poznámku - meno/popis majetku"
+                        "Pri neidentifikovanom majetku je nutné vyplniť vlastnú poznámku - meno/popis majetku"
                     return
                 } else {
                     it.textMainNumber = it.variableNote

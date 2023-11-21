@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import io.ktor.http.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
@@ -123,13 +120,16 @@ class InventoryDetailViewModel(
     private val _processedCount = MutableLiveData(0)
     val processedCount: LiveData<Int> = _processedCount
 
-
     init {
         allCodebooksRepository.getAll()
-        if (!submitInventory) {
-            filterOutValues()
-        } else {
-            submitInventory()
+        CoroutineScope(Dispatchers.Main).launch{
+            if (!submitInventory) {
+                filterOutValues()
+            } else if (withContext(Dispatchers.IO){
+                propertyRepository.getInventoryId()
+            } != null){
+                submitInventory(true)
+            }
         }
     }
 
@@ -161,9 +161,9 @@ class InventoryDetailViewModel(
                     _codeFilter.value = ""
                     return@launch
                 }
-                var propertyNumber: String =
+                val propertyNumber: String =
                     propertyId.subSequence(4, 16).toString().toLong().toString()
-                var subnumber: String =
+                val subnumber: String =
                     propertyId.subSequence(16, 20).toString().toLong().toString()
 
                 val selected = withContext(Dispatchers.IO) {
@@ -173,9 +173,9 @@ class InventoryDetailViewModel(
                     )
                 }
                 if (selected == null) {
-                    propertyNumber = "000000000000".subSequence(0, 12 - propertyNumber.length)
+                    /*propertyNumber = "000000000000".subSequence(0, 12 - propertyNumber.length)
                         .toString() + propertyNumber
-                    subnumber = "0000".subSequence(0, 4 - subnumber.length).toString() + subnumber
+                    subnumber = "0000".subSequence(0, 4 - subnumber.length).toString() + subnumber*/
                     propertyRepository.save(
                         PropertyEntity(
                             propertyNumber = propertyNumber,
@@ -269,7 +269,7 @@ class InventoryDetailViewModel(
                     )
                 }
             }
-            if(statusFilter.value == 'S'){
+            if (statusFilter.value == 'S') {
                 countLocalityRoomPairs()
             }
         }
@@ -442,7 +442,7 @@ class InventoryDetailViewModel(
         _exitModalShown.value = false
     }
 
-    fun submitInventory() {
+    fun submitInventory(fromStart : Boolean = false) {
         if (ClientData.username.isEmpty()) {
             requireLoginModalShow()
             submitInventoryConfirmModalHide()
@@ -476,10 +476,12 @@ class InventoryDetailViewModel(
                         toSendBatch
                     ) else HttpStatusCode.Created
                 if (responseStatus != HttpStatusCode.Created) {
-                    _loadingData.value = false
-                    _errorHeader.value = "Chyba!"
-                    _errorText.value =
-                        "Nastala chyba - položby sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+                    if(!fromStart) {
+                        _loadingData.value = false
+                        _errorHeader.value = "Chyba!"
+                        _errorText.value =
+                            "Nastala chyba - položky sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+                    }
                     return@launch
                 }
             }

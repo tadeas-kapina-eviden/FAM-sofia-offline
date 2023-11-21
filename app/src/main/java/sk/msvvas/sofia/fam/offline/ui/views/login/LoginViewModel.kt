@@ -128,8 +128,6 @@ class LoginViewModel(
                         ClientData.password = _password.value!!
 
                         if (inventoryIDParameter.isEmpty()) {
-                            inventoryRepository.deleteAll()
-                            inventoryRepository.saveAll(Client.getInventories())
                             navController.navigate(Routes.INVENTORY_LIST.value)
                         } else {
                             navController.navigate(
