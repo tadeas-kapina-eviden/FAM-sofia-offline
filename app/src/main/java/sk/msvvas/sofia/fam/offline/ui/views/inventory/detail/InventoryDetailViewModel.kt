@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import io.ktor.http.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
@@ -122,12 +125,12 @@ class InventoryDetailViewModel(
 
     init {
         allCodebooksRepository.getAll()
-        CoroutineScope(Dispatchers.Main).launch{
+        CoroutineScope(Dispatchers.Main).launch {
             if (!submitInventory) {
                 filterOutValues()
-            } else if (withContext(Dispatchers.IO){
-                propertyRepository.getInventoryId()
-            } != null){
+            } else if (withContext(Dispatchers.IO) {
+                    propertyRepository.getInventoryId()
+                } != null) {
                 submitInventory(true)
             }
         }
@@ -442,7 +445,7 @@ class InventoryDetailViewModel(
         _exitModalShown.value = false
     }
 
-    fun submitInventory(fromStart : Boolean = false) {
+    fun submitInventory(fromStart: Boolean = false) {
         if (ClientData.username.isEmpty()) {
             requireLoginModalShow()
             submitInventoryConfirmModalHide()
@@ -476,7 +479,7 @@ class InventoryDetailViewModel(
                         toSendBatch
                     ) else HttpStatusCode.Created
                 if (responseStatus != HttpStatusCode.Created) {
-                    if(!fromStart) {
+                    if (!fromStart) {
                         _loadingData.value = false
                         _errorHeader.value = "Chyba!"
                         _errorText.value =
@@ -533,7 +536,9 @@ class InventoryDetailViewModel(
                     }
                 }
             }
-            _localityRoomPairsCount.value = result
+            _localityRoomPairsCount.value = result.sortedBy {
+                it.locality
+            }
         }
     }
 }
