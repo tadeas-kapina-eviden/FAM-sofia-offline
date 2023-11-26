@@ -176,9 +176,6 @@ class InventoryDetailViewModel(
                     )
                 }
                 if (selected == null) {
-                    /*propertyNumber = "000000000000".subSequence(0, 12 - propertyNumber.length)
-                        .toString() + propertyNumber
-                    subnumber = "0000".subSequence(0, 4 - subnumber.length).toString() + subnumber*/
                     propertyRepository.save(
                         PropertyEntity(
                             propertyNumber = propertyNumber,
