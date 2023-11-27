@@ -18,13 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
@@ -84,14 +82,19 @@ fun CodebookSelectionView(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close button.",
-                modifier = Modifier.clickable { onClose() }.align(Alignment.End),
+                modifier = Modifier
+                    .clickable { onClose() }
+                    .align(Alignment.End),
                 tint = MaterialTheme.colors.primary
             )
         }
         TextField(
-            value = filterValue,
+            value = TextFieldValue(
+                text = filterValue,
+                selection = if(filterValue.isBlank()) TextRange(0) else TextRange(filterValue.length)
+            ),
             onValueChange = {
-                filterValue = it
+                filterValue = it.text
                 filteredCodebookData = codebookData.filter { codebook ->
                     filterValue.isEmpty()
                             || idGetter(codebook).lowercase()
@@ -113,7 +116,11 @@ fun CodebookSelectionView(
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 5.dp)
                 .focusRequester(focusRequester)
-                .border(color = MaterialTheme.colors.primary, width = 1.dp, shape = RoundedCornerShape(8.dp)),
+                .border(
+                    color = MaterialTheme.colors.primary,
+                    width = 1.dp,
+                    shape = RoundedCornerShape(8.dp)
+                ),
             keyboardActions = KeyboardActions(
                 onDone = {
                     onSelect(filterValue)
@@ -131,7 +138,9 @@ fun CodebookSelectionView(
             textStyle = MaterialTheme.typography.body1
         )
         Spacer(
-            Modifier.fillMaxWidth().height(1.dp)
+            Modifier
+                .fillMaxWidth()
+                .height(1.dp)
         )
         LazyColumn(
             modifier = Modifier
@@ -147,7 +156,11 @@ fun CodebookSelectionView(
                             onSelect(idGetter(item))
                         }
                         .background(color = MaterialTheme.colors.secondary)
-                        .border(color = MaterialTheme.colors.primary, width = 1.dp, shape = RoundedCornerShape(8.dp)),
+                        .border(
+                            color = MaterialTheme.colors.primary,
+                            width = 1.dp,
+                            shape = RoundedCornerShape(8.dp)
+                        ),
                 ) {
                     Text(
                         highlightSelectedText(filterValue, idGetter(item)),
@@ -169,7 +182,12 @@ fun CodebookSelectionView(
                 }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth(0.85f).align(Alignment.CenterHorizontally).padding(bottom = 15.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 15.dp)
+        ) {
             StyledTextBackButton(
                 onClick = {
                     onDelete()

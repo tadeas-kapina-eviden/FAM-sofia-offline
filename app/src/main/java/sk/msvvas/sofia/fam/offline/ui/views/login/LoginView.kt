@@ -20,10 +20,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.R
@@ -74,7 +72,10 @@ fun LoginView(
                 ErrorAlert(lastError = lastError)
             }
             InputField(
-                value = loginName,
+                value = TextFieldValue(
+                    text = loginName,
+                    selection = TextRange(loginName.length)
+                ),
                 onChange = { loginViewModel.onLoginNameChanged(it) },
                 label = "Užívateľ",
                 focusRequester = loginNameFocusRequester!!,
@@ -88,7 +89,10 @@ fun LoginView(
                 )
             )
             InputField(
-                value = password,
+                value = TextFieldValue(
+                    text = password,
+                    selection = TextRange(password.length)
+                ),
                 onChange = { loginViewModel.onPasswordChange(it) },
                 label = "Heslo",
                 focusRequester = passwordFocusRequester!!,
@@ -97,7 +101,10 @@ fun LoginView(
                 visualTransformation = PasswordVisualTransformation(),
             )
             InputField(
-                value = client,
+                value = TextFieldValue(
+                    text = client,
+                    selection = TextRange(client.length)
+                ),
                 onChange = { loginViewModel.onClientChange(it) },
                 label = "Klient",
                 focusRequester = clientFocusRequester!!,
@@ -116,9 +123,9 @@ fun LoginView(
                 text = "Prihlásiť sa"
             )
         }
-        if(!isLoaded){
+        if (!isLoaded) {
             LoadingAnimationModalWindow(header = "Načítavanie", text = "")
-        }else{
+        } else {
             loginViewModel.setSavedUserData();
         }
         if (downloadingData) {
@@ -176,7 +183,7 @@ private fun ErrorAlert(
  */
 @Composable
 private fun InputField(
-    value: String,
+    value: TextFieldValue,
     onChange: (String) -> Unit,
     label: String,
     focusRequester: FocusRequester,
@@ -187,7 +194,7 @@ private fun InputField(
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = { onChange(it) },
+        onValueChange = { onChange(it.text) },
         colors = TextFieldDefaults
             .textFieldColors(
                 backgroundColor = MaterialTheme.colors.secondary,
