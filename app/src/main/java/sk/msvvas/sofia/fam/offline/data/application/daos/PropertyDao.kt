@@ -194,7 +194,15 @@ interface PropertyDao {
 
     @Query(
         "select subnumber from properties " +
-                "where property_number = 'NOVY' order by subnumber desc limit 1"
+                "where property_number = 'NOVY' order by cast(subnumber as int) desc limit 1"
     )
-    suspend fun countNEW(): String?
+    suspend fun countNEW(): String
+
+    @Query(
+        "select * from properties where property_number = :propertyNumber and subnumber = :subnumber Limit 1"
+    )
+    suspend fun findByPropertyNumberAndSubNumber(
+        propertyNumber : String?,
+        subnumber: String?
+    ) : PropertyEntity?
 }

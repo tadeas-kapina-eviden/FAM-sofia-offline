@@ -39,6 +39,7 @@ class SetUpUrlViewModel(
         _url.value = _url.value!!.trim()
         if (_url.value != null && _url.value!!.isNotEmpty()) {
             _savingData.value = true
+            _url.value = _url.value!!.removeSuffix("\n")
             val url = url.value!!.let {
                 if (it.split("://").size >= 2)
                     return@let it.split("://")[1].split("/")[0]
@@ -58,7 +59,7 @@ class SetUpUrlViewModel(
      */
     fun onChangeUrl(value: String) {
         _url.value = value
-        if (_url.value!!.isNotEmpty() && _url.value!!.last() == '\n'){
+        if (_url.value!!.isNotEmpty() && _url.value!!.last() == '\n') {
             _url.value = _url.value!!.removeSuffix("\n")
             setUrl()
         }

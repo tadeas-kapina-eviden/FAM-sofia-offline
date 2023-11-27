@@ -116,9 +116,9 @@ class LoginViewModel(
                 try {
                     val response =
                         Client.validateLogin(
-                            username = _loginName.value!!,
-                            password = _password.value!!,
-                            clientId = _client.value!!
+                            username = _loginName.value!!.trim().removeSuffix("\n").trim(),
+                            password = _password.value!!.trim().removeSuffix("\n").trim(),
+                            clientId = _client.value!!.trim().removeSuffix("\n").trim()
                         )
                     if (response) {
                         saveUserData()

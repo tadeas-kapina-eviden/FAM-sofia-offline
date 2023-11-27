@@ -199,11 +199,11 @@ class InventoryDetailViewModel(
                     if (_scanWithoutDetail.value!!) {
                         selected.let {
                             it.localityNew =
-                                if (_localityFilter.value!!.isNotEmpty()) _localityFilter.value!! else if (it.localityNew.isNotEmpty()) it.localityNew else it.locality
+                                if (_localityFilter.value!!.isNotEmpty()) if (_localityFilter.value!! == "ziadna") "" else _localityFilter.value!! else if (it.localityNew.isNotEmpty()) it.localityNew else it.locality
                             it.roomNew =
-                                if (_roomFilter.value!!.isNotEmpty()) _roomFilter.value!! else if (it.roomNew.isNotEmpty()) it.roomNew else it.room
+                                if (_roomFilter.value!!.isNotEmpty()) if (_roomFilter.value!! == "ziadna") "" else _roomFilter.value!! else if (it.roomNew.isNotEmpty()) it.roomNew else it.room
                             it.personalNumberNew =
-                                if (_userFilter.value!!.isNotEmpty()) _userFilter.value!! else if (it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
+                                if (_userFilter.value!!.isNotEmpty()) if (_userFilter.value!! == "ziadna") "" else _userFilter.value!! else if (it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
                             if (it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew) {
                                 it.recordStatus = 'S'
                             } else {
@@ -269,9 +269,8 @@ class InventoryDetailViewModel(
                     )
                 }
             }
-            if (statusFilter.value == 'S') {
-                countLocalityRoomPairs()
-            }
+            countLocalityRoomPairs()
+
         }
 
         countUnprocessed()
@@ -285,7 +284,7 @@ class InventoryDetailViewModel(
                 return@launch
             }
             if (id < 0) {
-                val subnumber = withContext(Dispatchers.IO) { propertyRepository.countNEW() + 1 }
+                val subnumber = withContext(Dispatchers.IO) { propertyRepository.countNEW() } + 1;
                 propertyRepository.save(
                     PropertyEntity(
                         propertyNumber = "NOVY",
@@ -298,10 +297,11 @@ class InventoryDetailViewModel(
                         isNew = true
                     )
                 )
+
                 navController.navigate(
                     Routes.PROPERTY_DETAIL.withArgs(
                         "-1",
-                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString() + "&propertyNumber=" + "NOVY" + "&subnumber=" + subnumber
+                    ) + "?locality=" + _localityFilter.value!! + "&room=" + _roomFilter.value!! + "&user=" + _userFilter.value!! + "&inventoryId=" + _inventoryId.value!! + "&statusFilter=" + _statusFilter.value + "&isManual=" + true.toString() + "&propertyNumber=" + "NOVY" + "&subnumber=" + subnumber.toString()
                 )
             } else {
                 navController.navigate(

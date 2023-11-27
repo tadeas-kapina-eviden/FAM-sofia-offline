@@ -49,7 +49,12 @@ class PropertyDetailViewModel(
         property = _property
         if (id < 0) {
             CoroutineScope(Dispatchers.Main).launch {
-                _property.value = loadPropertyAsync(propertyNumber, subnumber).await()!![0]
+                _property.value = withContext(Dispatchers.IO){
+                    propertyRepository.getByIdentifiers(
+                        propertyNumber,
+                        subnumber
+                    )
+                }
             }
         } else {
             CoroutineScope(Dispatchers.Main).launch {
@@ -68,26 +73,9 @@ class PropertyDetailViewModel(
             if (_property.value!!.locality == "ziadna") {
                 _property.value!!.locality = ""
             }
-            if (_property.value!!.room == "ziadna") {
-                _property.value!!.room = ""
-            }
         }
     }
 
-    private fun loadPropertyAsync(
-        propertyNumber: String,
-        subnumber: String
-    ): Deferred<List<PropertyEntity>?> =
-        CoroutineScope(Dispatchers.Main).async(Dispatchers.IO) {
-            var selectedList: List<PropertyEntity>
-            while (propertyRepository.getAll()
-                    .filter { it.propertyNumber == propertyNumber && it.subnumber == subnumber }
-                    .also { selectedList = it }.isEmpty()
-            ) {
-                Thread.sleep(100)
-            }
-            return@async selectedList
-        }
 
     /**
      * Tells if all required variables are properly initialized
@@ -290,21 +278,6 @@ class PropertyDetailViewModel(
     fun lateInitVarsData() {
         if (!varsInitialized) {
             _property.value!!.let {
-
-                if (_locality.value == "") {
-                    if (it.localityNew != "")
-                        _locality.value = it.localityNew
-                    else
-                        _locality.value = it.locality
-                }
-
-                if (_room.value == "") {
-                    if (it.roomNew != "")
-                        _room.value = it.roomNew
-                    else
-                        _room.value = it.room
-                }
-
                 if (_user.value == "") {
                     if (it.personalNumberNew != "")
                         _user.value = it.personalNumberNew
