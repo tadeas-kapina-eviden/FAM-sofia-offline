@@ -11,8 +11,8 @@ android {
         applicationId "sk.msvvas.sofia.fam.offline"
         minSdk 26
         targetSdk 32
-        versionCode 7
-        versionName "1.4"
+        versionCode 8
+        versionName "1.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

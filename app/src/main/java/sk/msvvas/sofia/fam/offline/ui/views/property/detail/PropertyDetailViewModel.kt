@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
 import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepository
@@ -43,41 +46,6 @@ class PropertyDetailViewModel(
     val property: LiveData<PropertyEntity>
 
     /**
-     * Loads property from database and checks if it is new.
-     */
-    init {
-        property = _property
-        if (id < 0) {
-            CoroutineScope(Dispatchers.Main).launch {
-                _property.value = withContext(Dispatchers.IO){
-                    propertyRepository.getByIdentifiers(
-                        propertyNumber,
-                        subnumber
-                    )
-                }
-            }
-        } else {
-            CoroutineScope(Dispatchers.Main).launch {
-                _property.value = withContext(Dispatchers.IO) {
-                    propertyRepository.findById(id)
-                }
-            }
-        }
-        if (_property.value != null) {
-            if (_property.value!!.localityNew == "ziadna") {
-                _property.value!!.localityNew = ""
-            }
-            if (_property.value!!.roomNew == "ziadna") {
-                _property.value!!.roomNew = ""
-            }
-            if (_property.value!!.locality == "ziadna") {
-                _property.value!!.locality = ""
-            }
-        }
-    }
-
-
-    /**
      * Tells if all required variables are properly initialized
      */
     private var varsInitialized = false
@@ -90,6 +58,9 @@ class PropertyDetailViewModel(
 
     private val _user = MutableLiveData(userFilter)
     val user: LiveData<String> = _user
+
+    private val _userName = MutableLiveData("")
+    val userName: LiveData<String> = _userName
 
     private val _place = MutableLiveData("")
     val place: LiveData<String> = _place
@@ -127,6 +98,49 @@ class PropertyDetailViewModel(
 
     private val _errorText = MutableLiveData("")
     val errorText: LiveData<String> = _errorText
+
+    /**
+     * Loads property from database and checks if it is new.
+     */
+    init {
+        property = _property
+        if (id < 0) {
+            CoroutineScope(Dispatchers.Main).launch {
+                _property.value = withContext(Dispatchers.IO) {
+                    propertyRepository.getByIdentifiers(
+                        propertyNumber,
+                        subnumber
+                    )
+                }
+            }
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                _property.value = withContext(Dispatchers.IO) {
+                    propertyRepository.findById(id)
+                }
+            }
+        }
+        if (_property.value != null) {
+            if (_property.value!!.localityNew == "ziadna") {
+                _property.value!!.localityNew = ""
+            }
+            if (_property.value!!.roomNew == "ziadna") {
+                _property.value!!.roomNew = ""
+            }
+            if (_property.value!!.locality == "ziadna") {
+                _property.value!!.locality = ""
+            }
+        }
+
+        if (userFilter.isNotBlank()) {
+            val userCodebook = allCodebooksRepository.allUsers.value!!.filter {
+                it.id == userFilter
+            }.firstOrNull()
+            if (userCodebook != null) {
+                _userName.value = userCodebook!!.fullName
+            }
+        }
+    }
 
     /**
      * Close codebook selection view
@@ -195,11 +209,19 @@ class PropertyDetailViewModel(
             closeCodebookSelectionView()
             _user.value = it
             property.value!!.personalNumberNew = it
+
+            val userCodebook = allCodebooksRepository.allUsers.value!!.filter { it2 ->
+                it2.id == it
+            }.firstOrNull()
+            if (userCodebook != null) {
+                _userName.value = userCodebook.fullName
+            }
         }
         _deleteCodebook.value = {
             closeCodebookSelectionView()
             property.value!!.personalNumberNew = ""
             _user.value = ""
+            _userName.value = ""
         }
     }
 
@@ -279,10 +301,21 @@ class PropertyDetailViewModel(
         if (!varsInitialized) {
             _property.value!!.let {
                 if (_user.value == "") {
-                    if (it.personalNumberNew != "")
+                    if (it.personalNumberNew != ""){
                         _user.value = it.personalNumberNew
-                    else
+                    }
+                    else{
                         _user.value = it.personalNumber
+                    }
+                }
+
+                if (_user.value!!.isNotBlank()) {
+                    val userCodebook = allCodebooksRepository.allUsers.value!!.filter { it2 ->
+                        it2.id == _user.value
+                    }.firstOrNull()
+                    if (userCodebook != null) {
+                        _userName.value = userCodebook!!.fullName
+                    }
                 }
 
                 _place.value = it.workplaceNew
@@ -294,7 +327,17 @@ class PropertyDetailViewModel(
                     _fixedNote.value = "${note.id}/${note.description}"
                 }
                 _variableNote.value = it.variableNote
+
+                println("osoba: " + it.personalNumber)
+                println("osoba n: " + it.personalNumberNew)
+                println("lokalita: " + it.locality)
+                println("lokalita: " + it.localityNew)
+                println("room: " + it.room)
+                println("room n: " + it.roomNew)
+                println("pracovisko: " + it.workplace)
+                println("pracovisko n: " + it.workplaceNew)
             }
+
             varsInitialized = true
         }
     }

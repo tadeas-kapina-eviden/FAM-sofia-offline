@@ -448,7 +448,23 @@ class InventoryDetailViewModel(
             submitInventoryConfirmModalHide()
             return
         }
+
         CoroutineScope(Dispatchers.Main).launch {
+
+            try {
+                val response =
+                    Client.validateLogin(
+                        username = ClientData.username,
+                        password = ClientData.password,
+                        clientId = ClientData.client
+                    )
+            } catch (e: RuntimeException) {
+                requireLoginModalShow()
+                submitInventoryConfirmModalHide()
+
+                return@launch
+            }
+
             _submitInventoryConfirmModalShown.value = false
             _loadingData.value = true
             _loadingState.value = "Spracúvajú sa dáta..."

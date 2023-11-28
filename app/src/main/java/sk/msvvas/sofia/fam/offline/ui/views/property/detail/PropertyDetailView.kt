@@ -34,6 +34,7 @@ fun PropertyDetailView(
     val locality by propertyDetailViewModel.locality.observeAsState("")
     val room by propertyDetailViewModel.room.observeAsState("")
     val user by propertyDetailViewModel.user.observeAsState("")
+    val userName by propertyDetailViewModel.userName.observeAsState("")
     val place by propertyDetailViewModel.place.observeAsState("")
     val fixedNote by propertyDetailViewModel.fixedNote.observeAsState("")
     val variableNote by propertyDetailViewModel.variableNote.observeAsState("")
@@ -132,7 +133,7 @@ fun PropertyDetailView(
                         )
                         InputRowStyled(
                             label = "z. Os.",
-                            value = user,
+                            value = user + if(userName.isNotBlank()) "\n" + userName else "",
                             onClick = { propertyDetailViewModel.showUserCodebookSelectionView() },
                             enabled = true
                         )
