@@ -383,7 +383,8 @@ fun InventoryDetailView(
                 descriptionGetter = codebookSelectionViewDescriptionGetter,
                 onSelect = { selectCodebook(it); focusRequester.requestFocus() },
                 onClose = { inventoryDetailViewModel.closeCodebookSelectionView(); focusRequester.requestFocus() },
-                onDelete = { deleteCodebook(); focusRequester.requestFocus() }
+                onDelete = { deleteCodebook(); focusRequester.requestFocus() },
+                checkFormat = { true }
             )
         }
 

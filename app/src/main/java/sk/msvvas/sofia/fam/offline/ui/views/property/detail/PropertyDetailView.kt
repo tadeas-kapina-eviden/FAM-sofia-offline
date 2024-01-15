@@ -58,6 +58,8 @@ fun PropertyDetailView(
     val codebookSelectionViewDescriptionGetter by propertyDetailViewModel.codebookSelectionViewDescriptionGetter.observeAsState { "" }
     val selectCodebook by propertyDetailViewModel.selectCodebook.observeAsState { "" }
     val deleteCodebook by propertyDetailViewModel.deleteCodebook.observeAsState {}
+    val checkFormatCodebook by propertyDetailViewModel.checkFormatCodebook.observeAsState {}
+    val wrongFormatTextCodebook by propertyDetailViewModel.wrongFormatTextCodebook.observeAsState("")
 
     Box {
         if (property != null) {
@@ -75,7 +77,8 @@ fun PropertyDetailView(
                         .fillMaxWidth()
                 ) {
                     TextField(
-                        value = if (property.propertyNumber.isBlank() || property.propertyNumber == "NOVY") "Nová položka" else "Podrobnosti: " + property.propertyNumber.toLong().toString() + "/" + property.subnumber.toLong().toString(),
+                        value = if (property.propertyNumber.isBlank() || property.propertyNumber == "NOVY") "Nová položka" else "Podrobnosti: " + property.propertyNumber.toLong()
+                            .toString() + "/" + property.subnumber.toLong().toString(),
                         onValueChange = {},
                         readOnly = true,
                         modifier = Modifier
@@ -133,7 +136,7 @@ fun PropertyDetailView(
                         )
                         InputRowStyled(
                             label = "z. Os.",
-                            value = user + if(userName.isNotBlank()) "\n" + userName else "",
+                            value = user + if (userName.isNotBlank()) "\n" + userName else "",
                             onClick = { propertyDetailViewModel.showUserCodebookSelectionView() },
                             enabled = true
                         )
@@ -233,7 +236,9 @@ fun PropertyDetailView(
                     descriptionGetter = codebookSelectionViewDescriptionGetter,
                     onSelect = selectCodebook,
                     onClose = { propertyDetailViewModel.closeCodebookSelectionView() },
-                    onDelete = deleteCodebook
+                    onDelete = deleteCodebook,
+                    checkFormat = checkFormatCodebook as (String) -> Boolean,
+                    wrongFormatText = wrongFormatTextCodebook
                 )
             }
 

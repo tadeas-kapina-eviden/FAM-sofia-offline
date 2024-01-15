@@ -47,7 +47,6 @@ class InventoryListViewModel(
         CoroutineScope(Dispatchers.Main).launch {
             inventoryRepository.deleteAll()
 
-
             _inventories.value = Client.getInventories()
 
             inventoryRepository.saveAll(_inventories.value!!)

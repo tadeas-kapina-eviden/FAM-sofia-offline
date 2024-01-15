@@ -144,6 +144,7 @@ class LoginViewModel(
                         _downloadingData.value = false
                     }
                 } catch (e: RuntimeException) {
+                    e.printStackTrace()
                     _lastError.value =
                         "Prihlásenie sa nepodarilo. Skontrolujte pripojenie k internetu!"
                     _downloadingData.value = false

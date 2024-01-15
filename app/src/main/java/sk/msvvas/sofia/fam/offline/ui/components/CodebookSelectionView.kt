@@ -48,7 +48,9 @@ fun CodebookSelectionView(
     descriptionGetter: (Any) -> String,
     onSelect: (String) -> Any,
     onClose: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    checkFormat: (String) -> Boolean,
+    wrongFormatText: String = ""
 ) {
     var filterValue by remember {
         mutableStateOf(lastFilterValue)
@@ -66,145 +68,168 @@ fun CodebookSelectionView(
         mutableStateOf(FocusRequester())
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                color = MaterialTheme.colors.surface,
-            )
-    ) {
+    var wrongFormat by remember {
+        mutableStateOf(false)
+    }
+
+    Box {
         Column(
             modifier = Modifier
-                .padding(top = 25.dp, bottom = 5.dp)
-                .align(Alignment.Start)
-                .fillMaxWidth(1f)
+                .fillMaxSize()
+                .background(
+                    color = MaterialTheme.colors.surface,
+                )
         ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Close button.",
+            Column(
                 modifier = Modifier
-                    .clickable { onClose() }
-                    .align(Alignment.End),
-                tint = MaterialTheme.colors.primary
-            )
-        }
-        TextField(
-            value = TextFieldValue(
-                text = filterValue,
-                selection = if(filterValue.isBlank()) TextRange(0) else TextRange(filterValue.length)
-            ),
-            onValueChange = {
-                filterValue = it.text
-                filteredCodebookData = codebookData.filter { codebook ->
-                    filterValue.isEmpty()
-                            || idGetter(codebook).lowercase()
-                        .contains(
-                            filterValue.lowercase(
-                                Locale.getDefault()
-                            )
-                        )
-                            || descriptionGetter(codebook).lowercase()
-                        .contains(
-                            filterValue.lowercase(
-                                Locale.getDefault()
-                            )
-                        )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .align(Alignment.CenterHorizontally)
-                .padding(bottom = 5.dp)
-                .focusRequester(focusRequester)
-                .border(
-                    color = MaterialTheme.colors.primary,
-                    width = 1.dp,
-                    shape = RoundedCornerShape(8.dp)
-                ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    onSelect(filterValue)
-                }
-            ),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
-            ),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = MaterialTheme.colors.primary,
-                backgroundColor = MaterialTheme.colors.secondary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primaryVariant
-            ),
-            textStyle = MaterialTheme.typography.body1
-        )
-        Spacer(
-            Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-        )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .align(Alignment.CenterHorizontally)
-                .weight(1f)
-        ) {
-            items(filteredCodebookData) { item ->
-                Row(
+                    .padding(top = 25.dp, bottom = 5.dp)
+                    .align(Alignment.Start)
+                    .fillMaxWidth(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close button.",
                     modifier = Modifier
-                        .padding(vertical = 1.dp)
-                        .clickable(enabled = true) {
-                            onSelect(idGetter(item))
+                        .clickable { onClose() }
+                        .align(Alignment.End),
+                    tint = MaterialTheme.colors.primary
+                )
+            }
+            TextField(
+                value = TextFieldValue(
+                    text = filterValue,
+                    selection = if (filterValue.isBlank()) TextRange(0) else TextRange(filterValue.length)
+                ),
+                onValueChange = {
+                    filterValue = it.text
+                    filteredCodebookData = codebookData.filter { codebook ->
+                        filterValue.isEmpty()
+                                || idGetter(codebook).lowercase()
+                            .contains(
+                                filterValue.lowercase(
+                                    Locale.getDefault()
+                                )
+                            )
+                                || descriptionGetter(codebook).lowercase()
+                            .contains(
+                                filterValue.lowercase(
+                                    Locale.getDefault()
+                                )
+                            )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 5.dp)
+                    .focusRequester(focusRequester)
+                    .border(
+                        color = MaterialTheme.colors.primary,
+                        width = 1.dp,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        if (checkFormat(filterValue)) {
+                            onSelect(filterValue)
+                        } else {
+                            wrongFormat = true
                         }
-                        .background(color = MaterialTheme.colors.secondary)
-                        .border(
-                            color = MaterialTheme.colors.primary,
-                            width = 1.dp,
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                ) {
-                    Text(
-                        highlightSelectedText(filterValue, idGetter(item)),
+                    }
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    focusedIndicatorColor = MaterialTheme.colors.primary,
+                    unfocusedIndicatorColor = MaterialTheme.colors.primaryVariant
+                ),
+                textStyle = MaterialTheme.typography.body1
+            )
+            Spacer(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .align(Alignment.CenterHorizontally)
+                    .weight(1f)
+            ) {
+                items(filteredCodebookData) { item ->
+                    Row(
                         modifier = Modifier
-                            .weight(3f)
-                            .padding(horizontal = 10.dp, vertical = 2.dp),
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.primary
-                    )
-                    Text(
-                        highlightSelectedText(filterValue, descriptionGetter(item)),
-                        modifier = Modifier
-                            .weight(4f)
-                            .padding(horizontal = 10.dp, vertical = 2.dp),
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.primary
-                    )
+                            .padding(vertical = 1.dp)
+                            .clickable(enabled = true) {
+                                onSelect(idGetter(item))
+                            }
+                            .background(color = MaterialTheme.colors.secondary)
+                            .border(
+                                color = MaterialTheme.colors.primary,
+                                width = 1.dp,
+                                shape = RoundedCornerShape(8.dp)
+                            ),
+                    ) {
+                        Text(
+                            highlightSelectedText(filterValue, idGetter(item)),
+                            modifier = Modifier
+                                .weight(3f)
+                                .padding(horizontal = 10.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.body1,
+                            color = MaterialTheme.colors.primary
+                        )
+                        Text(
+                            highlightSelectedText(filterValue, descriptionGetter(item)),
+                            modifier = Modifier
+                                .weight(4f)
+                                .padding(horizontal = 10.dp, vertical = 2.dp),
+                            textAlign = TextAlign.End,
+                            style = MaterialTheme.typography.body1,
+                            color = MaterialTheme.colors.primary
+                        )
+                    }
                 }
             }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 15.dp)
+            ) {
+                StyledTextBackButton(
+                    onClick = {
+                        onDelete()
+                    },
+                    text = "Zmazať",
+                    modifier = Modifier
+                        .weight(1f)
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
+                StyledTextButton(
+                    onClick = {
+                        if (checkFormat(filterValue)) {
+                            onSelect(filterValue)
+                        } else {
+                            wrongFormat = true
+                        }
+                    },
+                    text = "Potvrdiť",
+                    modifier = Modifier
+                        .weight(1f)
+                )
+            }
+
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .align(Alignment.CenterHorizontally)
-                .padding(bottom = 15.dp)
-        ) {
-            StyledTextBackButton(
-                onClick = {
-                    onDelete()
-                },
-                text = "Zmazať",
-                modifier = Modifier
-                    .weight(1f)
-            )
-            Spacer(modifier = Modifier.weight(0.1f))
-            StyledTextButton(
-                onClick = {
-                    onSelect(filterValue)
-                },
-                text = "Potvrdiť",
-                modifier = Modifier
-                    .weight(1f)
-            )
+
+        if (wrongFormat) {
+            InformationModalWindow(
+                "Nesprávny formát",
+                wrongFormatText,
+                "Potvrdiť",
+            ) { wrongFormat = false }
         }
     }
 
@@ -287,6 +312,7 @@ fun CodebookSelectionPreview() {
             onSelect = {},
             onClose = {},
             onDelete = {},
+            checkFormat = { true }
         )
     }
 }

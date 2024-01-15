@@ -90,6 +90,15 @@ class PropertyDetailViewModel(
     private val _deleteCodebook = MutableLiveData {}
     val deleteCodebook: LiveData<() -> Unit> = _deleteCodebook
 
+    private val _checkFormatCodebook = MutableLiveData<(String) -> Boolean> {
+        true
+    }
+
+    private val _wrongFormatTextCodebook = MutableLiveData("")
+    val wrongFormatTextCodebook: LiveData<String> = _wrongFormatTextCodebook
+
+    val checkFormatCodebook: LiveData<(String) -> Boolean> = _checkFormatCodebook
+
     private val _codebookSelectionViewLastValue = MutableLiveData("")
     val codebookSelectionViewLastValue: LiveData<String> = _codebookSelectionViewLastValue
 
@@ -169,6 +178,10 @@ class PropertyDetailViewModel(
             property.value!!.localityNew = ""
             _locality.value = ""
         }
+        _checkFormatCodebook.value = {
+            it.length <= 10
+        }
+        _wrongFormatTextCodebook.value = "Musí obsahovať maximálne 10 písmen a číslic!"
     }
 
     /**
@@ -193,6 +206,10 @@ class PropertyDetailViewModel(
             property.value!!.roomNew = ""
             _room.value = ""
         }
+        _checkFormatCodebook.value = {
+            it.length <= 8
+        }
+        _wrongFormatTextCodebook.value = "Musí obsahovať maximálne 8 písmen a číslic!"
     }
 
     /**
@@ -223,6 +240,10 @@ class PropertyDetailViewModel(
             _user.value = ""
             _userName.value = ""
         }
+        _checkFormatCodebook.value = {
+            it.length == 8 && it.toIntOrNull() != null
+        }
+        _wrongFormatTextCodebook.value = "Musí obsahovať presne 8 číslic!"
     }
 
     /**
@@ -244,6 +265,9 @@ class PropertyDetailViewModel(
             closeCodebookSelectionView()
             property.value!!.workplaceNew = ""
             _place.value = ""
+        }
+        _checkFormatCodebook.value = {
+            true
         }
     }
 
@@ -270,6 +294,9 @@ class PropertyDetailViewModel(
             property.value!!.fixedNote = ""
             _fixedNote.value = ""
         }
+        _checkFormatCodebook.value = {
+            true
+        }
     }
 
     /**
@@ -292,6 +319,11 @@ class PropertyDetailViewModel(
             property.value!!.variableNote = ""
             _variableNote.value = ""
         }
+        _checkFormatCodebook.value = {
+            it.length <= 50
+        }
+
+        _wrongFormatTextCodebook.value = "Musí obsahovať maximálne 50 písmen a číslic!"
     }
 
     /**
@@ -301,10 +333,9 @@ class PropertyDetailViewModel(
         if (!varsInitialized) {
             _property.value!!.let {
                 if (_user.value == "") {
-                    if (it.personalNumberNew != ""){
+                    if (it.personalNumberNew != "") {
                         _user.value = it.personalNumberNew
-                    }
-                    else{
+                    } else {
                         _user.value = it.personalNumber
                     }
                 }
