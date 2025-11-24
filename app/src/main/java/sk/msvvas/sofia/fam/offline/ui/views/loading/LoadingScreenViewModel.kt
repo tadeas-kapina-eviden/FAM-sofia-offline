@@ -22,8 +22,8 @@ class LoadingScreenViewModel(
     private val _serverUrl = MutableLiveData<String?>(null)
     val serverUrl: LiveData<String?> = _serverUrl
 
-    private val _inventoryId = MutableLiveData<String>("")
-    val inventoryIdFromProperty: LiveData<String> = _inventoryId
+    private val _inventoryId = MutableLiveData<String?>("")
+    val inventoryIdFromProperty: LiveData<String?> = _inventoryId
 
 
     init {

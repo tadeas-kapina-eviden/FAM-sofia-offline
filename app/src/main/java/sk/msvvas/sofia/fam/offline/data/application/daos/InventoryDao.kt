@@ -2,7 +2,7 @@ package sk.msvvas.sofia.fam.offline.data.application.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.IGNORE
+import androidx.room.OnConflictStrategy.Companion.IGNORE
 import androidx.room.Query
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 

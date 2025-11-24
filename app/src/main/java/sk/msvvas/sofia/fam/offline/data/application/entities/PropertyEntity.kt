@@ -1,8 +1,7 @@
 package sk.msvvas.sofia.fam.offline.data.application.entities
 
 import androidx.room.ColumnInfo
-import androidx.room.ColumnInfo.INTEGER
-import androidx.room.ColumnInfo.TEXT
+import androidx.room.ColumnInfo.Companion.INTEGER
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -18,14 +17,17 @@ import androidx.room.PrimaryKey
         Index(value = ["inventory_id"], unique = false),
         Index(value = ["record_status"], unique = false),
         Index(value = ["record_status", "locality", "room", "personal_number"], unique = false),
-        Index(value = ["record_status", "locality_new", "room_new", "personal_number_new"], unique = false),
+        Index(
+            value = ["record_status", "locality_new", "room_new", "personal_number_new"],
+            unique = false
+        ),
         Index(value = ["property_number", "subnumber"], unique = true),
     ]
 )
 data class PropertyEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long = 0L,
+    var id: Long = 0,
 
     @ColumnInfo(name = "inventory_id")
     var inventoryId: String = "",

@@ -199,11 +199,11 @@ class InventoryDetailViewModel(
                     if (_scanWithoutDetail.value!!) {
                         selected.let {
                             it.localityNew =
-                                if (_localityFilter.value!!.isNotEmpty()) if (_localityFilter.value!! == "ziadna") "" else _localityFilter.value!! else if (it.localityNew.isNotEmpty()) it.localityNew else it.locality
+                                if (_localityFilter.value!!.isNotEmpty()) if (_localityFilter.value!! == "ziadna") "" else _localityFilter.value!! else it.localityNew.ifEmpty { it.locality }
                             it.roomNew =
-                                if (_roomFilter.value!!.isNotEmpty()) if (_roomFilter.value!! == "ziadna") "" else _roomFilter.value!! else if (it.roomNew.isNotEmpty()) it.roomNew else it.room
+                                if (_roomFilter.value!!.isNotEmpty()) if (_roomFilter.value!! == "ziadna") "" else _roomFilter.value!! else it.roomNew.ifEmpty { it.room }
                             it.personalNumberNew =
-                                if (_userFilter.value!!.isNotEmpty()) if (_userFilter.value!! == "ziadna") "" else _userFilter.value!! else if (it.personalNumberNew.isNotEmpty()) it.personalNumberNew else it.personalNumber
+                                if (_userFilter.value!!.isNotEmpty()) if (_userFilter.value!! == "ziadna") "" else _userFilter.value!! else it.personalNumberNew.ifEmpty { it.personalNumber }
                             if (it.locality == it.localityNew && it.room == it.roomNew && it.personalNumber == it.personalNumberNew) {
                                 it.recordStatus = 'S'
                             } else {
@@ -368,12 +368,13 @@ class InventoryDetailViewModel(
                 if (localityFilter.value == null || localityFilter.value!!.isBlank()) true else it.localityId == localityFilter.value!!
             }!!.plus(
                 RoomCodebookEntity(
+                0,
                     "ziadna",
                     "ziadna",
                     "Žiadna miestnosť"
                 )
             )
-        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
+        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id.toString() }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
         _codebookSelectionViewLastValue.value = _roomFilter.value
@@ -549,9 +550,9 @@ class InventoryDetailViewModel(
                     }
                 }
             }
-            _localityRoomPairsCount.value = result.sortedBy {
-                it.locality
-            }
+            _localityRoomPairsCount.value = result
+                .sortedBy{it.room}
+                .sortedBy { it.locality }
         }
     }
 }

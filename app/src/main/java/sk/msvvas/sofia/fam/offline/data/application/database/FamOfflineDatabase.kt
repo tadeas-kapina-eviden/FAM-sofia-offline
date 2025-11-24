@@ -32,7 +32,8 @@ import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
         ServerUrlEntity::class,
         UserDataEntity::class
     ],
-    version = 6
+    version = 6,
+    exportSchema = false
 )
 abstract class FamOfflineDatabase : RoomDatabase() {
 

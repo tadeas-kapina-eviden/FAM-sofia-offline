@@ -134,7 +134,7 @@ class PropertyRepository(private val propertyDao: PropertyDao) {
         return propertyDao.getAll()
     }
 
-    suspend fun getInventoryId(): String {
+    suspend fun getInventoryId(): String? {
         return propertyDao.getInventoryId()
     }
 

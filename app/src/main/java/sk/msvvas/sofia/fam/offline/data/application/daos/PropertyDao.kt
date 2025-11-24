@@ -1,7 +1,7 @@
 package sk.msvvas.sofia.fam.offline.data.application.daos
 
 import androidx.room.*
-import androidx.room.OnConflictStrategy.IGNORE
+import androidx.room.OnConflictStrategy.Companion.IGNORE
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
 import sk.msvvas.sofia.fam.offline.data.application.model.LocalityRoomPair
 import sk.msvvas.sofia.fam.offline.data.application.model.PropertyPreviewModel
@@ -91,7 +91,7 @@ interface PropertyDao {
     suspend fun findByInventoryId(inventoryId: String): List<PropertyEntity>
 
     @Query("SELECT inventory_id FROM properties LIMIT 1")
-    suspend fun getInventoryId(): String
+    suspend fun getInventoryId(): String?
 
     @Query(
         "SELECT COUNT(record_status) AS row_count  " +

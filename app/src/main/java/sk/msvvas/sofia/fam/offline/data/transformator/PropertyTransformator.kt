@@ -88,7 +88,7 @@ object PropertyTransformator {
     fun propertyEntityListToPropertyPreviewList(propertyEntities: List<PropertyEntity>): List<PropertyPreviewModel> {
         return propertyEntities.map {
             PropertyPreviewModel(
-                id = it.id,
+                id = it.id!!,
                 textMainNumber = it.textMainNumber,
                 status = it.recordStatus,
                 subNumber = it.subnumber,

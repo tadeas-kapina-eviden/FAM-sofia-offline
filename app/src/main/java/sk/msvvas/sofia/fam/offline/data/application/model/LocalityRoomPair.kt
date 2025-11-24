@@ -1,8 +1,7 @@
 package sk.msvvas.sofia.fam.offline.data.application.model
 
 import androidx.room.ColumnInfo
-import androidx.room.ColumnInfo.INTEGER
-
+import androidx.room.ColumnInfo.Companion.INTEGER
 data class LocalityRoomPair(
     @ColumnInfo(name = "locality")
     val locality: String,

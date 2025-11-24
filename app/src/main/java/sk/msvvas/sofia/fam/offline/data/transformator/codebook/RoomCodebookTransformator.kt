@@ -19,7 +19,8 @@ object RoomCodebookTransformator {
         return roomCodebookFeedXml.entries.map { entry ->
             entry.content.room.let {
                 RoomCodebookEntity(
-                    id = it.id,
+                    id = 0,
+                    name = it.id,
                     localityId = it.localityId,
                     description = it.description
                 )

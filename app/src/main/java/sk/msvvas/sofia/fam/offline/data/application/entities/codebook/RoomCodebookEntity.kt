@@ -9,16 +9,15 @@ import androidx.room.PrimaryKey
  * Entity for rooms_codebook table in local database
  */
 @Entity(
-    tableName = "rooms_codebook",
-    indices = [
-        Index(value = ["id"], unique = true)
-    ]
+    tableName = "rooms_codebook"
 )
 data class RoomCodebookEntity(
-
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: String,
+    val id : Int,
+
+    @ColumnInfo(name = "name")
+    val name: String,
 
     @ColumnInfo(name = "locality_id")
     var localityId: String,

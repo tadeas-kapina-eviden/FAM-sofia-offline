@@ -142,9 +142,9 @@ class PropertyDetailViewModel(
         }
 
         if (userFilter.isNotBlank()) {
-            val userCodebook = allCodebooksRepository.allUsers.value!!.filter {
+            val userCodebook = allCodebooksRepository.allUsers.value!!.firstOrNull {
                 it.id == userFilter
-            }.firstOrNull()
+            }
             if (userCodebook != null) {
                 _userName.value = userCodebook!!.fullName
             }
@@ -192,7 +192,7 @@ class PropertyDetailViewModel(
         _codebookSelectionViewData.value = allCodebooksRepository.allRooms.value!!.filter {
             if (locality.value == null || locality.value!!.isBlank()) true else it.localityId == locality.value!!
         }
-        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id }
+        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).name }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
         _codebookSelectionViewLastValue.value = _property.value?.roomNew
@@ -285,9 +285,11 @@ class PropertyDetailViewModel(
             closeCodebookSelectionView()
             val note = allCodebooksRepository.allNotes.value!!.filter { note ->
                 note.id == it
-            }[0]
-            _fixedNote.value = "${note.id}/${note.description}"
-            property.value!!.fixedNote = it
+            }
+            if(note.isNotEmpty()) {
+                _fixedNote.value = "${note[0].id}/${note[0].description}"
+                property.value!!.fixedNote = it
+            }
         }
         _deleteCodebook.value = {
             closeCodebookSelectionView()
@@ -341,11 +343,14 @@ class PropertyDetailViewModel(
                 }
 
                 if (_user.value!!.isNotBlank()) {
-                    val userCodebook = allCodebooksRepository.allUsers.value!!.filter { it2 ->
-                        it2.id == _user.value
-                    }.firstOrNull()
-                    if (userCodebook != null) {
-                        _userName.value = userCodebook!!.fullName
+                    if(allCodebooksRepository.allUsers.value != null) {
+                        val userCodebook =
+                            allCodebooksRepository.allUsers.value!!.firstOrNull { it2 ->
+                                it2.id == _user.value
+                            }
+                        if (userCodebook != null) {
+                            _userName.value = userCodebook.fullName
+                        }
                     }
                 }
 
