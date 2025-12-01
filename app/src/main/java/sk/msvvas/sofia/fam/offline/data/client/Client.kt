@@ -1,15 +1,30 @@
 package sk.msvvas.sofia.fam.offline.data.client
 
 import com.thoughtworks.xstream.XStream
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.cookies.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.basicAuth
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.ParametersBuilder
+import io.ktor.http.URLBuilder
+import io.ktor.http.URLProtocol
+import io.ktor.http.isSuccess
+import io.ktor.http.path
 import sk.msvvas.sofia.fam.offline.data.application.entities.InventoryEntity
 import sk.msvvas.sofia.fam.offline.data.application.entities.PropertyEntity
-import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.*
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.LocalityCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.NoteCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.PlaceCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.RoomCodebookEntity
+import sk.msvvas.sofia.fam.offline.data.application.entities.codebook.UserCodebookEntity
 import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityCodebookContentXml
 import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityCodebookFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.codebook.locality.LocalityCodebookXml
@@ -33,7 +48,13 @@ import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyFeedXml
 import sk.msvvas.sofia.fam.offline.data.client.model.property.PropertyXml
 import sk.msvvas.sofia.fam.offline.data.transformator.InventoryTransformator
 import sk.msvvas.sofia.fam.offline.data.transformator.PropertyTransformator
-import sk.msvvas.sofia.fam.offline.data.transformator.codebook.*
+import sk.msvvas.sofia.fam.offline.data.transformator.codebook.LocalityCodebookTransformator
+import sk.msvvas.sofia.fam.offline.data.transformator.codebook.NoteCodebookTransformator
+import sk.msvvas.sofia.fam.offline.data.transformator.codebook.PlaceCodebookTransformator
+import sk.msvvas.sofia.fam.offline.data.transformator.codebook.RoomCodebookTransformator
+import sk.msvvas.sofia.fam.offline.data.transformator.codebook.UserCodebookTransformator
+import java.io.EOFException
+import java.net.ConnectException
 
 /**
  * Object with functions used for making request to back-end
@@ -269,7 +290,7 @@ object Client {
                 mapper.fromXML(
                     responseProcessed.bodyAsText()
                 ) as PropertyFeedXml
-            ).map{
+            ).map {
                 it.also {
                     it.isSaved = true
                 }
@@ -287,24 +308,30 @@ object Client {
     suspend fun submitProcessedProperties(
         inventoryEntity: InventoryEntity,
         properties: List<PropertyEntity>
-    ): HttpStatusCode {
+    ): HttpStatusCode? {
         val token = fetchTokenRequest()
 
-        return client.post {
-            buildRequest(
-                this,
-                getPath = "InventoryDataSet",
-            )
+        try {
+            return client.post {
+                buildRequest(
+                    this,
+                    getPath = "InventoryDataSet",
+                )
 
-            header("Content-Type", "application/json")
-            header("X-CSRF-TOKEN", token)
-            setBody(
-                InventoryTransformator.inventoryEntityToInventoryModelJson(
-                    inventoryEntity,
-                    properties
-                ).toJSON()
-            )
-        }.status
+                header("Content-Type", "application/json")
+                header("X-CSRF-TOKEN", token)
+                setBody(
+                    InventoryTransformator.inventoryEntityToInventoryModelJson(
+                        inventoryEntity,
+                        properties
+                    ).toJSON()
+                )
+            }.status
+        } catch (ex: EOFException) {
+            return null
+        } catch (ex: ConnectException) {
+            return null
+        }
     }
 
     /**

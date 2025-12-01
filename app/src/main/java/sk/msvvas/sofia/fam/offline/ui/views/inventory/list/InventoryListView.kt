@@ -16,7 +16,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sk.msvvas.sofia.fam.offline.ui.components.ConfirmModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.InformationModalWindow
 import sk.msvvas.sofia.fam.offline.ui.components.LoadingAnimationModalWindow
+import sk.msvvas.sofia.fam.offline.ui.components.ModalWindow
 
 @Composable
 fun InventoryListView(
@@ -29,6 +31,7 @@ fun InventoryListView(
     val downloadingData by inventoryListViewModel.downloadingData.observeAsState(false)
     val loadingState by inventoryListViewModel.loadingState.observeAsState("")
     val exitModalShown by inventoryListViewModel.exitModalShown.observeAsState(false)
+    val errorModalShown by inventoryListViewModel.errorModalShown.observeAsState(false)
     val loadingsInventories by inventoryListViewModel.loadingsInventories.observeAsState(false)
 
     val activity = (LocalContext.current as? Activity)
@@ -89,6 +92,16 @@ fun InventoryListView(
                     inventoryListViewModel.hideExitModalWindow()
                 }
             )
+        }
+
+        if (errorModalShown) {
+            InformationModalWindow(
+                header = "Nastala chyba!",
+                body = "Skontrolujte vaše pripojenie k internetu a skúste to znova.",
+                buttonText = "Potvrdiť",
+            ){
+                inventoryListViewModel.hideErrorModalWindow();
+            }
         }
     }
     BackHandler {

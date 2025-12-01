@@ -14,6 +14,8 @@ import sk.msvvas.sofia.fam.offline.data.application.repository.PropertyRepositor
 import sk.msvvas.sofia.fam.offline.data.application.repository.codebook.AllCodebooksRepository
 import sk.msvvas.sofia.fam.offline.data.client.Client
 import sk.msvvas.sofia.fam.offline.ui.navigation.Routes
+import java.io.EOFException
+import java.net.ConnectException
 
 class InventoryListViewModel(
     private val inventoryRepository: InventoryRepository,
@@ -43,6 +45,9 @@ class InventoryListViewModel(
     private val _loadingsInventories = MutableLiveData(true)
     val loadingsInventories: LiveData<Boolean> = _loadingsInventories
 
+    private val _errorModalShown = MutableLiveData(false);
+    val errorModalShown: LiveData<Boolean> = _errorModalShown
+
     init {
         CoroutineScope(Dispatchers.Main).launch {
             inventoryRepository.deleteAll()
@@ -62,21 +67,26 @@ class InventoryListViewModel(
 
     fun onSelectInventoryConfirm() {
         CoroutineScope(Dispatchers.Main).launch {
-            _downloadingData.value = true
-            _isDownloadConfirmShown.value = false
-            _loadingState.value = "Sťahujú sa inventúry... "
-            propertyRepository.saveAll(Client.getPropertiesByInventoryID(_selectedInventoryId.value!!))
-            _loadingState.value = "Sťahujú sa číselníky lokácií... "
-            allCodebooksRepository.saveAllLocalities(Client.getLocalityCodebooks())
-            _loadingState.value = "Sťahujú sa číselníky miestností... "
-            allCodebooksRepository.saveAllRooms(Client.getRoomCodebooks())
-            _loadingState.value = "Sťahujú sa číselníky pracovísk... "
-            allCodebooksRepository.saveAllPlaces(Client.getPlaceCodebooks())
-            _loadingState.value = "Sťahujú sa číselníky používateľov... "
-            allCodebooksRepository.saveAllUsers(Client.getUserCodebooks())
-            _loadingState.value = "Sťahujú sa číselníky fixných poznámok... "
-            allCodebooksRepository.saveAllNotes(Client.getNoteCodebooks())
-            navController.navigate(Routes.INVENTORY_DETAIL.withArgs(_selectedInventoryId.value!!))
+            try {
+                _downloadingData.value = true
+                _isDownloadConfirmShown.value = false
+                _loadingState.value = "Sťahujú sa inventúry... "
+                propertyRepository.saveAll(Client.getPropertiesByInventoryID(_selectedInventoryId.value!!))
+                _loadingState.value = "Sťahujú sa číselníky lokácií... "
+                allCodebooksRepository.saveAllLocalities(Client.getLocalityCodebooks())
+                _loadingState.value = "Sťahujú sa číselníky miestností... "
+                allCodebooksRepository.saveAllRooms(Client.getRoomCodebooks())
+                _loadingState.value = "Sťahujú sa číselníky pracovísk... "
+                allCodebooksRepository.saveAllPlaces(Client.getPlaceCodebooks())
+                _loadingState.value = "Sťahujú sa číselníky používateľov... "
+                allCodebooksRepository.saveAllUsers(Client.getUserCodebooks())
+                _loadingState.value = "Sťahujú sa číselníky fixných poznámok... "
+                allCodebooksRepository.saveAllNotes(Client.getNoteCodebooks())
+                navController.navigate(Routes.INVENTORY_DETAIL.withArgs(_selectedInventoryId.value!!))
+            }catch (ex: Exception) {
+                _downloadingData.value = false
+                _errorModalShown.value = true
+            }
         }
     }
 
@@ -90,5 +100,9 @@ class InventoryListViewModel(
 
     fun hideExitModalWindow() {
         _exitModalShown.value = false
+    }
+
+    fun hideErrorModalWindow() {
+        _errorModalShown.value = false
     }
 }

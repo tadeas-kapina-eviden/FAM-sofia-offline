@@ -99,7 +99,7 @@ abstract class FamOfflineDatabase : RoomDatabase() {
                         context.applicationContext,
                         FamOfflineDatabase::class.java,
                         "fam_offline_database"
-                    ).fallbackToDestructiveMigration()
+                    ).fallbackToDestructiveMigration(true)
                         .build()
 
                     INSTANCE = instance

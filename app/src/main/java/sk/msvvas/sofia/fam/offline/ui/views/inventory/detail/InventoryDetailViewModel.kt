@@ -492,6 +492,15 @@ class InventoryDetailViewModel(
                         withContext(Dispatchers.IO) { inventoryRepository.findById(toSendBatch[0].inventoryId) },
                         toSendBatch
                     ) else HttpStatusCode.Created
+                if(responseStatus == null){
+                    if (!fromStart) {
+                        _loadingData.value = false
+                        _errorHeader.value = "Chyba!"
+                        _errorText.value =
+                            "Nastala chyba - skontrolujte pripojenie k internetu!"
+                    }
+                    return@launch
+                }
                 if (responseStatus != HttpStatusCode.Created) {
                     if (!fromStart) {
                         _loadingData.value = false

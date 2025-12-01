@@ -43,7 +43,7 @@ class UserDataRepository(private val userDataDao: UserDataDao) {
      */
     fun getAll() {
         coroutineScope.launch(Dispatchers.Main) {
-            allData.value = asyncGetAll().await()
+            allData.value = asyncGetAll().await()!!
             isLoaded.value = true
         }
     }
