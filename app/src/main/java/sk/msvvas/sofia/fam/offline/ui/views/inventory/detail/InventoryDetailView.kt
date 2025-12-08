@@ -136,47 +136,42 @@ fun InventoryDetailView(
                                 .fillMaxWidth()
                                 .padding(top = 15.dp)
                         ) {
-                            InterceptPlatformTextInput(
-                                interceptor = { request, nextHandler ->
-                                    awaitCancellation()
+
+                            TextField(
+                                value = codeFilter,
+                                onValueChange = { it: String ->
+                                    inventoryDetailViewModel.onCodeFilterChange(it)
                                 },
-                                content = {
-                                    TextField(
-                                        value = codeFilter,
-                                        onValueChange = { it: String ->
-                                            inventoryDetailViewModel.onCodeFilterChange(it)
-                                        },
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .border(
-                                                width = 1.dp,
-                                                color = MaterialTheme.colors.primary,
-                                                shape = RoundedCornerShape(4.dp)
-                                            )
-                                            .focusRequester(focusRequester),
-                                        singleLine = true,
-                                        keyboardOptions = KeyboardOptions(
-                                            imeAction = ImeAction.Done,
-                                            autoCorrect = false,
-                                            capitalization = KeyboardCapitalization.Characters,
-                                            keyboardType = KeyboardType.Ascii,
-                                            showKeyboardOnFocus = false,
-                                        ),
-                                        keyboardActions = KeyboardActions(
-                                            onDone = {
-                                                inventoryDetailViewModel.runCodeFilter()
-                                            },
-                                        ),
-                                        colors = TextFieldDefaults.textFieldColors(
-                                            backgroundColor = MaterialTheme.colors.secondary,
-                                            textColor = MaterialTheme.colors.primary,
-                                            unfocusedIndicatorColor = Color.Transparent,
-                                            focusedIndicatorColor = Color.Transparent
-                                        ),
-                                        textStyle = MaterialTheme.typography.body1,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colors.primary,
+                                        shape = RoundedCornerShape(4.dp)
                                     )
-                                }
+                                    .focusRequester(focusRequester),
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Done,
+                                    autoCorrect = false,
+                                    capitalization = KeyboardCapitalization.Characters,
+                                    keyboardType = KeyboardType.Ascii,
+                                    showKeyboardOnFocus = false,
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        inventoryDetailViewModel.runCodeFilter()
+                                    },
+                                ),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = MaterialTheme.colors.secondary,
+                                    textColor = MaterialTheme.colors.primary,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    focusedIndicatorColor = Color.Transparent
+                                ),
+                                textStyle = MaterialTheme.typography.body1,
                             )
+
                             StyledTextButton(
                                 onClick = { inventoryDetailViewModel.onFiltersShowClick() },
                                 modifier = Modifier
