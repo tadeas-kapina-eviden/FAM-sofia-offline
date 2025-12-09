@@ -374,7 +374,7 @@ class InventoryDetailViewModel(
                     "Žiadna miestnosť"
                 )
             )
-        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).id.toString() }
+        _codebookSelectionViewIdGetter.value = { (it as RoomCodebookEntity).name }
         _codebookSelectionViewDescriptionGetter.value =
             { (it as RoomCodebookEntity).description }
         _codebookSelectionViewLastValue.value = _roomFilter.value
