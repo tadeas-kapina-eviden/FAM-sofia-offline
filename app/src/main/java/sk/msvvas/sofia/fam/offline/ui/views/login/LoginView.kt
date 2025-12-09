@@ -79,7 +79,7 @@ fun LoginView(
                 onChange = { loginViewModel.onLoginNameChanged(it) },
                 label = "Užívateľ",
                 focusRequester = loginNameFocusRequester!!,
-                keyboardType = KeyboardType.Ascii,
+                keyboardType = KeyboardType.Password,
                 onDone = { loginViewModel.requestPasswordFocus() },
                 modifier = Modifier.padding(
                     top = 40.dp,
