@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -368,7 +368,7 @@ class InventoryDetailViewModel(
                 if (localityFilter.value == null || localityFilter.value!!.isBlank()) true else it.localityId == localityFilter.value!!
             }!!.plus(
                 RoomCodebookEntity(
-                0,
+                    0,
                     "ziadna",
                     "ziadna",
                     "Žiadna miestnosť"
@@ -444,77 +444,84 @@ class InventoryDetailViewModel(
     }
 
     fun submitInventory(fromStart: Boolean = false) {
-        if (ClientData.username.isEmpty()) {
-            requireLoginModalShow()
-            submitInventoryConfirmModalHide()
-            return
-        }
+        try {
 
-        CoroutineScope(Dispatchers.Main).launch {
-
-            try {
-                val response =
-                    Client.validateLogin(
-                        username = ClientData.username,
-                        password = ClientData.password,
-                        clientId = ClientData.client
-                    )
-            } catch (e: RuntimeException) {
+            if (ClientData.username.isEmpty()) {
                 requireLoginModalShow()
                 submitInventoryConfirmModalHide()
-
-                return@launch
+                return
             }
 
-            _submitInventoryConfirmModalShown.value = false
-            _loadingData.value = true
-            _loadingState.value = "Spracúvajú sa dáta..."
-            val toSendProperties =
-                withContext(Dispatchers.IO) {
-                    propertyRepository.findProcessedBySearchCriteria(
-                        null,
-                        null,
-                        null
+            CoroutineScope(Dispatchers.Main).launch {
+
+                try {
+                    val response =
+                        Client.validateLogin(
+                            username = ClientData.username,
+                            password = ClientData.password,
+                            clientId = ClientData.client
+                        )
+                } catch (e: RuntimeException) {
+                    requireLoginModalShow()
+                    submitInventoryConfirmModalHide()
+
+                    return@launch
+                }
+
+                _submitInventoryConfirmModalShown.value = false
+                _loadingData.value = true
+                _loadingState.value = "Spracúvajú sa dáta..."
+                val toSendProperties =
+                    withContext(Dispatchers.IO) {
+                        propertyRepository.findProcessedBySearchCriteria(
+                            null,
+                            null,
+                            null
+                        )
+                    }
+                val batchesCount =
+                    toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1
+
+                for (i in 0 until batchesCount) {
+                    _loadingState.value = "Odosiela sa ${i + 1}. dávka..."
+                    val toSendBatch = toSendProperties.subList(
+                        i * BATCH_SIZE,
+                        if (BATCH_SIZE * (i + 1) <= toSendProperties.size) BATCH_SIZE * (i + 1) else toSendProperties.size
                     )
-                }
-            val batchesCount =
-                toSendProperties.size / BATCH_SIZE + if (toSendProperties.size % BATCH_SIZE == 0) 0 else 1
-
-            for (i in 0 until batchesCount) {
-                _loadingState.value = "Odosiela sa ${i + 1}. dávka..."
-                val toSendBatch = toSendProperties.subList(
-                    i * BATCH_SIZE,
-                    if (BATCH_SIZE * (i + 1) <= toSendProperties.size) BATCH_SIZE * (i + 1) else toSendProperties.size
-                )
-
-                val responseStatus =
-                    if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
-                        withContext(Dispatchers.IO) { inventoryRepository.findById(toSendBatch[0].inventoryId) },
-                        toSendBatch
-                    ) else HttpStatusCode.Created
-                if(responseStatus == null){
-                    if (!fromStart) {
-                        _loadingData.value = false
-                        _errorHeader.value = "Chyba!"
-                        _errorText.value =
-                            "Nastala chyba - skontrolujte pripojenie k internetu!"
+                    val responseStatus =
+                        if (toSendProperties.isNotEmpty()) Client.submitProcessedProperties(
+                            withContext(Dispatchers.IO) { inventoryRepository.findById(toSendBatch[0].inventoryId) },
+                            toSendBatch
+                        ) else HttpStatusCode.Created
+                    if (responseStatus == null) {
+                        if (!fromStart) {
+                            _loadingData.value = false
+                            _errorHeader.value = "Chyba!"
+                            _errorText.value =
+                                "Nastala chyba - skontrolujte pripojenie k internetu!"
+                        }
+                        return@launch
                     }
-                    return@launch
-                }
-                if (responseStatus != HttpStatusCode.Created) {
-                    if (!fromStart) {
-                        _loadingData.value = false
-                        _errorHeader.value = "Chyba!"
-                        _errorText.value =
-                            "Nastala chyba - položky sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+                    if (responseStatus != HttpStatusCode.Created) {
+                        if (!fromStart) {
+                            _loadingData.value = false
+                            _errorHeader.value = "Chyba!"
+                            _errorText.value =
+                                "Nastala chyba - položky sa nepodarilo odoslať na server. Chyba: ${responseStatus.value} - ${responseStatus.description}, "
+                        }
+                        return@launch
                     }
-                    return@launch
                 }
+                _loadingState.value = "Dáta boli odoslané..."
+                _loadingState.value = "Resetuje sa lokálna databáza..."
+                propertyRepository.deleteAll()
+                navController.navigate(Routes.INVENTORY_LIST.value)
             }
-            _loadingState.value = "Dáta boli odoslané..."
-            _loadingState.value = "Resetuje sa lokálna databáza..."
-            propertyRepository.deleteAll()
-            navController.navigate(Routes.INVENTORY_LIST.value)
+        } catch (ex: Exception) {
+            _loadingData.value = false
+            _errorHeader.value = "Chyba!"
+            _errorText.value =
+                "Nastala chyba - " + ex.message
         }
     }
 
@@ -560,7 +567,7 @@ class InventoryDetailViewModel(
                 }
             }
             _localityRoomPairsCount.value = result
-                .sortedBy{it.room}
+                .sortedBy { it.room }
                 .sortedBy { it.locality }
         }
     }
